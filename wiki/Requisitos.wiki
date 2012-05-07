@@ -10,5 +10,3 @@ Software probado correctamente en:
 = Wiki =
 
 Sintaxis Wiki: http://code.google.com/p/support/wiki/WikiSyntax
-
-WikiSyntax
