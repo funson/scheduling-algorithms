@@ -4,5 +4,5 @@
 
 Software probado correctamente en:
 
-*Netbeans 7.1.2
-*JDK 1.7
+  * Netbeans 7.1.2 
+  * JDK 1.7 
