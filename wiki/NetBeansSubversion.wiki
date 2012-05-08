@@ -12,11 +12,11 @@ Add your content here.  Format your content with:
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
 
-https://scheduling-algorithms.googlecode.com/svn/wiki/images/1.png
-
-https://scheduling-algorithms.googlecode.com/svn/wiki/images/2.png
+Primero de todo debeis obtener vuestro nombre de usuario. El mismo que vuestro correo. No olvideis el @gmail.com
 
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/3.png
+
+Ahora vamos a obtener la contraseña. En la página del proyecto, vais a SOURCE y allí, en CHECKOUT, os saldrá una ventana azul de desarrolladores y otra de solo lectura. En la de desarrolladores haced click en _googlecode.com password._.
 
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/4.png
 
