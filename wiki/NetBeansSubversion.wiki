@@ -20,9 +20,17 @@ Ahora vamos a obtener la contraseña. En la página del proyecto, vais a SOURCE 
 
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/4.png
 
+Una vez tenemos el usuario y la contraseña, abrimos el NetBeans. Clickamos en la pestaña Team, opción Subversion, que es el repositorio que usamos, Checkout... (ver imagen).
+
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/5.png
 
+Se nos abrirá una ventana como la siguiente, donde debemos configurar nuestro repositorio. Toda esta información la podéis encontrar en la página web del proyecto, en la sección source. Básicamente debeis introducir la url del repositorio en el campo solicitado:
+https://scheduling-algorithms.googlecode.com/svn/
+Vuestro usuario y contraseña, que hemos obtenido antes.
+
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/6.png
+
+Ahora una ventana como esta nos solicita el directorio del repositorio que queremos descargar. Este es trunk, pues todo el proyecto se encuentra en esa carpeta. Esta es la configuración por defecto, y así ha quedado.
 
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/7.png
 
