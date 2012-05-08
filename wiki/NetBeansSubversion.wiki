@@ -1,6 +1,6 @@
 #summary One-sentence summary of this page.
 
-= Introduction =
+= Configuración =
 
 Add your content here.
 
@@ -11,10 +11,6 @@ Add your content here.  Format your content with:
   * Text in *bold* or _italic_
   * Headings, paragraphs, and lists
   * Automatic links to other wiki pages
-
-/images/1.png
-
-1.png
 
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/1.png
 
