@@ -29,3 +29,5 @@ https://scheduling-algorithms.googlecode.com/svn/wiki/images/8.png
 https://scheduling-algorithms.googlecode.com/svn/wiki/images/9.png
 
 Una vez hecho todo esto, se os debería descargar el proyecto, y añadir a la lista de proyectos existentes. Aunque NetBeans te avisa con un codigo de colores, no olvidéis cada vez que os pongáis a trabajar, hacer un checkout, y cuando terminéis, un commit. No importa hacer todo este proceso. Dándole botón secundario al proyecto os saldrán esas funciones.
+
+https://scheduling-algorithms.googlecode.com/svn/wiki/images/10.png
