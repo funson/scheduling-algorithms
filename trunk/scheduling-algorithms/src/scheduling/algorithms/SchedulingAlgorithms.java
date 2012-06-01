@@ -10,11 +10,11 @@ package scheduling.algorithms;
  */
 public class SchedulingAlgorithms {
 
+    public static TaskGroup taskGroup;
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-        System.out.println("prueba");
+        mainWindow.main(args);
     }
 }
