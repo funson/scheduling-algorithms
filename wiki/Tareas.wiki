@@ -8,7 +8,7 @@ Quedan pendientes las siguientes clases:
   * GUI de gestión de tareas aperiódicas y visualización de tareas periódicas (estas no pueden modificarse)
   * Planificación de tareas periódicas: Scheduler
   * Planificación de tareas aperiódicas: BS, PS, DS, PE y SS
-  * Importer: cambiar el *.odt que nos pasó el profesor a un formato fácil de manejar por la aplicación e importar los datos propiamente dichos, para rellenar las estructuras de datos. Tener en cuenta que puede haber más de 2 conjuntos de tareas, y distinguir entre servidores y tareas periódicas.
+  * Importer: cambiar el odt que nos pasó el profesor a un formato fácil de manejar por la aplicación e importar los datos propiamente dichos, para rellenar las estructuras de datos. Tener en cuenta que puede haber más de 2 conjuntos de tareas, y distinguir entre servidores y tareas periódicas.
   * Exporter: extraer en un fichero la información necesaria para dibujar las gráficas especificadas en el enunciado. El fichero debe estar en un formato compatible con OpenOffice para poder crear las gráficas.
 
 Para que podáis ver más en detalle el funcionamiento y estructura de cada clase he subido el javadoc (incompleto) en la sección de Descargas: http://scheduling-algorithms.googlecode.com/files/javadoc.rar.
