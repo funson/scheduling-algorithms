@@ -5,94 +5,42 @@
 package scheduling.algorithms;
 
 /**
- *
+ * Clase que representa una tarea
  * @author Miguel
  */
-public class Task {
-    private float T_i;
-    private float C_i;
-    private float Phi_i;
-    private float U_p;
+public abstract class Task  implements Comparable<Task> {
+    
+    private float computationTime;    
+    protected float period;
     
     /**
-     * 
+     * El constructor de la tarea. Crea una nueva tarea a partir de los parámetros especificados.     
+     * @param computationTime   El tiempo de computación de la tarea     
+     * @param period   El periodo de la tarea  
      */
-    public Task(){
-        this.T_i    = 0;
-        this.C_i    = 0;
-        this.Phi_i  = 0;
-        this.U_p    = 0;
-    }
-    /**
-     * 
-     * @param T_i
-     * @param C_i
-     * @param Phi_i
-     * @param U_p 
-     */
-    public Task( float T_i, float C_i, float Phi_i, float U_p){
-        this.T_i    = T_i;
-        this.C_i    = C_i;
-        this.Phi_i  = Phi_i;
-        this.U_p    = U_p;
+    public Task(float computationTime, float period){        
+        this.computationTime = computationTime;    
+        this.period = period;
     }
 
     /**
-     * @return the T_i
+     * @return El tiempo de computación
      */
-    public float getT_i() {
-        return T_i;
+    public float getComputationTime() {
+        return computationTime;
     }
 
     /**
-     * @param T_i the T_i to set
+     * @param computationTime El tiempo de computación a asignar
      */
-    public void setT_i(float T_i) {
-        this.T_i = T_i;
-    }
-
-    /**
-     * @return the C_i
-     */
-    public float getC_i() {
-        return C_i;
-    }
-
-    /**
-     * @param C_i the C_i to set
-     */
-    public void setC_i(float C_i) {
-        this.C_i = C_i;
-    }
-
-    /**
-     * @return the Phi_i
-     */
-    public float getPhi_i() {
-        return Phi_i;
-    }
-
-    /**
-     * @param Phi_i the Phi_i to set
-     */
-    public void setPhi_i(float Phi_i) {
-        this.Phi_i = Phi_i;
-    }
-
-    /**
-     * @return the U_p
-     */
-    public float getU_p() {
-        return U_p;
-    }
-
-    /**
-     * @param U_p the U_p to set
-     */
-    public void setU_p(float U_p) {
-        this.U_p = U_p;
-    }
+    public void setComputationTime(float computationTime) {
+        this.computationTime = computationTime;
+    }  
     
-    
-    
+    @Override
+    public int compareTo(Task o) {
+        Float f = new Float (this.period);
+        return f.compareTo(o.period);
+    }
+           
 }
