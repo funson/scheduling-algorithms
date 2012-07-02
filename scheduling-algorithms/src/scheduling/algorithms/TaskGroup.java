@@ -4,45 +4,36 @@
  */
 package scheduling.algorithms;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Miguel
  */
 public class TaskGroup {
-    private Task tastGroup[][];
-    
+        
+    protected ArrayList<Task> taskGroup;        
     /**
      * 
      */
     public TaskGroup(){
-        this.tastGroup = new Task[10][10];
+        this.taskGroup = new ArrayList();        
     }
     
     /**
-     * 
-     * @param absolutePath 
-     */
-    public TaskGroup(String absolutePath){
-        // TODO importar des del fitxer i carregar a la classe.
-    }
-
-    /**
-     * 
-     * @param group
-     * @param task
+     *      
+     * @param numTask
      * @return 
      */
-    public Task getGrupTasca(int group, int task) {
-        return this.tastGroup[group][task];
+    public Task getTask(int numTask) {
+        return this.taskGroup.get(numTask);
     }
 
     /**
      * 
-     * @param taskToInsert
-     * @param group
-     * @param task 
+     * @param taskToInsert         
      */
-    public void setGrupTasca(Task taskToInsert, int group, int task) {
-        this.tastGroup[group][task] = taskToInsert;
+    public void addTask(Task taskToInsert) {
+        this.taskGroup.add(taskToInsert);
     }
 }

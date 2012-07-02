@@ -48,6 +48,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         menuFile.setText("File");
 
+        fileImportData.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         fileImportData.setText("Import data...");
         fileImportData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -56,6 +57,7 @@ public class mainWindow extends javax.swing.JFrame {
         });
         menuFile.add(fileImportData);
 
+        fileSaveResults.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         fileSaveResults.setText("Save results...");
         fileSaveResults.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -90,7 +92,7 @@ public class mainWindow extends javax.swing.JFrame {
         
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             //Opening
-            SchedulingAlgorithms.taskGroup = new TaskGroup(fc.getSelectedFile().getAbsolutePath());
+            Scheduler.importTaskSets(fc.getSelectedFile().getAbsolutePath());
         } else {
             // cancelled by the user. Nothing to do.
         }
