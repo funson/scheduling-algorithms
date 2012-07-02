@@ -1,0 +1,15 @@
+#summary Reparto del trabajo a realizar
+
+= Asignación =
+
+|| *Tarea* || *Asignados* ||
+||GUI principal|| ||
+||GUI tareas|| ||
+||Scheduler|| ||
+||BS|| ||
+||PS|| ||
+||DS|| ||
+||PE|| ||
+||SS|| ||
+||Importer|| ||
+||Exporter|| ||
