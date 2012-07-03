@@ -14,8 +14,8 @@ http://scheduling-algorithms.googlecode.com/files/GUI%20Tareas%20%28aperiodicas%
   * Aperiódicas:
     * La pestaña de aperiódicas muestra las tareas aperiódicas del conjunto.
     * Se muestra una tabla con las tareas periódicas, la cual está dentro de un scroll panel.
-    * Las celdas de la tabla son editables. Este tipo de cambios solo se guardarán cuando se pulse el botón "Guardar".
+    * Las celdas de la tabla son editables.
     * A la derecha de cada fila hay un botón que permite eliminar la tarea del grupo de tareas aperiódicas del conjunto.
     * Debajo de la tabla hay un botón para insertar una nueva tarea a través de un cuadro de diálogo (diseñar al gusto).
-    * El botón "Cancelar" cierra esta GUI.
-    * Las modificaciones de tareas solo se guardaran cuando se pulse "Guardar". Las inserciones y eliminaciones se guardan enseguida que se efectúan.
+    * El botón "Cancelar" cierra esta GUI. No se guarda ningún cambio.
+    * Las modificaciones, eliminaciones e inserciones de tareas sólo se guardaran cuando se pulse "Guardar". Para ello se puede clonar el grupo de tareas aperiódicas (el método clone() ya lo hemos implementado a nivel de TaskGroup) y que los cambios en GUI afecten al grupo clonado. Al pulsar "Guardar" se sobreescribirá el grupo original con el clonado; si en cambio se pulsa "Cancelar", el grupo clonado se descarta.
