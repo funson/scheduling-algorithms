@@ -33,7 +33,7 @@ public class Result {
         resultTable = new ArrayList<>();
     }
     
-    public void setData(float total_load, String serverName, float meanResponseTime){
+    public void addData(float total_load, String serverName, float meanResponseTime){
         resultTable.add(new ResultData(total_load, serverName, meanResponseTime));
     }
     
