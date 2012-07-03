@@ -10,7 +10,7 @@ package scheduling.algorithms;
  */
 public class PollingServer extends Server {
     public PollingServer(float period, float capacity){
-        super(period, capacity);
+        super("Polling Server", period, capacity);
     }
 
     @Override

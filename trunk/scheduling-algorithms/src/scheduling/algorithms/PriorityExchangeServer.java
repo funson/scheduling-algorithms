@@ -10,7 +10,7 @@ package scheduling.algorithms;
  */
 public class PriorityExchangeServer extends Server {
     public PriorityExchangeServer(float period, float capacity){
-        super(period, capacity);
+        super("Priority Exchange Server",period, capacity);
     }
 
     @Override

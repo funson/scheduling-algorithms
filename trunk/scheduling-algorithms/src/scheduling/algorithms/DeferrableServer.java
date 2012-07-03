@@ -11,7 +11,7 @@ package scheduling.algorithms;
 public class DeferrableServer extends Server {
     
     public DeferrableServer(float period, float capacity){
-        super(period, capacity);
+        super("Deferrable Server", period, capacity);
     }
 
     @Override

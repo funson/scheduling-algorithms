@@ -9,7 +9,11 @@ import java.util.Iterator;
 import java.util.ListIterator;
 
 /**
- *
+ * Clase que define el Resumen de la planificación de un grupo de tareas.
+ * La información que incluye son los intervalos de tiempo en que se ejecutará cada tarea, o bién no se ejecuta ninguna;
+ * el tiempo medio de respuesta de la tareas aperiódicas planificadas y el número de tareas aperiódicas que no han cumplido con su terminio.
+ * En este clase también se encuentra el método para planificar el grupo de tareas periódicas que debe ejecutar el {@link Scheduler}.
+ * 
  * @author Juanito
  */
 public class Summary {        
@@ -18,7 +22,9 @@ public class Summary {
     private ArrayList<Node> nodes;
     private int deadlinesNotMet;
     
-    
+    /**
+     * @param timeToSchedule Tiempo al que se parará de planificar.
+     */
     public Summary(float timeToSchedule){
         nodes = new ArrayList();
         nodes.add(new Node(0, timeToSchedule));  
@@ -40,9 +46,14 @@ public class Summary {
         return nodes.listIterator();
     }
     
+    /**
+     * Método que realiza la planificación de un grupo de tareas periódicas y de un servidor.
+     * @param periodicTaskGroupToSchedule Grupo de tareas periódicas a planificar. Sin contar el servidor.
+     * @param server Servidor que se utilizará para planificar las tareas aperiódicas.
+     */
     public void schedulePeriodicTaskGroup(PeriodicTaskGroup periodicTaskGroupToSchedule, Server server){
         boolean schedulable;
-        PeriodicTaskGroup clonedPeriodicTaskGroup = periodicTaskGroupToSchedule.clone();
+        PeriodicTaskGroup clonedPeriodicTaskGroup = (PeriodicTaskGroup) periodicTaskGroupToSchedule.clone();
         clonedPeriodicTaskGroup.addTask(server);
         clonedPeriodicTaskGroup.sortByPeriod();        
         Iterator<Task> periodicTaskIterator = periodicTaskGroupToSchedule.getPeriodicTaskIterator();

@@ -11,7 +11,7 @@ package scheduling.algorithms;
 public class SporadicServer extends Server {
     
     public SporadicServer(float period, float capacity){
-        super(period, capacity);
+        super("Sporadic Server", period, capacity);
     }
 
     @Override
