@@ -65,8 +65,8 @@ public class Result {
      * que permita, mediante pocos pasos, crear un gráfico.
      * @param url_file_name Url del fichero a guardar/crear.
      */
-    public void saveResultsOdtFormat(String url_file_name){
-        Exporter.exportResultToOdt(this);
+    public void saveResultsOdtFormat(String urlFilename){
+        Exporter.exportResultToOdt(urlFilename, this);
     }
     
 }

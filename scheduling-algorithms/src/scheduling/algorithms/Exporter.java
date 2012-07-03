@@ -10,7 +10,7 @@ package scheduling.algorithms;
  */
 public class Exporter {
     
-    public static void exportResultToOdt(Result result){
+    public static void exportResultToOdt(String urlFile, Result result){
         throw new UnsupportedOperationException("Not supported yet");        
 
     }
