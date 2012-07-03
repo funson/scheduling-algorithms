@@ -1,0 +1,21 @@
+#summary Composición de la GUI de tareas.
+
+http://scheduling-algorithms.googlecode.com/files/GUI%20Tareas%20%28peri%C3%B3dicas%29.jpg
+
+http://scheduling-algorithms.googlecode.com/files/GUI%20Tareas%20%28aperiodicas%29.jpg
+
+  * En esta GUI se muestran las tareas de un conjunto (seleccionado en la GUI Scheduler).
+  * Las tareas están separadas por pestañas, una para cada tipo de tarea.
+  * Periódicas:
+    * La pestaña de periódicas muestra todos los grupos de tareas periódicas del conjunto.
+    * Los grupos y sus tareas se muestran en tablas separadas, y todo ello está dentro de un scroll panel.
+    * Estas tareas son solo de consulta (las celdas de la tabla no son editables).
+    * El botón de OK/Aceptar cierra esta GUI.
+  * Aperiódicas:
+    * La pestaña de aperiódicas muestra las tareas aperiódicas del conjunto.
+    * Se muestra una tabla con las tareas periódicas, la cual está dentro de un scroll panel.
+    * Las celdas de la tabla son editables. Este tipo de cambios solo se guardarán cuando se pulse el botón "Guardar".
+    * A la derecha de cada fila hay un botón que permite eliminar la tarea del grupo de tareas aperiódicas del conjunto.
+    * Debajo de la tabla hay un botón para insertar una nueva tarea a través de un cuadro de diálogo (diseñar al gusto).
+    * El botón "Cancelar" cierra esta GUI.
+    * Las modificaciones de tareas solo se guardaran cuando se pulse "Guardar". Las inserciones y eliminaciones se guardan enseguida que se efectúan.
