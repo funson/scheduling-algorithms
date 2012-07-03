@@ -9,7 +9,7 @@
 ||BS|| Juan Carlos Caimari Mateu||
 ||PS|| Gonzalo Laso Ferrer ||
 ||DS|| Juan Marí Nadal||
-||PE|| ||
+||PE|| Javier Cortés Ortega||
 ||SS|| ||
 ||Importer/Exporter|| Miquel Ángel Menéndez Jaume, Ramón Ruiz Gómez||
 
