@@ -6,7 +6,7 @@ Quedan pendientes las siguientes clases:
 
   * [http://code.google.com/p/scheduling-algorithms/wiki/GUIScheduler GUI Scheduler]
   * [http://code.google.com/p/scheduling-algorithms/wiki/GUITareas GUI Tareas]
-  * GUI resultados: presentar los resultados (en formato textual y numérico) y permitir guardarlos en un fichero de texto para dibujar las gráficas especificadas en el enunciado. El fichero debe estar en un formato compatible con !OpenOffice para poder crear las gráficas.
+  * [http://code.google.com/p/scheduling-algorithms/wiki/GUIResultados GUI] resultados: presentar los resultados (en formato textual y numérico) y permitir guardarlos en un fichero de texto para dibujar las gráficas especificadas en el enunciado. El fichero debe estar en un formato compatible con !OpenOffice para poder crear las gráficas.
   * Planificación de tareas periódicas: Scheduler
   * Planificación de tareas aperiódicas: BS, PS, DS, PE y SS
   * Importer/Exporter: cambiar el odt que nos pasó el profesor a un formato fácil de manejar por la aplicación e importar los datos propiamente dichos, para rellenar las estructuras de datos. Tener en cuenta que puede haber más de 2 conjuntos de tareas, y distinguir entre servidores y tareas periódicas. El Exporter permite exportar los datos (tareas, servidores) a un nuevo fichero, con el mismo formato que el que importamos con el Importer.
