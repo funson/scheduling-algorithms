@@ -6,7 +6,6 @@
 ||GUI principal|| ||
 ||GUI tareas|| ||
 ||GUI resultados|| ||
-||Scheduler|| Joan Llodrà Riera||
 ||BS|| Juan Carlos Caimari Mateu||
 ||PS|| Gonzalo Laso Ferrer ||
 ||DS|| ||
