@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Clase que representa el planificador de los conjuntos de tareas. Planifica el conjunto que seleccionemos y genera los datos que se esperan: tiempo medio de respuesta de todos los grupos y número de tareas periódicas que no cumplen su terminio.
+ * Clase que representa el planificador de los conjuntos de tareas. Planifica el conjunto que seleccionemos 
+ * y genera los datos que se esperan: tiempo medio de respuesta y número de tareas periódicas que no cumplen 
+ * su terminio de todos los grupos.
  * @author Juanito
  */
 public class Scheduler {
@@ -19,6 +21,7 @@ public class Scheduler {
     private static Summary[][] summaries = new Summary[NUM_SERVERS][TaskSet.GROUPS_PER_SET];  
     private static ArrayList<TaskSet> taskSets;        
     private static int taskSetToSchedule;
+    
     private static Runnable runnable = new Runnable() {
 
         @Override
@@ -37,8 +40,10 @@ public class Scheduler {
     };
     
     /**
-     * Método que carga los datos del fichero de entrada. Separa las tareas periódicas y los servidores, los cuales mete en el array de servidores. Tener en cuenta que el Servidor Background no está en el fichero porque sus parámetros (capacidad y periodo) son constantes.
-     * @param urlFile 
+     * Método que carga los datos del fichero de entrada. 
+     * Separa las tareas periódicas y los servidores, los cuales mete en el array de servidores. 
+     * Tener en cuenta que el Servidor Background no está en el fichero porque sus parámetros (capacidad y periodo) son constantes.
+     * @param urlFile Url del fichero con las tareas periódicas a importar.
      */
     public static void importTaskSets(String urlFile){
         servers[0] = new BackgroundServer();
@@ -46,7 +51,11 @@ public class Scheduler {
         
     }
     
-    public void scheduleTaskSet(int taskSetToSchedule){
+    /**
+     * Método con el cual se realiza la planificación de todos los grupos de tareas del conjunto especificado.
+     * @param taskSetToSchedule Índice del conjunto de tareas a planificar.
+     */
+    public static void scheduleTaskSet(int taskSetToSchedule){
        Scheduler.taskSetToSchedule = taskSetToSchedule;
        new Thread(runnable).start();
     }

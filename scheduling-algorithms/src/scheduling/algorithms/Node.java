@@ -5,7 +5,9 @@
 package scheduling.algorithms;
 
 /**
- *
+ * Clase que representa los componentes que forman un resumen (Summary).
+ * Es un componente que representa un intervalo de tiempo en que se ejecutará una determinada tarea. 
+ * También puede representar un intervalo de tiempo donde no se ejecuta ninguna tarea.
  * @author Juanito
  */
 public class Node {
@@ -52,35 +54,35 @@ public class Node {
     }
 
     /**
-     * @param task the task to set
+     * @param task La tarea que se ejecuta en el intervalo de tiempo marcado por este nodo.
      */
     public void setTask(Task task) {
         this.task = task;
     }
 
     /**
-     * @return the startTime
+     * @return El tiempo de inicio del intervalo.
      */
     public float getStartTime() {
         return startTime;
     }
 
     /**
-     * @param startTime the startTime to set
+     * @param startTime El tiempo de inicio del intervalo a asignar.
      */
     public void setStartTime(float startTime) {
         this.startTime = startTime;
     }
 
     /**
-     * @return the stopTime
+     * @return El tiempo de finalización del intervalo.
      */
     public float getStopTime() {
         return stopTime;
     }
 
     /**
-     * @param stopTime the stopTime to set
+     * @param stopTime El tiempo de finalización del intervalo a asignar.
      */
     public void setStopTime(float stopTime) {
         this.stopTime = stopTime;
