@@ -11,7 +11,7 @@ package scheduling.algorithms;
 public abstract class Task  implements Comparable<Task> {
     
     private String name;
-    private float computationTime;
+    protected float computationTime;
     
 
     protected float period;

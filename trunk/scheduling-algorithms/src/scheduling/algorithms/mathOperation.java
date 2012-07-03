@@ -32,7 +32,7 @@ public class mathOperation {
      * @param lambda
      * @return an Exponential-distributed random variable's value
      */
-    public static float getExponential(float lambda){
+    public static float getExponential(double lambda){
         return (float)(-Math.log(Math.random())/lambda);        
     }
     

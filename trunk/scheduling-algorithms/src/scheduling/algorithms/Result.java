@@ -23,9 +23,7 @@ public class Result {
             this.servername       = servername;
             this.meanResponseTime = meanResponseTime;
         }
-    }
-    
-    
+    }        
     
     private ArrayList<ResultData> resultTable;
     
@@ -68,7 +66,7 @@ public class Result {
      * @param url_file_name Url del fichero a guardar/crear.
      */
     public void saveResultsOdtFormat(String url_file_name){
-        throw new UnsupportedOperationException("SaveResultsOdtFormat not implemented yet.");
+        Exporter.exportResultToOdt(this);
     }
     
 }
