@@ -24,8 +24,22 @@ public class AperiodicTaskGroup extends TaskGroup {
         if(!(task instanceof AperiodicTask)){
             throw new UnsupportedOperationException("The task you are adding is not an aperiodic task.");
         }
-        super.addTask(task);
-            
+        super.addTask(task);            
+    }
+    
+    /**
+     * Constructor para crear un grupo de tareas aperiódicas a partir de los parámetros especificados
+     * @param numTasks El tamaño del grupo de tareas aperiódicas
+     * @param aperiodicMeanServiceTime El tiempo medio de servicio, que repercute en el tiempo de comutación de la tarea
+     */
+    public AperiodicTaskGroup(int numTasks, double aperiodicMeanServiceTime){
+        float arrivalTime, computationTime;
+        for(int i = 0; i < numTasks; i++){
+            arrivalTime = mathOperation.getPoisson(aperiodicMeanServiceTime);
+            computationTime = mathOperation.getExponential(aperiodicMeanServiceTime);
+            this.taskGroup.add(new AperiodicTask("AP"+i, arrivalTime, computationTime));
+        }
+        
     }
     
     /**

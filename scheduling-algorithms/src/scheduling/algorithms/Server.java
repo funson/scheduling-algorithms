@@ -12,9 +12,10 @@ package scheduling.algorithms;
 public abstract class Server extends PeriodicTask {
     
     private static AperiodicTaskGroup aperiodicTaskGroup;
+
     
-    public Server(String name, float period, float capacity){
-        super(name, period, 0, capacity);        
+    public Server(String name, float period, float load){
+        super(name, period, 0, load*period);        
     }
     
     /**
@@ -32,6 +33,20 @@ public abstract class Server extends PeriodicTask {
      */
     public static AperiodicTaskGroup getAperiodicTaskGroup() {
         return aperiodicTaskGroup;
+    }
+    
+    /** Método para asignar un grupo de tareas aperiódicas al servidor.
+     * @param aAperiodicTaskGroup El grupo de tareas aperiódicas que debe planificar el Servidor
+     */
+    public static void setAperiodicTaskGroup(AperiodicTaskGroup aAperiodicTaskGroup) {
+        aperiodicTaskGroup = aAperiodicTaskGroup;
+    }
+    public float getLoad(){
+        return computationTime/period;
+    }
+    
+    public void setLoad(float load){
+        computationTime = period * load;
     }
     
 }

@@ -11,22 +11,25 @@ package scheduling.algorithms;
 public class TaskSet {
     public final static int GROUPS_PER_SET =10;
     
-    private PeriodicTaskGroup[] group;
-    
+    private PeriodicTaskGroup[] group;    
     private int firstFreePosition;
+    private float totalPeriodicLoad;
+    
     
     public TaskSet(){
         group = new PeriodicTaskGroup[GROUPS_PER_SET];
+        totalPeriodicLoad = 0;
         firstFreePosition = 0;
     }
     
     /**
      * Método que devuelve el grupo que se encuentra en el índice especificado.
      * @param numGroup Índice del grupo a obtener.
+     * @param totalPeriodicLoad La utilización periódica de cada grupo (es la misma para todos los grupos)
      * @return El grupo
      */
     public PeriodicTaskGroup getGroup(int numGroup){
-        return group[numGroup];
+        return group[numGroup];        
     }
     
     /**
@@ -40,5 +43,9 @@ public class TaskSet {
         }
         this.group[firstFreePosition] = groupToInsert;
         firstFreePosition++;
+    }
+    
+    public float getTotalPeriodicLoad(){
+        return totalPeriodicLoad;
     }
 }
