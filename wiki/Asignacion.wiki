@@ -5,11 +5,11 @@
 || *Tarea* || *Asignados* ||
 ||GUI principal|| ||
 ||GUI tareas|| ||
+||GUI resultados|| ||
 ||Scheduler|| Joan Llodrà Riera||
 ||BS|| Juan Carlos Caimari Mateu||
 ||PS|| ||
 ||DS|| ||
 ||PE|| ||
 ||SS|| ||
-||Importer|| Miquel Ángel Menéndez Jaume||
-||Exporter|| Ramón Ruiz Gómez||
+||Importer/Exporter|| Miquel Ángel Menéndez Jaume, Ramón Ruiz Gómez||
