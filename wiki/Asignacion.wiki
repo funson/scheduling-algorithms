@@ -6,7 +6,7 @@
 ||GUI principal|| ||
 ||GUI tareas|| ||
 ||Scheduler|| ||
-||BS|| ||
+||BS|| Juan Carlos Caimari Mateu||
 ||PS|| ||
 ||DS|| ||
 ||PE|| ||
