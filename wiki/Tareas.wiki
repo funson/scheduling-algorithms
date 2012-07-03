@@ -5,7 +5,7 @@ Como veréis casi todo el esqueleto de la práctica está implementado, además 
 Quedan pendientes las siguientes clases:
 
   * [http://code.google.com/p/scheduling-algorithms/wiki/GUIScheduler GUI Scheduler]
-  * GUI de gestión de tareas aperiódicas y visualización de tareas periódicas (estas no pueden modificarse)
+  * [http://code.google.com/p/scheduling-algorithms/wiki/GUITareas GUI Tareas]
   * GUI resultados: presentar los resultados (en formato textual y numérico) y permitir guardarlos en un fichero de texto para dibujar las gráficas especificadas en el enunciado. El fichero debe estar en un formato compatible con !OpenOffice para poder crear las gráficas.
   * Planificación de tareas periódicas: Scheduler
   * Planificación de tareas aperiódicas: BS, PS, DS, PE y SS
