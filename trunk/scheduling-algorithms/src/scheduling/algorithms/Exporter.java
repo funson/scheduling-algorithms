@@ -14,7 +14,7 @@ public class Exporter {
     
     public static void exportResultToOdt(String urlFile, Result result){
         ArrayList<String> serverNamesInResult = result.getServerNamesInResult();
-        ArrayList<Float> loadsInResult        = result.getLoadsInResult();
+        ArrayList<Double> loadsInResult       = result.getLoadsInResult();
         throw new UnsupportedOperationException("Not supported yet");        
 
     }
