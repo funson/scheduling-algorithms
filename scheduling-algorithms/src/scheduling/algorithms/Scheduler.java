@@ -75,7 +75,7 @@ public class Scheduler {
      * @param urlFile Url del fichero con las tareas periódicas a importar.
      */
     public static void importTaskSets(String urlFile){        
-        Importer.importTaskSets(urlFile, servers);
+        Importer.importTaskSets(urlFile, taskSets,servers);
     }    
     
     /**
