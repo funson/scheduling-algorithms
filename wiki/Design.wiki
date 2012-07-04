@@ -25,6 +25,8 @@ http://scheduling-algorithms.googlecode.com/files/Diagramadeclase.gif
 
 *Importador*: clase que lee e interpreta el fichero de entrada para introducir la información de las tareas periódicas y los servidores (que también son tareas periódicas) a la aplicación.
 
+*Exportador*: clase que permite generar un fichero de parámetros de la aplicación, igual al fichero que lee el *Importador*.
+
 *Grupo de tareas*: clase que contiene la agrupación de tareas.
 
 *Grupo de tareas periódicas*: agrupación de 10 tareas periódicas, tal y como se especifica en el enunciado.
