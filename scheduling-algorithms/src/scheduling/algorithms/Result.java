@@ -14,11 +14,11 @@ import java.util.Iterator;
 public class Result {
     
     private class ResultData{
-        float  totalLoad;
+        double  totalLoad;
         String servername;
-        float  meanResponseTime;
+        double  meanResponseTime;
         
-        public ResultData(float totalLoad, String servername, float meanResponseTime){
+        public ResultData(double totalLoad, String servername, double meanResponseTime){
             this.totalLoad        = totalLoad;
             this.servername       = servername;
             this.meanResponseTime = meanResponseTime;
@@ -27,7 +27,7 @@ public class Result {
     
     private ArrayList<ResultData> resultTable;
     
-    private ArrayList<Float>  loadsInResult;
+    private ArrayList<Double>  loadsInResult;
     private ArrayList<String> serverNamesInResult;
     
     public Result(){
@@ -42,7 +42,7 @@ public class Result {
      * @param serverName Nombre del tipo del servidor.
      * @param meanResponseTime Tiempo medio de respuesta de las tareas aperiódicas planificadas por el servidor.
      */
-    public void addData(float total_load, String serverName, float meanResponseTime){
+    public void addData(double total_load, String serverName, double meanResponseTime){
         if (!isLoadInResult(total_load))
             getLoadsInResult().add(total_load);
         if (!isServerNameInResult(serverName))
@@ -56,7 +56,7 @@ public class Result {
      * @param serverName Nombre del tipo de servidor
      * @return Tiempo de respuesta. Si no se ha encontrado devolverá -1. 
      */
-    public float getData(float total_load,String serverName){
+    public double getData(double total_load, String serverName){
         Iterator<ResultData> i = resultTable.iterator();
         ResultData r = new ResultData(-1, serverName, -1);
         boolean found = false;
@@ -83,7 +83,7 @@ public class Result {
      * @param load Carga a buscar a buscar
      * @return True si la carga se ha encontrado
      */
-    public boolean isLoadInResult(float load){
+    public boolean isLoadInResult(double load){
         return getLoadsInResult().contains(load);
     }
     
@@ -91,7 +91,7 @@ public class Result {
      * Devuelve la lista de cargas que hay registradas dentro del resultado
      * @return La lista de cargas
      */
-    public ArrayList<Float> getLoadsInResult() {
+    public ArrayList<Double> getLoadsInResult() {
         return loadsInResult;
     }
 
