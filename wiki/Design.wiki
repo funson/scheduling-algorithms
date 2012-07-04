@@ -19,13 +19,19 @@ http://scheduling-algorithms.googlecode.com/files/Planteamiento%20planificaci%C3
 
 http://scheduling-algorithms.googlecode.com/files/Diagramadeclase.gif
 
-*Planificador*: clase que realiza la planificación de un conjunto de tareas periódicas en orden descendente de prioridad y que da como resultado los diferentes *Resúmenes de ejecución*, uno por cada grupo de tareas.
+*Planificador*: clase que realiza la planificación de un conjunto de tareas periódicas en orden descendente de prioridad y que da como resultado los diferentes *Resúmenes de planificación*, a la vez que genera los Resultados de la planificación.
 
-*Conjunto de tareas*: conjunto de tareas que, tal y como se especifica en el enunciado, está formado por 10 grupos de tareas periódicas.
+*Resultado*: clase que contiene los resultados de planificación; en concreto, contiene un conjunto de sub-resultados, donde cada sub-resultado es el tiempo medio de respuesta aperiódica dados un servidor y una carga total (periódica + aperiódica).
 
 *Importador*: clase que lee e interpreta el fichero de entrada para introducir la información de las tareas periódicas y los servidores (que también son tareas periódicas) a la aplicación.
 
 *Exportador*: clase que permite generar un fichero de parámetros de la aplicación, igual al fichero que lee el *Importador*.
+
+*Resumen*: clase que representa el Resumen de ejecución. Es una lista de nodos que representan los intervalos de tiempo de ejecución de las tareas así como los intervalos de tiempo libres donde no se ejecuta nada.
+
+*Nodo*: clase que representa un nodo del Resumen de ejecución. Debe contener los instantes de tiempo en que comienza y termina así como la información de lo que está pasando entre estos 2 instantes de tiempo (ejecución de una tarea o libre).
+
+*Conjunto de tareas*: conjunto de tareas que, tal y como se especifica en el enunciado, está formado por 10 grupos de tareas periódicas.
 
 *Grupo de tareas*: clase que contiene la agrupación de tareas.
 
@@ -38,12 +44,6 @@ http://scheduling-algorithms.googlecode.com/files/Diagramadeclase.gif
 *Tarea periódica*: tarea repetitiva a lo largo del tiempo y que tiene un período definido que coincide con su deadline.
 
 *Tarea aperiódica*: tarea esporádica que tiene un tiempo de llegada concreto.
-
-*Resumen*: clase que representa el Resumen de ejecución. Es una lista de nodos que representan los intervalos de tiempo de ejecución de las tareas así como los intervalos de tiempo libres donde no se ejecuta nada.
-
-*Resultado*: clase que contiene los resultados de planificación; en concreto, contiene un conjunto de sub-resultados, donde cada sub-resultado es el tiempo medio de respuesta aperiódica dados un servidor y una carga total (periódica + aperiódica).
-
-*Nodo*: clase que representa un nodo del Resumen de ejecución. Debe contener los instantes de tiempo en que comienza y termina así como la información de lo que está pasando entre estos 2 instantes de tiempo (ejecución de una tarea o libre).
 
 *Servidor*: servidor que actúa como tarea periódica y planifica las tareas aperiódicas. Puede ser de uno de los siguientes tipos:
   * BS: Servidor de background
