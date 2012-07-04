@@ -39,6 +39,8 @@ http://scheduling-algorithms.googlecode.com/files/Diagramadeclase.gif
 
 *Resumen*: clase que representa el Resumen de ejecución. Es una lista de nodos que representan los intervalos de tiempo de ejecución de las tareas así como los intervalos de tiempo libres donde no se ejecuta nada.
 
+*Resultado*: clase que contiene los resultados de planificación; en concreto, contiene un conjunto de sub-resultados, donde cada sub-resultado es el tiempo medio de respuesta aperiódica dados un servidor y una carga total (periódica + aperiódica).
+
 *Nodo*: clase que representa un nodo del Resumen de ejecución. Debe contener los instantes de tiempo en que comienza y termina así como la información de lo que está pasando entre estos 2 instantes de tiempo (ejecución de una tarea o libre).
 
 *Servidor*: servidor que actúa como tarea periódica y planifica las tareas aperiódicas. Puede ser de uno de los siguientes tipos:
