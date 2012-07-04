@@ -3,7 +3,7 @@
 = Asignación =
 
 || *Tarea* || *Asignados* ||
-||GUI principal|| ||
+||GUI principal|| Toni Gili Beltrán ||
 ||GUI tareas|| ||
 ||GUI resultados|| ||
 ||BS|| Juan Carlos Caimari Mateu||
