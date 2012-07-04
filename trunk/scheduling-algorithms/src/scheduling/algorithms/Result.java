@@ -27,8 +27,13 @@ public class Result {
     
     private ArrayList<ResultData> resultTable;
     
+    private ArrayList<Float>  loadsInResult;
+    private ArrayList<String> serverNamesInResult;
+    
     public Result(){
-        resultTable = new ArrayList<>();
+        resultTable         = new ArrayList<>();
+        loadsInResult       = new ArrayList<>();
+        serverNamesInResult = new ArrayList<>();      
     }
     
     /**
@@ -38,6 +43,10 @@ public class Result {
      * @param meanResponseTime Tiempo medio de respuesta de las tareas aperiódicas planificadas por el servidor.
      */
     public void addData(float total_load, String serverName, float meanResponseTime){
+        if (!isLoadInResult(total_load))
+            getLoadsInResult().add(total_load);
+        if (!isServerNameInResult(serverName))
+            getServerNamesInResult().add(serverName);
         resultTable.add(new ResultData(total_load, serverName, meanResponseTime));
     }
     
@@ -58,6 +67,40 @@ public class Result {
         
         return found ? r.meanResponseTime : -1.0f;
         
+    }
+    
+    /**
+     * Método que devuelve si un nombre de servidor se encuentra dentro del resultado.
+     * @param servername Nombre del servidor a buscar
+     * @return True si el nombre se ha encontrado
+     */
+    public boolean isServerNameInResult(String servername){
+        return getServerNamesInResult().contains(servername);
+    }
+    
+    /**
+     * Método que devuelve si una carga total se encuentra dentro del resultado.
+     * @param load Carga a buscar a buscar
+     * @return True si la carga se ha encontrado
+     */
+    public boolean isLoadInResult(float load){
+        return getLoadsInResult().contains(load);
+    }
+    
+    /**
+     * Devuelve la lista de cargas que hay registradas dentro del resultado
+     * @return La lista de cargas
+     */
+    public ArrayList<Float> getLoadsInResult() {
+        return loadsInResult;
+    }
+
+    /**
+     * Devuelve la lista de nombres de servidors que hay dentro del resultado.
+     * @return La lista de nombre de servidores.
+     */
+    public ArrayList<String> getServerNamesInResult() {
+        return serverNamesInResult;
     }
     
     /**
