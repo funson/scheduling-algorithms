@@ -15,17 +15,19 @@ public class TaskSet {
     private int firstFreePosition;
     private float totalPeriodicLoad;
     
-    
-    public TaskSet(){
+    /**
+     * Constructor de Conjunto de Tareas
+     * @param totalPeriodicLoad Carga periódica que caracterizará al conjunto de tareas.
+     */
+    public TaskSet(float totalPeriodicLoad){
         group = new PeriodicTaskGroup[GROUPS_PER_SET];
-        totalPeriodicLoad = 0;
+        this.totalPeriodicLoad = totalPeriodicLoad;
         firstFreePosition = 0;
     }
     
     /**
      * Método que devuelve el grupo que se encuentra en el índice especificado.
      * @param numGroup Índice del grupo a obtener.
-     * @param totalPeriodicLoad La utilización periódica de cada grupo (es la misma para todos los grupos)
      * @return El grupo
      */
     public PeriodicTaskGroup getGroup(int numGroup){
