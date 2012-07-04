@@ -27,11 +27,9 @@ public class Importer {
     public static void importTaskSets(String urlFile, ArrayList<TaskSet> taskSets, Server[] servers){
         taskSets   = new ArrayList<>();
         servers[0] = new BackgroundServer();
-        throw new UnsupportedOperationException("Import task sets not supported yet.");
-        
         
         // Informació de fitxer
-        int currentSets = -1;
+        int currentSets = -1; // actual super conjunt de tasques
         // Utilització dels servidors
         float u;
         
