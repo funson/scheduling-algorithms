@@ -24,9 +24,10 @@ public class Importer {
      * @param taskSets Array de conjunto de tareas periódicas a crear e inicializar.
      * @param servers  Array de servidors a inicializar.
      */    
-    public static void importTaskSets(String urlFile, ArrayList<TaskSet> taskSets, Server[] servers){
+    public static void importTaskSets(String urlFile, ArrayList<TaskSet> taskSets, ArrayList<Server[]> servers){
         taskSets   = new ArrayList<>();
-        servers[0] = new BackgroundServer();
+        servers = new ArrayList<>();
+        Server[] taskSetServers;
         
         // Informació de fitxer
         int currentSets = -1; // actual super conjunt de tasques
@@ -57,6 +58,9 @@ public class Importer {
                             u = Integer.parseInt(aux[i].substring(3, aux[i].length()-1));
                             System.out.println(u);
                             currentSets++;
+                            //Hem detectat un nou conjunt per tant inicialitzam el seu array de servidors i hi ficam el BS
+                            taskSetServers = new Server[5];
+                            taskSetServers[0] = new BackgroundServer();                            
                         }
                         else if (aux[i].contains("Grup tasques")){
                             //System.out.println(aux[i].charAt(aux[i].length()-1));
@@ -84,6 +88,10 @@ public class Importer {
                             
                             //arraydetasques.insert(taskGroup).
                         }
+                        /*A mesura que es recorre un conjunt, anar guardant els servidors a l'array:
+                         * taskSetServers[numServer] = new ...
+                         * en acabar de recorrer un conjunt, s'ha de ficar aquest array de servidors dins l'ArrayList de l'Scheduler:
+                        servers.add(taskSetServers);*/
                     }
                     i++;
                 }
