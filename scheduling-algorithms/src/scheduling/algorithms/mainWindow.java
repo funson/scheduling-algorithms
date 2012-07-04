@@ -4,14 +4,17 @@
  */
 package scheduling.algorithms;
 
-import java.io.File;
-import javax.swing.JFileChooser;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import javax.swing.*;
 
 /**
  *
  * @author Miguel
  */
 public class mainWindow extends javax.swing.JFrame {
+    
+    private ButtonGroup rButtonGroup[];
 
     public static String newline = System.getProperty("line.separator");
     /**
@@ -30,21 +33,21 @@ public class mainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        jButton1 = new javax.swing.JButton();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         fileImportData = new javax.swing.JMenuItem();
         fileSaveResults = new javax.swing.JMenuItem();
 
-        jMenu1.setText("File");
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButton1.setText("Planificar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         menuFile.setText("File");
 
@@ -74,11 +77,27 @@ public class mainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(315, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(249, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(48, Short.MAX_VALUE)))
         );
 
         pack();
@@ -96,11 +115,84 @@ public class mainWindow extends javax.swing.JFrame {
         } else {
             // cancelled by the user. Nothing to do.
         }
+        int numOfSuperSets = 5;
+        // Construim els panells
+        JPanel panels[];
+        panels = new JPanel[numOfSuperSets];
+        rButtonGroup = new ButtonGroup[numOfSuperSets];
+        
+        for (int i = 0; i < panels.length; i++){
+            panels[i] = new JPanel();
+            rButtonGroup[i] = new ButtonGroup();
+            
+        
+        
+            GroupLayout jPanel1Layout = new GroupLayout(panels[i]);
+            panels[i].setLayout(jPanel1Layout);
+            jPanel1Layout.setHorizontalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 200, Short.MAX_VALUE)
+            );
+            jPanel1Layout.setVerticalGroup(
+                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(0, 108, Short.MAX_VALUE)
+            );
+
+            
+            
+            int numOfSets = 5;
+
+            // Radio Button
+
+            // obtener panel de contenido y establecer su esquema
+            panels[i].setLayout( new GridLayout(6,0));//FlowLayout() );
+
+            JRadioButton radioButton[];//botonSimple, botonNegrita, botonCursiva, botonNegritaCursiva;
+//            ButtonGroup rButtonGroup;
+            // crear botones de opción
+            radioButton = new JRadioButton[numOfSets];
+            rButtonGroup[i] = new ButtonGroup();
+            for (int j = 0; j < radioButton.length; j++){
+                radioButton[j] = new JRadioButton("Set " + j, false);
+                panels[i].add(radioButton[j]);
+                rButtonGroup[i].add(radioButton[j]);
+            }
+            
+            JButton taskButton = new JButton("tasks...");
+            //jButton1.setText("Planificar");
+            taskButton.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    //jButton1ActionPerformed(evt);
+                    // TODO llençar finestra tasques amb la tasca actual
+                    System.out.println("Tab = " + jTabbedPane1.getSelectedIndex());
+                    System.out.println("Set = " + rButtonGroup[jTabbedPane1.getSelectedIndex()].getSelection().getActionCommand());
+                    
+                }
+            });
+            
+            panels[i].add(taskButton);
+            
+            jTabbedPane1.addTab("tab" + i, panels[i]); // Objectiu, que el titol sigui "Up=40%"
+
+
+        }
+
+        // crear relación lógica entre objetos JRadioButton
+      
+        //
+
+        
+        
     }//GEN-LAST:event_fileImportDataActionPerformed
 
     private void fileSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileSaveResultsActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_fileSaveResultsActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -147,10 +239,9 @@ public class mainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem fileImportData;
     private javax.swing.JMenuItem fileSaveResults;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenu menuFile;
     // End of variables declaration//GEN-END:variables
 }
