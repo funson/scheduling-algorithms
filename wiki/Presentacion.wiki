@@ -1,0 +1,7 @@
+#summary Enlace a la presentación de la práctica
+
+He compartido la presentación en Google Docs:
+
+https://docs.google.com/presentation/d/1ICJCUMUjZWi_HyPgWDdZcfvBHC4eJLEiXcT2csJFp18/edit
+
+Podéis modificarla como queráis para incluir lo que habéis hecho en la parte de Implementación (aún no hay nada).
