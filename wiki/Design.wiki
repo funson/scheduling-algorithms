@@ -25,7 +25,7 @@ http://scheduling-algorithms.googlecode.com/files/Diagramadeclase.gif
 
 *Importador*: clase que lee e interpreta el fichero de entrada para introducir la información de las tareas periódicas y los servidores (que también son tareas periódicas) a la aplicación.
 
-*Exportador*: clase que permite generar un fichero de parámetros de la aplicación, igual al fichero que lee el *Importador*.
+*Exportador*: clase que permite generar un fichero de parámetros de la aplicación, igual al fichero que lee el *Importador*. También permite generar el fichero de resultados a partir de los Resultados de la planificación.
 
 *Resumen*: clase que representa el Resumen de ejecución. Es una lista de nodos que representan los intervalos de tiempo de ejecución de las tareas así como los intervalos de tiempo libres donde no se ejecuta nada.
 
