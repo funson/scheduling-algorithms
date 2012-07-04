@@ -88,6 +88,30 @@ public class Importer {
                             
                             //arraydetasques.insert(taskGroup).
                         }
+                        else if (aux[i].contains("U*s_DS")){
+                            System.out.println("###############################");// a les dues linies segs tenim la informació dels servidors
+                            // Lleguim la seg linia
+                            sLine = bf.readLine();
+                            aux = sLine.split("\t");
+                            // Els tres primers son les dades dels servidor
+                            int index = 0;
+                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
+                            System.out.println(aux[index]);
+                            index++;
+                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
+                            System.out.println(aux[index]);
+                            index++;
+                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
+                            System.out.println(aux[index]);
+
+                            // El 4t element es el primer de la seg linia
+                            sLine = bf.readLine();
+                            aux = sLine.split("\t");
+                            // Els tres primers son les dades dels servidor
+                            index = 0;
+                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
+                            System.out.println(aux[index]);
+                        }
                         /*A mesura que es recorre un conjunt, anar guardant els servidors a l'array:
                          * taskSetServers[numServer] = new ...
                          * en acabar de recorrer un conjunt, s'ha de ficar aquest array de servidors dins l'ArrayList de l'Scheduler:
