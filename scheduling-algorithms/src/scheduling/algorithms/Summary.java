@@ -73,10 +73,52 @@ public class Summary {
         if(periodicTask instanceof Server){
             averageAperiodicResponseTime = ((Server) periodicTask).scheduleAperiodicTaskGroup(this);
             return true;
-        }
-        else
+        } else {
             //Iterar, para todas las ocurrencias de la tarea periódica, los nodos libres y meter la tarea
             //Hint: para mayor eficiencia, USAR ITERATOR para recorrer el array de nodos
-            throw new UnsupportedOperationException("Scheduling periodic task not supported yet. USE LIST ITERATOR!!");        
+            ListIterator iterator = getSummaryListIterator();
+            Node node;
+            float period = periodicTask.getPeriod();
+            float phase = periodicTask.getPhase();
+            float computation = periodicTask.getComputationTime();
+            float remainingComputation;
+            boolean deadlineMet = true;
+            int numPeriod = 1;
+            float nextAbsolutePeriod;
+            while(iterator.hasNext()){
+                nextAbsolutePeriod = period*numPeriod + phase;
+                remainingComputation = computation;
+                node = (Node) iterator.next();
+                while(iterator.hasNext() && node.getStopTime() <= nextAbsolutePeriod){
+                    node = (Node) iterator.next();
+                }
+                if(!iterator.hasNext())
+                    return deadlineMet;
+                while(remainingComputation > 0 && deadlineMet){
+                    if(node.isFree()){
+                        if(node.getStartTime() < nextAbsolutePeriod){
+                            iterator.add(new Node(nextAbsolutePeriod, node.getStopTime()));
+                            node.setStopTime(nextAbsolutePeriod);
+                            node = (Node) iterator.previous();
+                        }
+                        if(node.getStopTime() > node.getStartTime() + remainingComputation){
+                            iterator.add(new Node(node.getStartTime() + remainingComputation, node.getStopTime()));
+                            node.setStopTime(node.getStartTime() + remainingComputation);
+                            iterator.previous(); //lo dejamos apuntando a node
+                        }
+                        node.setTask(periodicTask);
+                        remainingComputation -= node.getStopTime() - node.getStartTime();
+                        if(remainingComputation > 0 && node.getStopTime() > nextAbsolutePeriod)
+                            deadlineMet = false;
+                    }                    
+                    if(iterator.hasNext())
+                        node = (Node) iterator.next();
+                    else if(remainingComputation > 0)
+                        deadlineMet = false;
+                }                
+                numPeriod++;
+            }
+            return deadlineMet;
+        }
     }
 }
