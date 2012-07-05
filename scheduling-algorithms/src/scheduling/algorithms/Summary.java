@@ -73,9 +73,7 @@ public class Summary {
         if(periodicTask instanceof Server){
             averageAperiodicResponseTime = ((Server) periodicTask).scheduleAperiodicTaskGroup(this);
             return true;
-        } else {
-            //Iterar, para todas las ocurrencias de la tarea periódica, los nodos libres y meter la tarea
-            //Hint: para mayor eficiencia, USAR ITERATOR para recorrer el array de nodos
+        } else {            
             ListIterator iterator = getSummaryListIterator();
             Node node;
             float period = periodicTask.getPeriod();
