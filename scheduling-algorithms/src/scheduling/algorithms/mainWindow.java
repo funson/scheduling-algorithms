@@ -14,7 +14,7 @@ import javax.swing.*;
  */
 public class mainWindow extends javax.swing.JFrame {
     
-    private ButtonGroup rButtonGroup[];
+    private ButtonGroup rButtonGroup;
 
     public static String newline = System.getProperty("line.separator");
     /**
@@ -36,8 +36,10 @@ public class mainWindow extends javax.swing.JFrame {
         tasksWindow = new javax.swing.JFrame();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jButton2 = new javax.swing.JButton();
+        resultWindow = new javax.swing.JFrame();
         jButton1 = new javax.swing.JButton();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel1 = new javax.swing.JPanel();
         jMenuBar2 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         fileImportData = new javax.swing.JMenuItem();
@@ -73,14 +75,38 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        javax.swing.GroupLayout resultWindowLayout = new javax.swing.GroupLayout(resultWindow.getContentPane());
+        resultWindow.getContentPane().setLayout(resultWindowLayout);
+        resultWindowLayout.setHorizontalGroup(
+            resultWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        resultWindowLayout.setVerticalGroup(
+            resultWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setText("Planificar");
+        jButton1.setText("Plan");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 378, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 230, Short.MAX_VALUE)
+        );
+
+        jScrollPane1.setViewportView(jPanel1);
 
         menuFile.setText("File");
 
@@ -110,27 +136,23 @@ public class mainWindow extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(315, Short.MAX_VALUE)
-                .addComponent(jButton1)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane1))
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                    .addContainerGap()))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(249, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1)
                 .addContainerGap())
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(48, Short.MAX_VALUE)))
         );
 
         pack();
@@ -145,80 +167,36 @@ public class mainWindow extends javax.swing.JFrame {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             //Opening
             Scheduler.importTaskSets(fc.getSelectedFile().getAbsolutePath());
-        } else {
-            // cancelled by the user. Nothing to do.
-        }
-        int numOfSuperSets = 5;
-        // Construim els panells
-        JPanel panels[];
-        panels = new JPanel[numOfSuperSets];
-        rButtonGroup = new ButtonGroup[numOfSuperSets];
-        
-        for (int i = 0; i < panels.length; i++){
-            panels[i] = new JPanel();
-            rButtonGroup[i] = new ButtonGroup();
-            
-        
-        
-            GroupLayout jPanel1Layout = new GroupLayout(panels[i]);
-            panels[i].setLayout(jPanel1Layout);
-            jPanel1Layout.setHorizontalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 200, Short.MAX_VALUE)
-            );
-            jPanel1Layout.setVerticalGroup(
-                jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGap(0, 108, Short.MAX_VALUE)
-            );
-
-            
-            
+       
             int numOfSets = 5;
 
-            // Radio Button
+            jPanel1.setLayout( new GridLayout(6,0));
 
-            // obtener panel de contenido y establecer su esquema
-            panels[i].setLayout( new GridLayout(6,0));//FlowLayout() );
-
-            JRadioButton radioButton[];//botonSimple, botonNegrita, botonCursiva, botonNegritaCursiva;
-//            ButtonGroup rButtonGroup;
-            // crear botones de opción
-            radioButton = new JRadioButton[numOfSets];
-            rButtonGroup[i] = new ButtonGroup();
-            for (int j = 0; j < radioButton.length; j++){
-                radioButton[j] = new JRadioButton("Set " + j, false);
-                panels[i].add(radioButton[j]);
-                rButtonGroup[i].add(radioButton[j]);
+            rButtonGroup = new ButtonGroup();
+            final JRadioButton radioButton[] = new JRadioButton[numOfSets];
+            for (int i = 0; i < numOfSets; i++){
+                radioButton[i] = new JRadioButton("Set " + i, false);
+                radioButton[i].setActionCommand(Integer.toString(i));
+                jPanel1.add(radioButton[i]);
+                rButtonGroup.add(radioButton[i]);
             }
-            
             JButton taskButton = new JButton("tasks...");
             taskButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    System.out.println("Tab = " + jTabbedPane1.getSelectedIndex());
-                    String selected = (rButtonGroup[jTabbedPane1.getSelectedIndex()].getSelection().getActionCommand() == null) ? "Si" : "No";
-                    System.out.println("Set = " + selected);
-                    // TODO construir la finestra depenent del conjunt seleccionat.
-                    tasksWindow.setVisible(true);
-                    jTabbedPane1.removeAll();
-                    
-                    jTabbedPane1.validate();
+                    if (rButtonGroup.getSelection() != null){
+                        System.out.println(rButtonGroup.getSelection().getActionCommand());
+                        int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
+                        tasksWindow.setVisible(true);
+                        // TODO construir la finestra de tasques
+                    }
                 }
             });
-            
-            panels[i].add(taskButton);
-            
-            jTabbedPane1.addTab("tab" + i, panels[i]); // Objectiu, que el titol sigui "Up=40%"
-
-
+            jPanel1.add(taskButton);
+            jPanel1.validate();
+         } else {
+            // cancelled by the user. Nothing to do.
         }
-
-        // crear relación lógica entre objetos JRadioButton
-      
-        //
-
-        
-        
     }//GEN-LAST:event_fileImportDataActionPerformed
 
     private void fileSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileSaveResultsActionPerformed
@@ -226,7 +204,8 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        // TODO llençar el planificador i construir la finestra de resultats
+        resultWindow.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -281,9 +260,11 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JMenuBar jMenuBar2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JFrame resultWindow;
     private javax.swing.JFrame tasksWindow;
     // End of variables declaration//GEN-END:variables
 }
