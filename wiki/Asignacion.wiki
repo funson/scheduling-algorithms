@@ -4,7 +4,7 @@
 
 || *Tarea* || *Asignados* ||
 ||GUI principal|| Toni Gili Beltrán ||
-||GUI tareas|| ||
+||GUI tareas||  Miquel Ángel Menéndez Jaume||
 ||GUI resultados|| ||
 ||BS|| Juan Carlos Caimari Mateu||
 ||PS|| Gonzalo Laso Ferrer ||
