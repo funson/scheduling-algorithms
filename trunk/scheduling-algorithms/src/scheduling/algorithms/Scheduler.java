@@ -121,7 +121,7 @@ public class Scheduler {
                 aperiodicMeanTimeBetweenArrivals += (currentAperiodicTask.getArrivalTime() - previousAperiodicTask.getArrivalTime()) / (manualNumAperiodicTasks - 1);
                 previousAperiodicTask = currentAperiodicTask;
             }
-            APERIODIC_LOADS[0] = aperiodicMeanTimeBetweenArrivals / APERIODIC_MEAN_SERVICE_TIMES[0];
+            APERIODIC_LOADS[0] = APERIODIC_MEAN_SERVICE_TIMES[0] / aperiodicMeanTimeBetweenArrivals;
         }                                
         summaries = new Summary[NUM_SERVERS][TaskSet.GROUPS_PER_SET][NUM_APERIODIC_MEAN_SERVICE_TIMES][NUM_APERIODIC_LOADS];
         Scheduler.numTaskSetToSchedule = taskSetToSchedule;

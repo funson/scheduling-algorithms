@@ -37,7 +37,7 @@ public class AperiodicTaskGroup extends TaskGroup {
         AperiodicTask previousTask = new AperiodicTask("", 0, 0);
         AperiodicTask currentTask;
         for(int i = 0; i < numTasks; i++){
-            timeBetweenArrivals = mathOperation.getPoisson(aperiodicMeanServiceTime * aperiodicLoad);
+            timeBetweenArrivals = mathOperation.getPoisson(aperiodicMeanServiceTime * (1 / aperiodicLoad));
             computationTime = mathOperation.getExponential(aperiodicMeanServiceTime);            
             currentTask = new AperiodicTask("AP"+i, previousTask.getArrivalTime() + timeBetweenArrivals, computationTime);
             this.taskGroup.add(currentTask);
