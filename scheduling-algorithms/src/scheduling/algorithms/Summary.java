@@ -71,7 +71,7 @@ public class Summary {
      */
     private boolean schedulePeriodicTask(PeriodicTask periodicTask) {        
         if(periodicTask instanceof Server){
-            ((Server) periodicTask).scheduleAperiodicTaskGroup(this);
+            averageAperiodicResponseTime = ((Server) periodicTask).scheduleAperiodicTaskGroup(this);
             return true;
         }
         else
