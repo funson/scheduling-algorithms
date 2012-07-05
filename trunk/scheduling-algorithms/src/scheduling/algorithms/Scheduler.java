@@ -31,6 +31,7 @@ public class Scheduler {
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
     private static int numTaskSetToSchedule;
+    private static final double MAX_CPU_UTILIZATION = 0.9;
     
     private static Runnable runnable = new Runnable() {
 
@@ -88,6 +89,8 @@ public class Scheduler {
         if(mode.equals(AperiodicTaskCreationMode.AUTO)){
             NUM_APERIODIC_LOADS = 5;
             APERIODIC_LOADS = new double[NUM_APERIODIC_LOADS];
+            double residualAperiodicLoad = MAX_CPU_UTILIZATION - taskSets.get(taskSetToSchedule).getTotalPeriodicLoad();
+            double aperiodicLoadIntervalSize = residualAperiodicLoad / (double)NUM_APERIODIC_LOADS;
             NUM_APERIODIC_MEAN_SERVICE_TIMES = 4;
             APERIODIC_MEAN_SERVICE_TIMES = new double[NUM_APERIODIC_MEAN_SERVICE_TIMES];
             APERIODIC_MEAN_SERVICE_TIMES[0] = 0.55;
@@ -96,26 +99,29 @@ public class Scheduler {
             APERIODIC_MEAN_SERVICE_TIMES[3] = 5.5;
             aperiodicTaskGroups = new AperiodicTaskGroup[NUM_APERIODIC_LOADS][NUM_APERIODIC_MEAN_SERVICE_TIMES];
             for(int i = 0; i < NUM_APERIODIC_LOADS; i++){
+                APERIODIC_LOADS[i] = aperiodicLoadIntervalSize * i;
                 for(int j = 0; j < NUM_APERIODIC_MEAN_SERVICE_TIMES; j++){                        
                     aperiodicTaskGroups[i][j] = new AperiodicTaskGroup(numAperiodicTasks, APERIODIC_MEAN_SERVICE_TIMES[i], APERIODIC_LOADS[j]);                
                 }                    
             }                
         } else {
-            //Si la creación del grupo de aperiódicas es manual, el grupo debe estar en la posición aperiodicTaskGroups[0][0]
+            //Si la creación del grupo de aperiódicas es manual, el grupo ya debe estar en la posición aperiodicTaskGroups[0][0]
             NUM_APERIODIC_LOADS = 1;
             APERIODIC_LOADS = new double[NUM_APERIODIC_LOADS];
             NUM_APERIODIC_MEAN_SERVICE_TIMES = 1;
             APERIODIC_MEAN_SERVICE_TIMES = new double[NUM_APERIODIC_MEAN_SERVICE_TIMES];            
-            AperiodicTask aperiodicTask;
+            AperiodicTask currentAperiodicTask;
+            AperiodicTask previousAperiodicTask = (AperiodicTask) aperiodicTaskGroups[0][0].getTask(0);
             APERIODIC_MEAN_SERVICE_TIMES[0] = 0;
             double aperiodicMeanTimeBetweenArrivals = 0;
             int manualNumAperiodicTasks = aperiodicTaskGroups[0][0].taskGroup.size();
-            for(int i = 0; i < manualNumAperiodicTasks; i++){
-                aperiodicTask = (AperiodicTask) aperiodicTaskGroups[0][0].getTask(i);
-                APERIODIC_MEAN_SERVICE_TIMES[0] += aperiodicTask.getComputationTime() / manualNumAperiodicTasks;
-                aperiodicMeanTimeBetweenArrivals += aperiodicTask.getArrivalTime() / manualNumAperiodicTasks;
+            for(int i = 1; i < manualNumAperiodicTasks; i++){
+                currentAperiodicTask = (AperiodicTask) aperiodicTaskGroups[0][0].getTask(i);
+                APERIODIC_MEAN_SERVICE_TIMES[0] += currentAperiodicTask.getComputationTime() / manualNumAperiodicTasks;
+                aperiodicMeanTimeBetweenArrivals += (currentAperiodicTask.getArrivalTime() - previousAperiodicTask.getArrivalTime()) / (manualNumAperiodicTasks - 1);
+                previousAperiodicTask = currentAperiodicTask;
             }
-            APERIODIC_LOADS[0] = aperiodicMeanTimeBetweenArrivals / APERIODIC_MEAN_SERVICE_TIMES[0];            
+            APERIODIC_LOADS[0] = aperiodicMeanTimeBetweenArrivals / APERIODIC_MEAN_SERVICE_TIMES[0];
         }                                
         summaries = new Summary[NUM_SERVERS][TaskSet.GROUPS_PER_SET][NUM_APERIODIC_MEAN_SERVICE_TIMES][NUM_APERIODIC_LOADS];
         Scheduler.numTaskSetToSchedule = taskSetToSchedule;
