@@ -4,6 +4,7 @@
  */
 package scheduling.algorithms;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.*;
@@ -35,7 +36,12 @@ public class mainWindow extends javax.swing.JFrame {
 
         tasksWindow = new javax.swing.JFrame();
         jTabbedPane2 = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        panelOfPeriodic = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        panelOfAperiodic = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         resultWindow = new javax.swing.JFrame();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -45,10 +51,47 @@ public class mainWindow extends javax.swing.JFrame {
         fileImportData = new javax.swing.JMenuItem();
         fileSaveResults = new javax.swing.JMenuItem();
 
+        javax.swing.GroupLayout panelOfPeriodicLayout = new javax.swing.GroupLayout(panelOfPeriodic);
+        panelOfPeriodic.setLayout(panelOfPeriodicLayout);
+        panelOfPeriodicLayout.setHorizontalGroup(
+            panelOfPeriodicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 373, Short.MAX_VALUE)
+        );
+        panelOfPeriodicLayout.setVerticalGroup(
+            panelOfPeriodicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 214, Short.MAX_VALUE)
+        );
+
+        jScrollPane2.setViewportView(panelOfPeriodic);
+
+        jTabbedPane2.addTab("Periódicas", jScrollPane2);
+
+        javax.swing.GroupLayout panelOfAperiodicLayout = new javax.swing.GroupLayout(panelOfAperiodic);
+        panelOfAperiodic.setLayout(panelOfAperiodicLayout);
+        panelOfAperiodicLayout.setHorizontalGroup(
+            panelOfAperiodicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 373, Short.MAX_VALUE)
+        );
+        panelOfAperiodicLayout.setVerticalGroup(
+            panelOfAperiodicLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 214, Short.MAX_VALUE)
+        );
+
+        jScrollPane3.setViewportView(panelOfAperiodic);
+
+        jTabbedPane2.addTab("Aperiódicas", jScrollPane3);
+
         jButton2.setText("Close");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Save changes");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
             }
         });
 
@@ -61,7 +104,9 @@ public class mainWindow extends javax.swing.JFrame {
                 .addGroup(tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTabbedPane2)
                     .addGroup(tasksWindowLayout.createSequentialGroup()
-                        .addGap(0, 321, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
                 .addContainerGap())
         );
@@ -69,9 +114,11 @@ public class mainWindow extends javax.swing.JFrame {
             tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tasksWindowLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addGroup(tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -87,6 +134,7 @@ public class mainWindow extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("SchedulingAlgorithms");
 
         jButton1.setText("Plan");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -168,6 +216,8 @@ public class mainWindow extends javax.swing.JFrame {
             //Opening
             Scheduler.importTaskSets(fc.getSelectedFile().getAbsolutePath());
        
+            //Scheduler.getTaskSets().size();
+            System.out.println(Scheduler.getTaskSets());
             int numOfSets = 5;
 
             jPanel1.setLayout( new GridLayout(6,0));
@@ -187,8 +237,36 @@ public class mainWindow extends javax.swing.JFrame {
                     if (rButtonGroup.getSelection() != null){
                         System.out.println(rButtonGroup.getSelection().getActionCommand());
                         int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
-                        tasksWindow.setVisible(true);
+                        
+                        
+                        
+                        panelOfPeriodic.removeAll();
+                        panelOfAperiodic.removeAll();
+                        
                         // TODO construir la finestra de tasques
+                        int numberOfGroups = 2;
+                        
+                        panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
+                        
+                        String[] columnNames = {"Task", "Phase", "Computation time", "Period"};
+                        
+                        for (int i = 0; i < numberOfGroups; i++){
+                            int numberOfTasksCurrentGroup = 2;
+                            Object[][] data = new Object[numberOfTasksCurrentGroup][columnNames.length];
+                            for (int j = 0; j < numberOfTasksCurrentGroup; j++){
+                                for (int k = 0; k < columnNames.length; k++){
+                                    data[j][k] = new Object();
+                                    data[j][k] = "texte de proba";
+                                }
+                            }
+                            JTable table = new JTable(data, columnNames);
+                            JScrollPane scrollPane = new JScrollPane(table);
+                            scrollPane.setPreferredSize(new Dimension(100,100));
+                            table.setFillsViewportHeight(true);
+                            panelOfPeriodic.add(scrollPane);
+                        }
+                        tasksWindow.setMinimumSize(new Dimension(400,300));
+                        tasksWindow.setVisible(true);
                     }
                 }
             });
@@ -211,6 +289,10 @@ public class mainWindow extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         tasksWindow.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO desar canvis de les taules
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -259,11 +341,16 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem fileSaveResults;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JPanel panelOfAperiodic;
+    private javax.swing.JPanel panelOfPeriodic;
     private javax.swing.JFrame resultWindow;
     private javax.swing.JFrame tasksWindow;
     // End of variables declaration//GEN-END:variables
