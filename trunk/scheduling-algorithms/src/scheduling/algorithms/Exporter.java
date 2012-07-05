@@ -36,6 +36,5 @@ public class Exporter {
                 out.write("\n");
             }
         }
-        throw new UnsupportedOperationException("Not supported yet");
     }
 }
