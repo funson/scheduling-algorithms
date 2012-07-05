@@ -34,7 +34,7 @@ public class Importer {
         // Utilització dels servidors
         float u;
         
-        int taskGroup; // el grup de tasques actual, on s'han d'insertar les tasques (index)
+        int taskGroup = 0; // el grup de tasques actual, on s'han d'insertar les tasques (index)
         // Informació de la tasca actual
         String nom; 
         float t, c, ph;
@@ -66,6 +66,7 @@ public class Importer {
                             //System.out.println(aux[i].charAt(aux[i].length()-1));
                             taskGroup = Integer.parseInt(aux[i].substring(aux[i].length()-1));
                             System.out.println(taskGroup);
+                            taskSets.get(currentSets).addGroup(new PeriodicTaskGroup());
                         }
                         else if (aux[i].contains("Px_")){
                             nom = aux[i];
@@ -84,8 +85,8 @@ public class Importer {
                             System.out.println("Periode: " + t);
                             System.out.println("Temps de computació: " + c);
                             System.out.println("Fase: " + ph);
-                            
-                            
+
+                            taskSets.get(currentSets).getGroup(taskGroup).addTask(new PeriodicTask(nom, t, ph, c));
                             //arraydetasques.insert(taskGroup).
                         }
                         else if (aux[i].contains("U*s_DS")){
@@ -114,6 +115,7 @@ public class Importer {
                         }
                         /*A mesura que es recorre un conjunt, anar guardant els servidors a l'array:
                          * taskSetServers[numServer] = new ...
+                         * numServer++
                          * en acabar de recorrer un conjunt, s'ha de ficar aquest array de servidors dins l'ArrayList de l'Scheduler:
                         servers.add(taskSetServers);*/
                     }
