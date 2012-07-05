@@ -69,8 +69,11 @@ public class Scheduler {
      * Tener en cuenta que el Servidor Background no está en el fichero porque sus parámetros (capacidad y periodo) son constantes.
      * @param urlFile Url del fichero con las tareas periódicas a importar.
      */
-    public static void importTaskSets(String urlFile){        
+    public static void importTaskSets(String urlFile){     
+        taskSets = new ArrayList<>();
+        servers  = new ArrayList<>();
         Importer.importTaskSets(urlFile, taskSets, servers);
+        
     }
     
     public static void generateAperiodicTaskGroups(int aperiodicTasksPerGroup, int taskSet){

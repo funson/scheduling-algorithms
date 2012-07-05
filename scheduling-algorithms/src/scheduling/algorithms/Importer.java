@@ -25,9 +25,7 @@ public class Importer {
      * @param servers  Array de servidors a inicializar.
      */    
     public static void importTaskSets(String urlFile, ArrayList<TaskSet> taskSets, ArrayList<Server[]> servers){
-        taskSets   = new ArrayList<>();
         TaskSet ts;//
-        servers = new ArrayList<>();
         Server[] taskSetServers = null;
         
         // Informació de fitxer
