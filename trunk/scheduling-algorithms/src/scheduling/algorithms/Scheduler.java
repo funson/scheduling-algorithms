@@ -15,18 +15,13 @@ import java.util.Iterator;
  */
 public class Scheduler {
     
-    public enum AperiodicTaskCreationMode {
-        MANUAL, AUTO;
-    }
-    
-    private static final int NUM_SERVERS = 5;
+    private static final int NUM_SERVERS = 5;    
     private static int NUM_APERIODIC_MEAN_SERVICE_TIMES;
-    private static double[] APERIODIC_MEAN_SERVICE_TIMES;
+    private static double[] APERIODIC_MEAN_SERVICE_TIMES;    
     private static int NUM_APERIODIC_LOADS;
     private static double[] APERIODIC_LOADS;
-    private static ArrayList<Server[]> servers;
-    private static AperiodicTaskCreationMode mode;
-    private static AperiodicTaskGroup[][] aperiodicTaskGroups;    
+    private static ArrayList<Server[]> servers;    
+    private static AperiodicTaskGroup[][] aperiodicTaskGroups;
     private static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 20;    
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
