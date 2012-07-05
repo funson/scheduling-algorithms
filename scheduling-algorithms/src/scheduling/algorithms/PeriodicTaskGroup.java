@@ -15,7 +15,11 @@ import java.util.Iterator;
  * @author Juanito
  */
 public class PeriodicTaskGroup extends TaskGroup {
-    
+
+
+    public PeriodicTaskGroup(){
+        super();
+    }
     /**
      * Permite añadir una tarea periódica en el grupo.
      * En el caso de que passasemos una tarea aperiódica, esta función lanzaría una Excepción.
