@@ -129,4 +129,18 @@ public class Scheduler {
     }
         
     
+    /**
+     * @return the taskSets
+     */
+    public static ArrayList<TaskSet> getTaskSets() {
+        return taskSets;
+    }
+
+    /**
+     * @param aTaskSets the taskSets to set
+     */
+    public static void setTaskSets(ArrayList<TaskSet> aTaskSets) {
+        taskSets = aTaskSets;
+    }
+        
 }
