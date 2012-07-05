@@ -43,7 +43,7 @@ public class Importer {
         String sLine;
         BufferedReader bf = null;
         try {
-            bf = new BufferedReader(new FileReader("C:/Users/Miguel/Desktop/Dades_generiques (1).txt"));
+            bf = new BufferedReader(new FileReader(urlFile));
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Importer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -66,9 +66,9 @@ public class Importer {
                             //System.out.println(aux[i].charAt(aux[i].length()-1));
                             taskGroup = Integer.parseInt(aux[i].substring(aux[i].length()-1));
                             System.out.println(taskGroup);
-                            taskSets.get(currentSets).addGroup(new PeriodicTaskGroup());
+                            //taskSets.get(currentSets).addGroup(new PeriodicTaskGroup());
                         }
-                        else if (aux[i].contains("Px_")){
+                        else if (aux[i].contains("Px_") || aux[i].contains("Py_")){
                             nom = aux[i];
                             i++; // Passam al seg item
                             while (aux[i].equals("\t") || aux[i].equals("") || aux[i].equals(" ")) i++;
@@ -86,7 +86,7 @@ public class Importer {
                             System.out.println("Temps de computació: " + c);
                             System.out.println("Fase: " + ph);
 
-                            taskSets.get(currentSets).getGroup(taskGroup).addTask(new PeriodicTask(nom, t, ph, c));
+                            //taskSets.get(currentSets).getGroup(taskGroup).addTask(new PeriodicTask(nom, t, ph, c));
                             //arraydetasques.insert(taskGroup).
                         }
                         else if (aux[i].contains("U*s_DS")){
