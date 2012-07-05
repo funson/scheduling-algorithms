@@ -4,6 +4,8 @@
  */
 package scheduling.algorithms;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -26,7 +28,6 @@ public class Result {
     }        
     
     private ArrayList<ResultData> resultTable;
-    
     private ArrayList<Double>  loadsInResult;
     private ArrayList<String> serverNamesInResult;
     
@@ -108,8 +109,8 @@ public class Result {
      * que permita, mediante pocos pasos, crear un gráfico.
      * @param url_file_name Url del fichero a guardar/crear.
      */
-    public void saveResultsOdtFormat(String urlFilename){
-        Exporter.exportResultToOdt(urlFilename, this);
+    public void saveResultsOdsFormat(String urlFilename) throws IOException{
+        Exporter.exportResultToOds(urlFilename, this);
     }
     
 }
