@@ -33,12 +33,45 @@ public class mainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tasksWindow = new javax.swing.JFrame();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jMenuBar2 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         fileImportData = new javax.swing.JMenuItem();
         fileSaveResults = new javax.swing.JMenuItem();
+
+        jButton2.setText("Close");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout tasksWindowLayout = new javax.swing.GroupLayout(tasksWindow.getContentPane());
+        tasksWindow.getContentPane().setLayout(tasksWindowLayout);
+        tasksWindowLayout.setHorizontalGroup(
+            tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, tasksWindowLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTabbedPane2)
+                    .addGroup(tasksWindowLayout.createSequentialGroup()
+                        .addGap(0, 321, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
+                .addContainerGap())
+        );
+        tasksWindowLayout.setVerticalGroup(
+            tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(tasksWindowLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addContainerGap())
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -159,15 +192,17 @@ public class mainWindow extends javax.swing.JFrame {
             }
             
             JButton taskButton = new JButton("tasks...");
-            //jButton1.setText("Planificar");
             taskButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    //jButton1ActionPerformed(evt);
-                    // TODO llençar finestra tasques amb la tasca actual
                     System.out.println("Tab = " + jTabbedPane1.getSelectedIndex());
-                    System.out.println("Set = " + rButtonGroup[jTabbedPane1.getSelectedIndex()].getSelection().getActionCommand());
+                    String selected = (rButtonGroup[jTabbedPane1.getSelectedIndex()].getSelection().getActionCommand() == null) ? "Si" : "No";
+                    System.out.println("Set = " + selected);
+                    // TODO construir la finestra depenent del conjunt seleccionat.
+                    tasksWindow.setVisible(true);
+                    jTabbedPane1.removeAll();
                     
+                    jTabbedPane1.validate();
                 }
             });
             
@@ -193,6 +228,10 @@ public class mainWindow extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        tasksWindow.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -240,8 +279,11 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem fileImportData;
     private javax.swing.JMenuItem fileSaveResults;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JFrame tasksWindow;
     // End of variables declaration//GEN-END:variables
 }

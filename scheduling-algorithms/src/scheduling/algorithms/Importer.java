@@ -26,13 +26,14 @@ public class Importer {
      */    
     public static void importTaskSets(String urlFile, ArrayList<TaskSet> taskSets, ArrayList<Server[]> servers){
         taskSets   = new ArrayList<>();
+        TaskSet ts;//
         servers = new ArrayList<>();
-        Server[] taskSetServers;
+        Server[] taskSetServers = null;
         
         // Informació de fitxer
-        int currentSets = -1; // actual super conjunt de tasques
+        int currentSet = -1; // actual super conjunt de tasques
         // Utilització dels servidors
-        float u;
+        float u = 0;
         
         int taskGroup = 0; // el grup de tasques actual, on s'han d'insertar les tasques (index)
         // Informació de la tasca actual
@@ -57,16 +58,21 @@ public class Importer {
                             //System.out.println(aux[i].substring(3, aux[i].length()-1));
                             u = Integer.parseInt(aux[i].substring(3, aux[i].length()-1));
                             System.out.println(u);
-                            currentSets++;
+                            currentSet++;
+                            // Cream el conjunt
+                            ts = new TaskSet((float)u/100);
+                            taskSets.add(ts);
                             //Hem detectat un nou conjunt per tant inicialitzam el seu array de servidors i hi ficam el BS
                             taskSetServers = new Server[5];
-                            taskSetServers[0] = new BackgroundServer();                            
+                            taskSetServers[0] = new BackgroundServer();
                         }
                         else if (aux[i].contains("Grup tasques")){
                             //System.out.println(aux[i].charAt(aux[i].length()-1));
                             taskGroup = Integer.parseInt(aux[i].substring(aux[i].length()-1));
-                            System.out.println(taskGroup);
-                            //taskSets.get(currentSets).addGroup(new PeriodicTaskGroup());
+                            System.out.println("Grup tasques" + taskGroup);
+                            
+                            // Cream el grup
+                            taskSets.get(currentSet).addGroup(new PeriodicTaskGroup());
                         }
                         else if (aux[i].contains("Px_") || aux[i].contains("Py_")){
                             nom = aux[i];
@@ -86,8 +92,8 @@ public class Importer {
                             System.out.println("Temps de computació: " + c);
                             System.out.println("Fase: " + ph);
 
-                            //taskSets.get(currentSets).getGroup(taskGroup).addTask(new PeriodicTask(nom, t, ph, c));
-                            //arraydetasques.insert(taskGroup).
+                            // Inserim la tasca al grup
+                            taskSets.get(currentSet).getGroup(taskGroup).addTask(new PeriodicTask(nom, t, ph, c));
                         }
                         else if (aux[i].contains("U*s_DS")){
                             System.out.println("###############################");// a les dues linies segs tenim la informació dels servidors
@@ -97,13 +103,13 @@ public class Importer {
                             // Els tres primers son les dades dels servidor
                             int index = 0;
                             while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            System.out.println(aux[index]);
+                            float dada1 = Float.parseFloat(aux[index].replace(",", "."));
                             index++;
                             while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            System.out.println(aux[index]);
+                            float dada2 = Float.parseFloat(aux[index].replace(",", "."));
                             index++;
                             while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            System.out.println(aux[index]);
+                            float dada3 = Float.parseFloat(aux[index].replace(",", "."));
 
                             // El 4t element es el primer de la seg linia
                             sLine = bf.readLine();
@@ -111,7 +117,23 @@ public class Importer {
                             // Els tres primers son les dades dels servidor
                             index = 0;
                             while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            System.out.println(aux[index]);
+                            float dada4 = Float.parseFloat(aux[index].replace(",", "."));
+                            
+                            
+                            
+                            System.out.println(dada1);
+                            System.out.println(dada2);
+                            System.out.println(dada3);
+                            System.out.println(dada4);
+                            
+                            
+                            
+                            
+//                            taskSetServers[1] = new DeferrableServer();
+//                            taskSetServers[2] = new PollingServer();
+//                            taskSetServers[3] = new PriorityExchangeServer();
+//                            taskSetServers[4] = new SporadicServer();
+                            servers.add(taskSetServers);
                         }
                         /*A mesura que es recorre un conjunt, anar guardant els servidors a l'array:
                          * taskSetServers[numServer] = new ...
