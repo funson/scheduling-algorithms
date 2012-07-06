@@ -50,4 +50,12 @@ public class TaskGroup {
         clone.taskGroup = (ArrayList<Task>)taskGroup.clone();
         return clone;
     }
+    
+    /**
+     * Método para obtener el número de tareas del grupo.
+     * @return El número de tareas en el grupo.
+     */
+    public int getNumTasks(){
+        return this.taskGroup.size();
+    }
 }
