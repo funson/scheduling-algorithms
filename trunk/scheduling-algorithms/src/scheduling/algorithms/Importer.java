@@ -142,7 +142,6 @@ public class Importer {
                     i++;
                 }
             }
-            System.out.println(taskSets.size());
         } catch (IOException ex) {
             Logger.getLogger(Importer.class.getName()).log(Level.SEVERE, null, ex);
         }
