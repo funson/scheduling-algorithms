@@ -12,7 +12,14 @@ import java.util.ArrayList;
  * su terminio de todos los grupos.
  * @author Juanito
  */
-public class Scheduler {    
+public class Scheduler {
+
+    /**
+     * @return the result
+     */
+    public static Result getResult() {
+        return result;
+    }
     
     public enum aperiodicGenerationMode{
         NONE, AUTO, MANUAL;
@@ -30,7 +37,9 @@ public class Scheduler {
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
     private static int numTaskSetToSchedule;
-    private static final double MAX_CPU_UTILIZATION = 0.9;    
+    private static final double MAX_CPU_UTILIZATION = 0.9; 
+    
+    private static Result result;
     
     private static Runnable runnable = new Runnable() {
 
@@ -40,7 +49,7 @@ public class Scheduler {
             TaskSet taskSetToSchedule = taskSets.get(numTaskSetToSchedule);
             PeriodicTaskGroup periodicTaskGroupToSchedule;
             AperiodicTaskGroup aperiodicTaskGroup;
-            Result result = new Result();
+            result = new Result();
             float responseTimeByMeanServiceTime = 0;
             float responseTimeByGroup = 0;            
             for(int i = 0; i < NUM_SERVERS; i++){                                                                                        
@@ -61,7 +70,7 @@ public class Scheduler {
                             responseTimeByGroup += responseTimeByMeanServiceTime;
                     }
                     responseTimeByGroup /= TaskSet.GROUPS_PER_SET;
-                    result.addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
+                    getResult().addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
                 }                
             }                        
         }
