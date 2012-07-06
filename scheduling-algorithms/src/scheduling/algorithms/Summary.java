@@ -104,7 +104,8 @@ public class Summary {
      * @param periodicTask
      * @return Devuelve {@code false} si la tarea incumple alguna vez su deadline.
      */
-    private boolean schedulePeriodicTask(PeriodicTask periodicTask) {        
+    private boolean schedulePeriodicTask(PeriodicTask periodicTask) {   
+        int luis = -1;
         if(periodicTask instanceof Server){
             averageAperiodicResponseTime = ((Server) periodicTask).scheduleAperiodicTaskGroup(this);
             return true;
