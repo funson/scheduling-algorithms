@@ -10,6 +10,10 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import scheduling.algorithms.Scheduler.aperiodicGenerationMode;
@@ -102,6 +106,7 @@ public class mainWindow extends javax.swing.JFrame {
     }
     
     private ButtonGroup rButtonGroup;
+    
 
     public static String newline = System.getProperty("line.separator");
     /**
@@ -129,6 +134,11 @@ public class mainWindow extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         resultWindow = new javax.swing.JFrame();
+        textPanel = new javax.swing.JPanel();
+        scrollTextArea = new javax.swing.JScrollPane();
+        resultsTextArea = new javax.swing.JTextArea();
+        buttonPanel = new javax.swing.JPanel();
+        saveButton = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -208,15 +218,65 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        resultsTextArea.setColumns(20);
+        resultsTextArea.setRows(5);
+        scrollTextArea.setViewportView(resultsTextArea);
+
+        javax.swing.GroupLayout textPanelLayout = new javax.swing.GroupLayout(textPanel);
+        textPanel.setLayout(textPanelLayout);
+        textPanelLayout.setHorizontalGroup(
+            textPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollTextArea)
+        );
+        textPanelLayout.setVerticalGroup(
+            textPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+        );
+
+        saveButton.setLabel("Guardar");
+        saveButton.setName("");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
+        buttonPanel.setLayout(buttonPanelLayout);
+        buttonPanelLayout.setHorizontalGroup(
+            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addGap(249, 249, 249)
+                .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(34, Short.MAX_VALUE))
+        );
+        buttonPanelLayout.setVerticalGroup(
+            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(saveButton, javax.swing.GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout resultWindowLayout = new javax.swing.GroupLayout(resultWindow.getContentPane());
         resultWindow.getContentPane().setLayout(resultWindowLayout);
         resultWindowLayout.setHorizontalGroup(
             resultWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(resultWindowLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(resultWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(textPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         resultWindowLayout.setVerticalGroup(
             resultWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(resultWindowLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -426,7 +486,26 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO llençar el planificador i construir la finestra de resultats
+        Result result = Scheduler.getResult();
+        
+        String output = "";
+        ArrayList<String> serverNamesInResult = result.getServerNamesInResult();
+        ArrayList<Double> loadsInResult       = result.getLoadsInResult();
+        
+        for (int i=0;i<serverNamesInResult.size();i++){
+                output+= " \t" + serverNamesInResult.get(i);
+        }
+        output+="\n";
+        
+       for (int i=0;i<loadsInResult.size();i++){
+                output+= Double.toString(loadsInResult.get(i));
+                for (int j=0;j<serverNamesInResult.size();j++){
+                    output+="\t" + result.getData(loadsInResult.get(i), serverNamesInResult.get(j));
+                }
+                output+="\n";
+       }
+       
+       resultsTextArea.setText(output);
         resultWindow.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -437,6 +516,27 @@ public class mainWindow extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO desar canvis de les taules
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
+        Result result = Scheduler.getResult();
+        //Create a file chooser
+        final JFileChooser fc = new JFileChooser();
+        //In response to a button click:
+        int returnVal = fc.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                Exporter.exportResultToOds(fc.getSelectedFile().getAbsolutePath(), result);
+            } catch (IOException ex) {
+                Logger.getLogger(GUIResult.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
+
+
+
+    }//GEN-LAST:event_saveButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -481,6 +581,7 @@ public class mainWindow extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel buttonPanel;
     private javax.swing.JMenuItem fileImportData;
     private javax.swing.JMenuItem fileSaveResults;
     private javax.swing.JButton jButton1;
@@ -496,6 +597,10 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel panelOfAperiodic;
     private javax.swing.JPanel panelOfPeriodic;
     private javax.swing.JFrame resultWindow;
+    private javax.swing.JTextArea resultsTextArea;
+    private javax.swing.JButton saveButton;
+    private javax.swing.JScrollPane scrollTextArea;
     private javax.swing.JFrame tasksWindow;
+    private javax.swing.JPanel textPanel;
     // End of variables declaration//GEN-END:variables
 }
