@@ -4,16 +4,102 @@
  */
 package scheduling.algorithms;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import scheduling.algorithms.Scheduler.aperiodicGenerationMode;
 
 /**
  *
  * @author Miguel
  */
 public class mainWindow extends javax.swing.JFrame {
+    
+    class ButtonRenderer extends JButton implements TableCellRenderer {
+
+        public ButtonRenderer() {
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+            boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+                setBackground(UIManager.getColor("Button.background"));
+            }
+            setText((value == null) ? "" : value.toString());
+            return this;
+        }
+    }
+    
+    class ButtonEditor extends DefaultCellEditor {
+        protected JButton button;
+
+        private String label;
+
+        private boolean isPushed;
+
+        public ButtonEditor(JCheckBox checkBox) {
+            super(checkBox);
+            button = new JButton();
+            button.setOpaque(true);
+            button.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    fireEditingStopped();
+                    System.out.println("aaaaaaaaaaaaaaaaaaaa");
+                }
+            });
+        }
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value,
+            boolean isSelected, int row, int column) {
+            if (isSelected) {
+                button.setForeground(table.getSelectionForeground());
+                button.setBackground(table.getSelectionBackground());
+            } else {
+                button.setForeground(table.getForeground());
+                button.setBackground(table.getBackground());
+            }
+            label = (value == null) ? "" : value.toString();
+            button.setText(label);
+            isPushed = true;
+            return button;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            if (isPushed) {
+                // 
+                // 
+                JOptionPane.showMessageDialog(button, label + ": Ouch!");
+                // System.out.println(label + ": Ouch!");
+            }
+            isPushed = false;
+            return label;
+        }
+
+        @Override
+        public boolean stopCellEditing() {
+            isPushed = false;
+            return super.stopCellEditing();
+        }
+
+        @Override
+        protected void fireEditingStopped() {
+            super.fireEditingStopped();
+        }
+    }
     
     private ButtonGroup rButtonGroup;
 
@@ -217,61 +303,119 @@ public class mainWindow extends javax.swing.JFrame {
             Scheduler.importTaskSets(fc.getSelectedFile().getAbsolutePath());
        
             //Scheduler.getTaskSets().size();
-            System.out.println(Scheduler.getTaskSets());
-            int numOfSets = 5;
+            if (Scheduler.getTaskSets() != null){
+                int numOfSets = Scheduler.getTaskSets().size();
 
-            jPanel1.setLayout( new GridLayout(6,0));
+                jPanel1.setLayout( new GridLayout(6,0));
 
-            rButtonGroup = new ButtonGroup();
-            final JRadioButton radioButton[] = new JRadioButton[numOfSets];
-            for (int i = 0; i < numOfSets; i++){
-                radioButton[i] = new JRadioButton("Set " + i, false);
-                radioButton[i].setActionCommand(Integer.toString(i));
-                jPanel1.add(radioButton[i]);
-                rButtonGroup.add(radioButton[i]);
-            }
-            JButton taskButton = new JButton("tasks...");
-            taskButton.addActionListener(new java.awt.event.ActionListener() {
-                @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    if (rButtonGroup.getSelection() != null){
-                        System.out.println(rButtonGroup.getSelection().getActionCommand());
-                        int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
-                        
-                        
-                        
-                        panelOfPeriodic.removeAll();
-                        panelOfAperiodic.removeAll();
-                        
-                        // TODO construir la finestra de tasques
-                        int numberOfGroups = 2;
-                        
-                        panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
-                        
-                        String[] columnNames = {"Task", "Phase", "Computation time", "Period"};
-                        
-                        for (int i = 0; i < numberOfGroups; i++){
-                            int numberOfTasksCurrentGroup = 2;
-                            Object[][] data = new Object[numberOfTasksCurrentGroup][columnNames.length];
-                            for (int j = 0; j < numberOfTasksCurrentGroup; j++){
-                                for (int k = 0; k < columnNames.length; k++){
-                                    data[j][k] = new Object();
-                                    data[j][k] = "texte de proba";
-                                }
-                            }
-                            JTable table = new JTable(data, columnNames);
-                            JScrollPane scrollPane = new JScrollPane(table);
-                            scrollPane.setPreferredSize(new Dimension(100,100));
-                            table.setFillsViewportHeight(true);
-                            panelOfPeriodic.add(scrollPane);
-                        }
-                        tasksWindow.setMinimumSize(new Dimension(400,300));
-                        tasksWindow.setVisible(true);
-                    }
+                rButtonGroup = new ButtonGroup();
+                JRadioButton radioButton[] = new JRadioButton[numOfSets];
+                for (int i = 0; i < numOfSets; i++){
+                    radioButton[i] = new JRadioButton("Set " + i, false);
+                    radioButton[i].setActionCommand(Integer.toString(i));
+                    jPanel1.add(radioButton[i]);
+                    rButtonGroup.add(radioButton[i]);
                 }
-            });
-            jPanel1.add(taskButton);
-            jPanel1.validate();
+                JButton taskButton = new JButton("tasks...");
+                taskButton.addActionListener(new java.awt.event.ActionListener() {
+                    @Override
+                    public void actionPerformed(java.awt.event.ActionEvent evt) {
+                        if (rButtonGroup.getSelection() != null){
+                            System.out.println(rButtonGroup.getSelection().getActionCommand());
+                            int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
+
+
+
+                            panelOfPeriodic.removeAll();
+                            panelOfAperiodic.removeAll();
+
+                            // TODO construir la finestra de tasques
+                            //Scheduler.getTaskSets().get(selectedSet).
+                            int numberOfGroups = 2;
+
+                            panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
+
+                            String[] periodicColumnNames = {"Task", "Phase", "Computation time", "Period"};
+
+                            for (int i = 0; i < numberOfGroups; i++){
+                                int numberOfTasksCurrentGroup = 10;
+                                Object[][] data = new Object[numberOfTasksCurrentGroup][periodicColumnNames.length];
+                                for (int j = 0; j < numberOfTasksCurrentGroup; j++){
+                                    for (int k = 0; k < periodicColumnNames.length; k++){
+                                        data[j][k] = new Object();
+                                        data[j][k] = "texte de proba";
+                                    }
+                                }
+                                JTable table = new JTable(data, periodicColumnNames);
+                                JScrollPane scrollPane = new JScrollPane(table);
+                                scrollPane.setPreferredSize(new Dimension(100,100));
+                                table.setFillsViewportHeight(true);
+                                panelOfPeriodic.add(scrollPane);
+                            }
+                            
+                            // Aperiòdiques
+                            //if (Scheduler.getAperiodicInfo() != null){
+                                int numberOfAperiodicGroups = 1;//Scheduler.getAperiodicInfo().getAperiodicTaskGroups().length;
+                                panelOfAperiodic.setLayout(new GridLayout(numberOfAperiodicGroups + 1, 0));
+                                // +1 per afegir el panell de botons a la capçalera
+                                boolean automatic = false, manual = false;
+                                if (Scheduler.getAperiodicInfo().getMode().equals(aperiodicGenerationMode.AUTO))
+                                    automatic = true;
+                                else if (Scheduler.getAperiodicInfo().getMode().equals(aperiodicGenerationMode.MANUAL))
+                                    manual = true;
+                                ButtonGroup aperiodicButtonGroup = new ButtonGroup();
+                                JRadioButton automaticRadioButton = new JRadioButton("Automatic", automatic);
+                                automaticRadioButton.setActionCommand("Automatic");
+                                JRadioButton manualRadioButton = new JRadioButton("Manual", manual);
+                                manualRadioButton.setActionCommand("Manual");
+
+                                aperiodicButtonGroup.add(automaticRadioButton);
+                                aperiodicButtonGroup.add(manualRadioButton);
+
+                                JButton genButton = new JButton("Gen");
+                                JPanel genPanel = new JPanel();
+                                genPanel.setLayout(new GridLayout(2,0));
+                                
+                                JPanel radioButtonsPanel = new JPanel();
+                                radioButtonsPanel.setLayout(new GridLayout(0,2));
+
+                                radioButtonsPanel.add(automaticRadioButton);
+                                radioButtonsPanel.add(manualRadioButton);
+                                genPanel.add(radioButtonsPanel);
+                                genPanel.add(genButton);
+                                
+                                panelOfAperiodic.add(genPanel);
+                                
+                                String[] aperiodicColumnNames = {"Task", "Arrival", "Computation time", "End", "Delete"};
+
+                                for (int i = 0; i < numberOfAperiodicGroups; i++){
+                                    int numberOfTasksCurrentGroup = 10;
+                                    Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
+                                    for (int j = 0; j < numberOfTasksCurrentGroup; j++){
+                                        for (int k = 0; k < aperiodicColumnNames.length; k++){
+                                            data[j][k] = new Object();
+                                            data[j][k] = "texte de proba";
+                                        }
+                                        data[j][aperiodicColumnNames.length - 1] = new Object();
+                                        data[j][aperiodicColumnNames.length - 1] = "X";
+                                    }
+                                    JTable table = new JTable(data, aperiodicColumnNames);
+                                    table.getColumn("Delete").setCellRenderer(new ButtonRenderer());
+                                    table.getColumn("Delete").setCellEditor(new ButtonEditor(new JCheckBox()));
+                                    JScrollPane scrollPane = new JScrollPane(table);
+                                    scrollPane.setPreferredSize(new Dimension(100,100));
+                                    table.setFillsViewportHeight(true);
+                                    panelOfAperiodic.add(scrollPane);
+                                }
+                                //}
+                            tasksWindow.setMinimumSize(new Dimension(400,300));
+                            tasksWindow.setVisible(true);
+                        }
+                    }
+                });
+                jPanel1.add(taskButton);
+                jPanel1.validate();
+            }
          } else {
             // cancelled by the user. Nothing to do.
         }
