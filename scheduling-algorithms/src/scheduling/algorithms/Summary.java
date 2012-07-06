@@ -66,21 +66,24 @@ public class Summary {
     
     /**
      * Método que sirve para meter lo que quede para ejecutar de una tarea dentro de un Nodo libre del Summary.
-     * @param iterator Meter el iterador apuntando a un nodo libre
+     * @param iterator Meter el iterador apuntando a un nodo libre.
      * @param task     Tarea a meter.
      * @param arrivalTime Tiempo de llegada de la tarea a meter.
-     * @param remainingComputation Tiempo de computación que queda para acabar la Tarea
-     * @param serverCapacity Capacidad actual del servidor.       
-     * @return Tiempo del nodo asignado a la tarea. Imprescindible utilizarlo para calcular 
-     * el remainingComputation y el Server Capacity después de ejecutar éste método.
-     * Si devuelve -1 significa que el nodo ya está ocupado por una tarea.
+     * @param remainingComputation Tiempo de computación que queda para acabar la Tarea.
+     * @param serverCapacity Capacidad actual del servidor. No debemos olvidarnos de el momento en que la capacidad del servidor se regenera.
+     *        Por tanto será mas útil si en éste parámetro metemos el valor de Min (currentServerCapacity, nextRegenerationTime - currentNode.startTime()).
+     *        (El nombre de las variables es un ejemplo, usad las variables que hayáis creado para este propósito)
+     * @return Tiempo de computación de la tarea que se ejecutará dentro de el nodo especificado. 
+     *         Si devuelve -1 significa que el nodo ya estaba ocupado por una tarea.
+     *         Imprescindible utilizarlo para calcular las modificaciones de el remainingComputation y el Server Capacity después de ejecutar éste método.
+     *              remainingComputation = remainingComputation - resultado_addTaskToFreeNode;
+     *              ServerCapcity        = serverCapacity - resultado_addTaskToFreeNode
      */
     public static float addTaskToFreeNode(ListIterator<Node> iterator, Task task, float arrivalTime, float remainingComputation, float serverCapacity){
-        if (!iterator.hasNext())
-            return -1;
-        Node node = iterator.next();
+        Node node = iterator.previous();
+        iterator.next();
         
-        if (!node.isFree() || serverCapacity == 0)
+        if (!node.isFree() || serverCapacity <= 0 || remainingComputation<= 0)
             return -1;
         
         float stoptime = Math.min(remainingComputation,serverCapacity);
@@ -105,7 +108,6 @@ public class Summary {
      * @return Devuelve {@code false} si la tarea incumple alguna vez su deadline.
      */
     private boolean schedulePeriodicTask(PeriodicTask periodicTask) {   
-        int luis = -1;
         if(periodicTask instanceof Server){
             averageAperiodicResponseTime = ((Server) periodicTask).scheduleAperiodicTaskGroup(this);
             return true;
