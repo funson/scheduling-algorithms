@@ -4,19 +4,13 @@
  */
 package scheduling.algorithms;
 
-import java.awt.Component;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import scheduling.algorithms.Scheduler.aperiodicGenerationMode;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,89 +18,10 @@ import scheduling.algorithms.Scheduler.aperiodicGenerationMode;
  */
 public class mainWindow extends javax.swing.JFrame {
     
-    class ButtonRenderer extends JButton implements TableCellRenderer {
 
-        public ButtonRenderer() {
-            setOpaque(true);
-        }
-
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value,
-            boolean isSelected, boolean hasFocus, int row, int column) {
-            if (isSelected) {
-                setForeground(table.getSelectionForeground());
-                setBackground(table.getSelectionBackground());
-            } else {
-                setForeground(table.getForeground());
-                setBackground(UIManager.getColor("Button.background"));
-            }
-            setText((value == null) ? "" : value.toString());
-            return this;
-        }
-    }
-    
-    class ButtonEditor extends DefaultCellEditor {
-        protected JButton button;
-
-        private String label;
-
-        private boolean isPushed;
-
-        public ButtonEditor(JCheckBox checkBox) {
-            super(checkBox);
-            button = new JButton();
-            button.setOpaque(true);
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    fireEditingStopped();
-                    System.out.println("aaaaaaaaaaaaaaaaaaaa");
-                }
-            });
-        }
-
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-            boolean isSelected, int row, int column) {
-            if (isSelected) {
-                button.setForeground(table.getSelectionForeground());
-                button.setBackground(table.getSelectionBackground());
-            } else {
-                button.setForeground(table.getForeground());
-                button.setBackground(table.getBackground());
-            }
-            label = (value == null) ? "" : value.toString();
-            button.setText(label);
-            isPushed = true;
-            return button;
-        }
-
-        @Override
-        public Object getCellEditorValue() {
-            if (isPushed) {
-                // 
-                // 
-                JOptionPane.showMessageDialog(button, label + ": Ouch!");
-                // System.out.println(label + ": Ouch!");
-            }
-            isPushed = false;
-            return label;
-        }
-
-        @Override
-        public boolean stopCellEditing() {
-            isPushed = false;
-            return super.stopCellEditing();
-        }
-
-        @Override
-        protected void fireEditingStopped() {
-            super.fireEditingStopped();
-        }
-    }
-    
     private ButtonGroup rButtonGroup;
-    
+    ButtonGroup aperiodicButtonGroup;
+
 
     public static String newline = System.getProperty("line.separator");
     /**
@@ -132,7 +47,6 @@ public class mainWindow extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         panelOfAperiodic = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         resultWindow = new javax.swing.JFrame();
         textPanel = new javax.swing.JPanel();
         scrollTextArea = new javax.swing.JScrollPane();
@@ -146,6 +60,8 @@ public class mainWindow extends javax.swing.JFrame {
         menuFile = new javax.swing.JMenu();
         fileImportData = new javax.swing.JMenuItem();
         fileSaveResults = new javax.swing.JMenuItem();
+
+        tasksWindow.setTitle("Tasks");
 
         javax.swing.GroupLayout panelOfPeriodicLayout = new javax.swing.GroupLayout(panelOfPeriodic);
         panelOfPeriodic.setLayout(panelOfPeriodicLayout);
@@ -184,13 +100,6 @@ public class mainWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Save changes");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout tasksWindowLayout = new javax.swing.GroupLayout(tasksWindow.getContentPane());
         tasksWindow.getContentPane().setLayout(tasksWindowLayout);
         tasksWindowLayout.setHorizontalGroup(
@@ -201,8 +110,6 @@ public class mainWindow extends javax.swing.JFrame {
                     .addComponent(jTabbedPane2)
                     .addGroup(tasksWindowLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
                 .addContainerGap())
         );
@@ -212,9 +119,7 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTabbedPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                .addComponent(jButton2)
                 .addContainerGap())
         );
 
@@ -362,6 +267,14 @@ public class mainWindow extends javax.swing.JFrame {
             //Opening
             Scheduler.importTaskSets(fc.getSelectedFile().getAbsolutePath());
        
+            buildMainWindow();
+         } else {
+            // cancelled by the user. Nothing to do.
+        }
+    }//GEN-LAST:event_fileImportDataActionPerformed
+
+    void buildMainWindow(){
+        
             //Scheduler.getTaskSets().size();
             if (Scheduler.getTaskSets() != null){
                 int numOfSets = Scheduler.getTaskSets().size();
@@ -381,108 +294,194 @@ public class mainWindow extends javax.swing.JFrame {
                     @Override
                     public void actionPerformed(java.awt.event.ActionEvent evt) {
                         if (rButtonGroup.getSelection() != null){
-                            System.out.println(rButtonGroup.getSelection().getActionCommand());
-                            int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
-
-
-
-                            panelOfPeriodic.removeAll();
-                            panelOfAperiodic.removeAll();
-
-                            // TODO construir la finestra de tasques
-                            //Scheduler.getTaskSets().get(selectedSet).
-                            int numberOfGroups = 2;
-
-                            panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
-
-                            String[] periodicColumnNames = {"Task", "Phase", "Computation time", "Period"};
-
-                            for (int i = 0; i < numberOfGroups; i++){
-                                int numberOfTasksCurrentGroup = 10;
-                                Object[][] data = new Object[numberOfTasksCurrentGroup][periodicColumnNames.length];
-                                for (int j = 0; j < numberOfTasksCurrentGroup; j++){
-                                    for (int k = 0; k < periodicColumnNames.length; k++){
-                                        data[j][k] = new Object();
-                                        data[j][k] = "texte de proba";
-                                    }
-                                }
-                                JTable table = new JTable(data, periodicColumnNames);
-                                JScrollPane scrollPane = new JScrollPane(table);
-                                scrollPane.setPreferredSize(new Dimension(100,100));
-                                table.setFillsViewportHeight(true);
-                                panelOfPeriodic.add(scrollPane);
-                            }
                             
-                            // Aperiòdiques
-                            //if (Scheduler.getAperiodicInfo() != null){
-                                int numberOfAperiodicGroups = 1;//Scheduler.getAperiodicInfo().getAperiodicTaskGroups().length;
-                                panelOfAperiodic.setLayout(new GridLayout(numberOfAperiodicGroups + 1, 0));
-                                // +1 per afegir el panell de botons a la capçalera
-                                boolean automatic = false, manual = false;
-                                if (Scheduler.getAperiodicInfo().getMode().equals(aperiodicGenerationMode.AUTO))
-                                    automatic = true;
-                                else if (Scheduler.getAperiodicInfo().getMode().equals(aperiodicGenerationMode.MANUAL))
-                                    manual = true;
-                                ButtonGroup aperiodicButtonGroup = new ButtonGroup();
-                                JRadioButton automaticRadioButton = new JRadioButton("Automatic", automatic);
-                                automaticRadioButton.setActionCommand("Automatic");
-                                JRadioButton manualRadioButton = new JRadioButton("Manual", manual);
-                                manualRadioButton.setActionCommand("Manual");
-
-                                aperiodicButtonGroup.add(automaticRadioButton);
-                                aperiodicButtonGroup.add(manualRadioButton);
-
-                                JButton genButton = new JButton("Gen");
-                                JPanel genPanel = new JPanel();
-                                genPanel.setLayout(new GridLayout(2,0));
+                            buildPeriodicTab();
+                            buildAperiodicTab();
                                 
-                                JPanel radioButtonsPanel = new JPanel();
-                                radioButtonsPanel.setLayout(new GridLayout(0,2));
-
-                                radioButtonsPanel.add(automaticRadioButton);
-                                radioButtonsPanel.add(manualRadioButton);
-                                genPanel.add(radioButtonsPanel);
-                                genPanel.add(genButton);
-                                
-                                panelOfAperiodic.add(genPanel);
-                                
-                                String[] aperiodicColumnNames = {"Task", "Arrival", "Computation time", "End", "Delete"};
-
-                                for (int i = 0; i < numberOfAperiodicGroups; i++){
-                                    int numberOfTasksCurrentGroup = 10;
-                                    Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
-                                    for (int j = 0; j < numberOfTasksCurrentGroup; j++){
-                                        for (int k = 0; k < aperiodicColumnNames.length; k++){
-                                            data[j][k] = new Object();
-                                            data[j][k] = "texte de proba";
-                                        }
-                                        data[j][aperiodicColumnNames.length - 1] = new Object();
-                                        data[j][aperiodicColumnNames.length - 1] = "X";
-                                    }
-                                    JTable table = new JTable(data, aperiodicColumnNames);
-                                    table.getColumn("Delete").setCellRenderer(new ButtonRenderer());
-                                    table.getColumn("Delete").setCellEditor(new ButtonEditor(new JCheckBox()));
-                                    JScrollPane scrollPane = new JScrollPane(table);
-                                    scrollPane.setPreferredSize(new Dimension(100,100));
-                                    table.setFillsViewportHeight(true);
-                                    panelOfAperiodic.add(scrollPane);
-                                }
-                                //}
-                            tasksWindow.setMinimumSize(new Dimension(400,300));
+                            tasksWindow.setMinimumSize(new Dimension(500,420));
                             tasksWindow.setVisible(true);
                         }
                     }
                 });
-                jPanel1.add(taskButton);
+                JPanel panelOfTaskButton = new JPanel();
+                panelOfTaskButton.add(taskButton);
+                jPanel1.add(panelOfTaskButton);
                 jPanel1.validate();
             }
-         } else {
-            // cancelled by the user. Nothing to do.
-        }
-    }//GEN-LAST:event_fileImportDataActionPerformed
+    }
+    
+    void buildPeriodicTab(){
+        System.out.println(rButtonGroup.getSelection().getActionCommand());
+        int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
 
+        panelOfPeriodic.removeAll();
+        
+        int numberOfGroups = 2;
+
+        panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
+
+        String[] periodicColumnNames = {"Task", "Phase", "Computation time", "Period"};
+
+        for (int i = 0; i < numberOfGroups; i++){
+            int numberOfTasksCurrentGroup = 10;
+            Object[][] data = new Object[numberOfTasksCurrentGroup][periodicColumnNames.length];
+            for (int j = 0; j < numberOfTasksCurrentGroup; j++){
+                for (int k = 0; k < periodicColumnNames.length; k++){
+                    data[j][k] = new Object();
+                    data[j][k] = "texte de proba";
+                }
+            }
+            JTable table = new JTable(new DefaultTableModel(data, periodicColumnNames));
+            JScrollPane scrollPane = new JScrollPane(table);
+            scrollPane.setPreferredSize(new Dimension(100,100));
+            table.setFillsViewportHeight(true);
+            panelOfPeriodic.add(scrollPane);
+        }
+    }
+    void buildAperiodicTab(){
+        // Aperiòdiques
+        panelOfAperiodic.removeAll();
+        //if (Scheduler.getAperiodicInfo() != null){
+            int numberOfAperiodicGroups = 2;//Scheduler.getAperiodicInfo().getAperiodicTaskGroups().length;
+            
+            panelOfAperiodic.setLayout(new BorderLayout());
+            
+            aperiodicButtonGroup = new ButtonGroup();
+            JRadioButton automaticRadioButton = new JRadioButton("Automatic", false);
+            automaticRadioButton.setActionCommand("Automatic");
+            JRadioButton manualRadioButton = new JRadioButton("Manual", false);
+            manualRadioButton.setActionCommand("Manual");
+
+            aperiodicButtonGroup.add(automaticRadioButton);
+            aperiodicButtonGroup.add(manualRadioButton);
+
+            JButton genButton = new JButton("Gen");
+            JPanel genPanel = new JPanel();
+
+            JPanel radioButtonsPanel = new JPanel();
+
+            radioButtonsPanel.add(automaticRadioButton);
+            radioButtonsPanel.add(manualRadioButton);
+            genPanel.add(radioButtonsPanel);
+            genPanel.add(genButton);
+            genButton.addActionListener(new java.awt.event.ActionListener() {
+                @Override
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    if (aperiodicButtonGroup.getSelection() != null){
+                        System.out.println(aperiodicButtonGroup.getSelection().getActionCommand());
+                        // TODO generar les tasques així com es demana
+                        switch (aperiodicButtonGroup.getSelection().getActionCommand()) {
+                            case "AUTO":
+                                break;
+                            case "MANUAL":
+                                break;
+                        }
+                        buildAperiodicTab();
+                    }
+                }
+            });
+
+            panelOfAperiodic.add(genPanel, BorderLayout.PAGE_START);
+
+            String[] aperiodicColumnNames = {"Task", "Arrival", "Computation time", "End"};
+
+            Scheduler.getAperiodicInfo().setMode(Scheduler.aperiodicGenerationMode.MANUAL);
+            switch(Scheduler.getAperiodicInfo().getMode()){
+                case AUTO:
+                    for (int i = 0; i < numberOfAperiodicGroups; i++){
+                        int numberOfTasksCurrentGroup = 10;
+                        Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
+                        for (int j = 0; j < numberOfTasksCurrentGroup; j++){
+                            for (int k = 0; k < aperiodicColumnNames.length; k++){
+                                data[j][k] = new Object();
+                                data[j][k] = "texte de proba";
+                            }
+                        }
+                        JTable table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
+                        JScrollPane scrollPane = new JScrollPane(table);
+                        scrollPane.setPreferredSize(new Dimension(100,100));
+                        table.setFillsViewportHeight(true);
+                        panelOfAperiodic.add(scrollPane, BorderLayout.CENTER);
+                    }
+                    break;
+                case MANUAL:
+                    int numberOfTasksCurrentGroup = 10;
+                        Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
+                        for (int j = 0; j < numberOfTasksCurrentGroup; j++){
+                            data[j][0] = new Object();
+                            data[j][0] = "Nom de la tasca";
+                            for (int k = 1; k < aperiodicColumnNames.length; k++){
+                                data[j][k] = new Object();
+                                data[j][k] = (float)6.0;
+                            }
+                        }
+                        final JTable table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
+                        JScrollPane scrollPane = new JScrollPane(table);
+                        scrollPane.setPreferredSize(new Dimension(100,200));
+                        table.setFillsViewportHeight(true);
+                        panelOfAperiodic.add(scrollPane, BorderLayout.CENTER);
+
+                        JPanel OptionsPanel = new JPanel();
+
+                        JButton addTaskButton = new JButton("Add task");
+                        JButton deleteTaskButton = new JButton("Delete task");
+                        JButton saveChangesButton = new JButton("Save Changes");
+
+                        addTaskButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                System.out.println("Afegir tasca aperiodica");
+                                // TODO crear una tasca aperiodica
+                                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                                Object[] rowToAdd = {"1", "2", "3", "4"};
+                                model.addRow(rowToAdd);
+                            }
+                        });
+                        deleteTaskButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                System.out.println("Eliminar tasca aperiodica" + table.getSelectedRow());
+                                // TODO eliminar la tasca aperiodica table.getSelectedRow() de s'scheduler, jo ja ho faig de sa taula
+                                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                                int[] rows = table.getSelectedRows();
+                                for(int i=0;i<rows.length;i++){
+                                    model.removeRow(rows[i]-i);
+                                }
+                            }
+                        });
+                        saveChangesButton.addActionListener(new java.awt.event.ActionListener() {
+                            @Override
+                            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                System.out.println("Afegir tasca aperiodica");
+                                // TODO crear una tasca aperiodica
+                                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                                for (int i = 0; i < model.getRowCount(); i++){
+                                    String name = (String) model.getValueAt(i, 0);
+                                    float arrival = (float) model.getValueAt(i, 1);
+                                    float computationTime = (float) model.getValueAt(i, 2);
+                                    float end = (float) model.getValueAt(i, 3);
+
+                                    System.out.println(name + "/" + arrival + "/" + computationTime + "/" + end);
+                                }
+                            }
+                        });
+
+                        OptionsPanel.add(addTaskButton);
+                        OptionsPanel.add(deleteTaskButton);
+                        OptionsPanel.add(saveChangesButton);
+
+                        panelOfAperiodic.add(OptionsPanel, BorderLayout.PAGE_END);
+                    break;
+                case NONE:
+                    JLabel label = new JLabel("No tasks");
+                    panelOfAperiodic.add(label);
+                    break;
+            }
+            //}
+    }
+    
     private void fileSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileSaveResultsActionPerformed
-        // TODO add your handling code here:
+        // TODO guardar fitxer?? això no se fa a es resultats lluis?
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -513,10 +512,6 @@ public class mainWindow extends javax.swing.JFrame {
         tasksWindow.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO desar canvis de les taules
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         Result result = Scheduler.getResult();
         //Create a file chooser
@@ -528,7 +523,7 @@ public class mainWindow extends javax.swing.JFrame {
             try {
                 Exporter.exportResultToOds(fc.getSelectedFile().getAbsolutePath(), result);
             } catch (IOException ex) {
-                Logger.getLogger(GUIResult.class.getName()).log(Level.SEVERE, null, ex);
+
             }
         }
 
@@ -586,7 +581,6 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JMenuItem fileSaveResults;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
