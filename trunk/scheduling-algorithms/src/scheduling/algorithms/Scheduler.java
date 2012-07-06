@@ -5,11 +5,10 @@
 package scheduling.algorithms;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Clase que representa el planificador de los conjuntos de tareas. Planifica el conjunto que seleccionemos 
- * y genera los datos que se esperan: tiempo medio de respuesta y número de tareas periódicas que no cumplen 
+ * y genera los datos que se esperan: tiempo medio de respuesta en función de carga total y servidor y número de tareas periódicas que no cumplen
  * su terminio de todos los grupos.
  * @author Juanito
  */
@@ -80,28 +79,33 @@ public class Scheduler {
         Importer.importTaskSets(urlFile, taskSets, servers);
         
     }
-    
-    /*public static void generateAperiodicTaskGroups(int aperiodicTasksPerGroup, int taskSet){
+    /**
+     * Método PROVISIONAL para generar tareas aperiódicas automáticamente, para poder hacer pruebas mientras la GUI Tareas no esté terminada.
+     * @param aperiodicTasksPerGroup
+     * @param taskSet
+     */
+    public static void generateAperiodicTaskGroups(int aperiodicTasksPerGroup, int taskSet){
         numAperiodicLoads = 5;
-        aperiodicLoads = new double[numAperiodicLoads];
+        double[] aperiodicLoads = new double[numAperiodicLoads];
         double residualAperiodicLoad = MAX_CPU_UTILIZATION - taskSets.get(taskSet).getTotalPeriodicLoad();
         double aperiodicLoadIntervalSize = residualAperiodicLoad / (double)numAperiodicLoads;
         numAperiodicMeanServiceTimes = 4;
-        aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];
+        double[] aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];
         aperiodicMeanServiceTimes[0] = 0.55;
         aperiodicMeanServiceTimes[1] = 1.10;
         aperiodicMeanServiceTimes[2] = 2.75;
         aperiodicMeanServiceTimes[3] = 5.5;
-        aperiodicTaskGroups = new AperiodicTaskGroup[numAperiodicLoads][numAperiodicMeanServiceTimes];
+        AperiodicTaskGroup[][] aperiodicTaskGroups = new AperiodicTaskGroup[numAperiodicLoads][numAperiodicMeanServiceTimes];
         for(int i = 0; i < numAperiodicLoads; i++){
             aperiodicLoads[i] = aperiodicLoadIntervalSize * i;
             for(int j = 0; j < numAperiodicMeanServiceTimes; j++){                        
                 aperiodicTaskGroups[i][j] = new AperiodicTaskGroup(aperiodicTasksPerGroup, aperiodicMeanServiceTimes[j], aperiodicLoads[i]);                
             }                    
-        } 
+        }
+        aperiodicInfo = new AperiodicInfo(aperiodicTaskGroups, aperiodicGenerationMode.AUTO, aperiodicMeanServiceTimes, aperiodicLoads);
     }
     
-    public static void setAperiodicTaskGroup(AperiodicTaskGroup aperiodicTaskGroup){
+    /*public static void setAperiodicTaskGroup(AperiodicTaskGroup aperiodicTaskGroup){
         aperiodicTaskGroups[0][0] = aperiodicTaskGroup;
         numAperiodicLoads = 1;
         aperiodicLoads = new double[numAperiodicLoads];
@@ -163,19 +167,25 @@ public class Scheduler {
     }*/
 
     /**
-     * @return the aperiodicInfo
+     * @return La info aperiódica de la simulación.
      */
     public static AperiodicInfo getAperiodicInfo() {
         return aperiodicInfo;
     }
 
     /**
-     * @param aAperiodicInfo the aperiodicInfo to set
+     * @param aperiodicInfo La info aperiódica a asignar para la simulación.
      */
-    public static void setAperiodicInfo(AperiodicInfo aAperiodicInfo) {
-        aperiodicInfo = aAperiodicInfo;
+    public static void setAperiodicInfo(AperiodicInfo aperiodicInfo) {
+        Scheduler.aperiodicInfo = aperiodicInfo;
         Scheduler.numAperiodicMeanServiceTimes = aperiodicInfo.getAperiodicMeanServiceTimes().length;
         Scheduler.numAperiodicLoads = aperiodicInfo.getAperiodicLoads().length;
     }
-        
+    /**
+     * @return La utilización máxima de la CPU.
+     */
+    public static double getMAX_CPU_UTILIZATION() {
+        return MAX_CPU_UTILIZATION;
+    }
+
 }
