@@ -82,7 +82,7 @@ public class Summary {
             float remainingComputation;
             boolean deadlineMet = true;
             int numPeriod = 1;
-            float nextAbsolutePeriod;
+            float nextAbsolutePeriod, currentAbsolutePeriod;
             while(iterator.hasNext()){
                 nextAbsolutePeriod = period*numPeriod + phase;
                 remainingComputation = computation;
@@ -92,11 +92,13 @@ public class Summary {
                 }
                 if(!iterator.hasNext())
                     return deadlineMet;
+                currentAbsolutePeriod = nextAbsolutePeriod;
+                nextAbsolutePeriod = period * (numPeriod + 1) + phase;
                 while(remainingComputation > 0 && deadlineMet){
                     if(node.isFree()){
-                        if(node.getStartTime() < nextAbsolutePeriod){
-                            iterator.add(new Node(nextAbsolutePeriod, node.getStopTime()));
-                            node.setStopTime(nextAbsolutePeriod);
+                        if(node.getStartTime() < currentAbsolutePeriod){
+                            iterator.add(new Node(currentAbsolutePeriod, node.getStopTime()));
+                            node.setStopTime(currentAbsolutePeriod);
                             node = (Node) iterator.previous();
                         }
                         if(node.getStopTime() > node.getStartTime() + remainingComputation){
@@ -106,9 +108,11 @@ public class Summary {
                         }
                         node.setTask(periodicTask);
                         remainingComputation -= node.getStopTime() - node.getStartTime();
-                        if(remainingComputation > 0 && node.getStopTime() > nextAbsolutePeriod)
+                        if(remainingComputation > 0 && node.getStopTime() > currentAbsolutePeriod)
                             deadlineMet = false;
                     }                    
+                    if(remainingComputation > 0 && node.getStartTime() >= nextAbsolutePeriod)
+                        deadlineMet = false;
                     if(iterator.hasNext())
                         node = (Node) iterator.next();
                     else if(remainingComputation > 0)
