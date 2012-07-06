@@ -13,25 +13,25 @@ import java.util.Iterator;
  * su terminio de todos los grupos.
  * @author Juanito
  */
-public class Scheduler {
+public class Scheduler {    
     
     public enum aperiodicGenerationMode{
         NONE, AUTO, MANUAL;
     }
     
-    private static final int NUM_SERVERS = 5;    
+    private static final int NUM_SERVERS = 5;
+    private static AperiodicInfo aperiodicInfo = new AperiodicInfo();
     private static int numAperiodicMeanServiceTimes;
-    private static double[] aperiodicMeanServiceTimes;    
+    //private static double[] aperiodicMeanServiceTimes;
     private static int numAperiodicLoads;
-    private static double[] aperiodicLoads;
+    //private static double[] aperiodicLoads;
     private static ArrayList<Server[]> servers;    
-    private static AperiodicTaskGroup[][] aperiodicTaskGroups;
+    //private static AperiodicTaskGroup[][] aperiodicTaskGroups;
     private static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 20;    
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
     private static int numTaskSetToSchedule;
-    private static final double MAX_CPU_UTILIZATION = 0.9;
-    private static aperiodicGenerationMode mode = aperiodicGenerationMode.NONE;
+    private static final double MAX_CPU_UTILIZATION = 0.9;    
     
     private static Runnable runnable = new Runnable() {
 
@@ -52,7 +52,7 @@ public class Scheduler {
                         timeToSchedule = HIPERPERIOD_TIMES_TO_SCHEDULE*periodicTaskGroupToSchedule.calculateHiperperiod();
                         responseTimeByMeanServiceTime = 0;                    
                             for(int l = 0; l < numAperiodicMeanServiceTimes; l++){                                
-                                aperiodicTaskGroup = aperiodicTaskGroups[j][l];                                
+                                aperiodicTaskGroup = aperiodicInfo.getAperiodicTaskGroups()[j][l];
                                 Server.setAperiodicTaskGroup(aperiodicTaskGroup);                                
                                 summaries[i][k][l][j] = new Summary(timeToSchedule);                
                                 summaries[i][k][l][j].schedulePeriodicTaskGroup(periodicTaskGroupToSchedule, servers.get(numTaskSetToSchedule)[i]);  
@@ -62,7 +62,7 @@ public class Scheduler {
                             responseTimeByGroup += responseTimeByMeanServiceTime;
                     }
                     responseTimeByGroup /= TaskSet.GROUPS_PER_SET;
-                    result.addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicLoads[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
+                    result.addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
                 }                
             }                        
         }
@@ -81,7 +81,7 @@ public class Scheduler {
         
     }
     
-    public static void generateAperiodicTaskGroups(int aperiodicTasksPerGroup, int taskSet){
+    /*public static void generateAperiodicTaskGroups(int aperiodicTasksPerGroup, int taskSet){
         numAperiodicLoads = 5;
         aperiodicLoads = new double[numAperiodicLoads];
         double residualAperiodicLoad = MAX_CPU_UTILIZATION - taskSets.get(taskSet).getTotalPeriodicLoad();
@@ -119,7 +119,7 @@ public class Scheduler {
             previousAperiodicTask = currentAperiodicTask;
         }
         aperiodicLoads[0] = aperiodicMeanServiceTimes[0] / aperiodicMeanTimeBetweenArrivals;
-    }
+    }*/
     
     /**
      * Método con el cual se realiza la planificación de todos los grupos de tareas del conjunto especificado.
@@ -127,7 +127,9 @@ public class Scheduler {
      * @param numAperiodicTasks El número de tareas aperiódicas a crear
      * @mode Modo de creación de las tareas aperiódicas: manual o automática
      */
-    public static void scheduleTaskSet(int taskSetToSchedule){                             
+    public static void scheduleTaskSet(int taskSetToSchedule){
+        if(aperiodicInfo.getMode().equals(aperiodicGenerationMode.NONE))
+            throw new IllegalStateException("No hay tareas aperiódicas creadas.");
         summaries = new Summary[NUM_SERVERS][TaskSet.GROUPS_PER_SET][numAperiodicMeanServiceTimes][numAperiodicLoads];
         Scheduler.numTaskSetToSchedule = taskSetToSchedule;
         new Thread(runnable).start();
@@ -149,22 +151,31 @@ public class Scheduler {
     }
 
     /**
-     * @return the aperiodicTaskGroups
-     */
-    public static AperiodicTaskGroup[][] getAperiodicTaskGroups() {
-        return aperiodicTaskGroups;
-    }
-
-    /**
      * @param aAperiodicTaskGroups the aperiodicTaskGroups to set
      */
-    public static void setUp(AperiodicTaskGroup[][] aperiodicTaskGroups, aperiodicGenerationMode mode, double[] aperiodicMeanServiceTimes, double[] aperiodicLoads) {
+    /*public static void setUp(AperiodicTaskGroup[][] aperiodicTaskGroups, aperiodicGenerationMode mode, double[] aperiodicMeanServiceTimes, double[] aperiodicLoads) {
         Scheduler.aperiodicTaskGroups = aperiodicTaskGroups;
-        Scheduler.mode = mode;
+        //Scheduler.mode = mode;
         Scheduler.aperiodicMeanServiceTimes = aperiodicMeanServiceTimes;
         Scheduler.numAperiodicMeanServiceTimes = aperiodicMeanServiceTimes.length;
         Scheduler.aperiodicLoads = aperiodicLoads;
         Scheduler.numAperiodicLoads = aperiodicLoads.length;
+    }*/
+
+    /**
+     * @return the aperiodicInfo
+     */
+    public static AperiodicInfo getAperiodicInfo() {
+        return aperiodicInfo;
+    }
+
+    /**
+     * @param aAperiodicInfo the aperiodicInfo to set
+     */
+    public static void setAperiodicInfo(AperiodicInfo aAperiodicInfo) {
+        aperiodicInfo = aAperiodicInfo;
+        Scheduler.numAperiodicMeanServiceTimes = aperiodicInfo.getAperiodicMeanServiceTimes().length;
+        Scheduler.numAperiodicLoads = aperiodicInfo.getAperiodicLoads().length;
     }
         
 }
