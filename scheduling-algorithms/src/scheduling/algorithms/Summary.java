@@ -65,6 +65,41 @@ public class Summary {
     }
     
     /**
+     * Método que sirve para meter lo que quede para ejecutar de una tarea dentro de un Nodo libre del Summary.
+     * @param iterator Meter el iterador apuntando a un nodo libre
+     * @param task     Tarea a meter.
+     * @param arrivalTime Tiempo de llegada de la tarea a meter.
+     * @param remainingComputation Tiempo de computación que queda para acabar la Tarea
+     * @param serverCapacity Capacidad actual del servidor.       
+     * @return Tiempo del nodo asignado a la tarea. Imprescindible utilizarlo para calcular 
+     * el remainingComputation y el Server Capacity después de ejecutar éste método.
+     * Si devuelve -1 significa que el nodo ya está ocupado por una tarea.
+     */
+    public static float addTaskToFreeNode(ListIterator<Node> iterator, Task task, float arrivalTime, float remainingComputation, float serverCapacity){
+        if (!iterator.hasNext())
+            return -1;
+        Node node = iterator.next();
+        
+        if (!node.isFree() || serverCapacity == 0)
+            return -1;
+        
+        float stoptime = Math.min(remainingComputation,serverCapacity);
+        
+        if(node.getStartTime() < arrivalTime){
+            iterator.add(new Node(arrivalTime, node.getStopTime()));
+            node.setStopTime(arrivalTime);
+            node = (Node) iterator.previous();
+        }
+        if(node.getStopTime() > node.getStartTime() + stoptime){
+            iterator.add(new Node(node.getStartTime() + stoptime, node.getStopTime()));
+            node.setStopTime(node.getStartTime() + stoptime);
+            iterator.previous(); //lo dejamos apuntando a node
+        }
+        node.setTask(task);
+        return node.getStopTime() - node.getStartTime();
+    }
+    
+    /**
      * Método para planificar una tarea periódica
      * @param periodicTask
      * @return Devuelve {@code false} si la tarea incumple alguna vez su deadline.
@@ -96,18 +131,7 @@ public class Summary {
                 nextAbsolutePeriod = period * (numPeriod + 1) + phase;
                 while(remainingComputation > 0 && deadlineMet){
                     if(node.isFree()){
-                        if(node.getStartTime() < currentAbsolutePeriod){
-                            iterator.add(new Node(currentAbsolutePeriod, node.getStopTime()));
-                            node.setStopTime(currentAbsolutePeriod);
-                            node = (Node) iterator.previous();
-                        }
-                        if(node.getStopTime() > node.getStartTime() + remainingComputation){
-                            iterator.add(new Node(node.getStartTime() + remainingComputation, node.getStopTime()));
-                            node.setStopTime(node.getStartTime() + remainingComputation);
-                            iterator.previous(); //lo dejamos apuntando a node
-                        }
-                        node.setTask(periodicTask);
-                        remainingComputation -= node.getStopTime() - node.getStartTime();
+                        remainingComputation -= addTaskToFreeNode(iterator, periodicTask, currentAbsolutePeriod, remainingComputation, Float.MAX_VALUE);
                         if(remainingComputation > 0 && node.getStopTime() > currentAbsolutePeriod)
                             deadlineMet = false;
                     }                    
