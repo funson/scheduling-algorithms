@@ -21,9 +21,12 @@ public class mainWindow extends javax.swing.JFrame {
 
     private ButtonGroup rButtonGroup;
     ButtonGroup aperiodicButtonGroup;
+    private AperiodicInfo aperiodicInfo;
+    private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 0, 0);
+    JTable table;
 
 
-    public static String newline = System.getProperty("line.separator");
+    public static String newline = System.getProperty("line.separator");    
     /**
      * Creates new form mainWindow
      */
@@ -47,6 +50,7 @@ public class mainWindow extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         panelOfAperiodic = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
+        btSave = new javax.swing.JButton();
         resultWindow = new javax.swing.JFrame();
         textPanel = new javax.swing.JPanel();
         scrollTextArea = new javax.swing.JScrollPane();
@@ -100,6 +104,14 @@ public class mainWindow extends javax.swing.JFrame {
             }
         });
 
+        btSave.setText("Save");
+        btSave.setEnabled(false);
+        btSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btSaveMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout tasksWindowLayout = new javax.swing.GroupLayout(tasksWindow.getContentPane());
         tasksWindow.getContentPane().setLayout(tasksWindowLayout);
         tasksWindowLayout.setHorizontalGroup(
@@ -110,6 +122,8 @@ public class mainWindow extends javax.swing.JFrame {
                     .addComponent(jTabbedPane2)
                     .addGroup(tasksWindowLayout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2)))
                 .addContainerGap())
         );
@@ -119,7 +133,9 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jTabbedPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
+                .addGroup(tasksWindowLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(btSave))
                 .addContainerGap())
         );
 
@@ -296,7 +312,7 @@ public class mainWindow extends javax.swing.JFrame {
                         if (rButtonGroup.getSelection() != null){
                             
                             buildPeriodicTab();
-                            buildAperiodicTab();
+                            buildAperiodicTab(false);
                                 
                             tasksWindow.setMinimumSize(new Dimension(500,420));
                             tasksWindow.setVisible(true);
@@ -311,6 +327,7 @@ public class mainWindow extends javax.swing.JFrame {
     }
     
     void buildPeriodicTab(){
+        btSave.setVisible(false);
         System.out.println(rButtonGroup.getSelection().getActionCommand());
         int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
 
@@ -331,23 +348,26 @@ public class mainWindow extends javax.swing.JFrame {
                     data[j][k] = "texte de proba";
                 }
             }
-            JTable table = new JTable(new DefaultTableModel(data, periodicColumnNames));
+            table = new JTable(new DefaultTableModel(data, periodicColumnNames));
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.setPreferredSize(new Dimension(100,100));
             table.setFillsViewportHeight(true);
             panelOfPeriodic.add(scrollPane);
         }
     }
-    void buildAperiodicTab(){
+    void buildAperiodicTab(boolean generated){
+        btSave.setVisible(true);
+        btSave.setEnabled(generated);
+        final int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());        
         // Aperiòdiques
         panelOfAperiodic.removeAll();
         //if (Scheduler.getAperiodicInfo() != null){
-            int numberOfAperiodicGroups = 2;//Scheduler.getAperiodicInfo().getAperiodicTaskGroups().length;
+            //int numberOfAperiodicGroups = 2;        
             
-            panelOfAperiodic.setLayout(new BorderLayout());
+            panelOfAperiodic.setLayout(new BorderLayout());            
             
             aperiodicButtonGroup = new ButtonGroup();
-            JRadioButton automaticRadioButton = new JRadioButton("Automatic", false);
+            JRadioButton automaticRadioButton = new JRadioButton("Automatic", true);
             automaticRadioButton.setActionCommand("Automatic");
             JRadioButton manualRadioButton = new JRadioButton("Manual", false);
             manualRadioButton.setActionCommand("Manual");
@@ -366,56 +386,81 @@ public class mainWindow extends javax.swing.JFrame {
             genPanel.add(genButton);
             genButton.addActionListener(new java.awt.event.ActionListener() {
                 @Override
-                public void actionPerformed(java.awt.event.ActionEvent evt) {
-                    if (aperiodicButtonGroup.getSelection() != null){
-                        System.out.println(aperiodicButtonGroup.getSelection().getActionCommand());
-                        // TODO generar les tasques així com es demana
-                        switch (aperiodicButtonGroup.getSelection().getActionCommand()) {
-                            case "AUTO":
-                                break;
-                            case "MANUAL":
-                                break;
-                        }
-                        buildAperiodicTab();
-                    }
+                public void actionPerformed(java.awt.event.ActionEvent evt) {                    
+                    generateAperiodicTasks(selectedSet);
                 }
             });
 
             panelOfAperiodic.add(genPanel, BorderLayout.PAGE_START);
 
             String[] aperiodicColumnNames = {"Task", "Arrival", "Computation time", "End"};
-
-            Scheduler.getAperiodicInfo().setMode(Scheduler.aperiodicGenerationMode.MANUAL);
-            switch(Scheduler.getAperiodicInfo().getMode()){
+            
+            if(!generated)
+            aperiodicInfo = new AperiodicInfo(Scheduler.getAperiodicInfo());
+            
+            switch(aperiodicInfo.getMode()){
                 case AUTO:
-                    for (int i = 0; i < numberOfAperiodicGroups; i++){
-                        int numberOfTasksCurrentGroup = 10;
-                        Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
-                        for (int j = 0; j < numberOfTasksCurrentGroup; j++){
-                            for (int k = 0; k < aperiodicColumnNames.length; k++){
-                                data[j][k] = new Object();
-                                data[j][k] = "texte de proba";
+                    JPanel groupsPanel = new JPanel();
+                    groupsPanel.setLayout(new GridLayout(aperiodicInfo.getAperiodicLoads().length * aperiodicInfo.getAperiodicMeanServiceTimes().length,0));
+                    AperiodicTask aperiodicTask;
+                    for (int i = 0; i < aperiodicInfo.getAperiodicLoads().length; i++){
+                        for(int j = 0; j < aperiodicInfo.getAperiodicMeanServiceTimes().length; j++){
+                            int numberOfTasksCurrentGroup = aperiodicInfo.getAperiodicTaskGroups()[i][j].getNumTasks();
+                            Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
+                            for (int k = 0; k < numberOfTasksCurrentGroup; k++){
+                                aperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[i][j].getTask(k);
+                                for (int l = 0; l < aperiodicColumnNames.length; l++){
+                                    data[k][l] = new Object();                                    
+                                    switch(aperiodicColumnNames[l]){
+                                        case("Task"):
+                                            data[k][l] = aperiodicTask.getName();
+                                            break;
+                                        case("Arrival"):
+                                            data[k][l] = String.valueOf(aperiodicTask.getArrivalTime());
+                                            break;    
+                                        case("Computation time"):
+                                            data[k][l] = String.valueOf(aperiodicTask.getComputationTime());
+                                            break;
+                                        case("End"):
+                                            data[k][l] = String.valueOf(aperiodicTask.getDeadline());
+                                            break;
+                                    }
+                                }
                             }
+                            table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
+                            JScrollPane scrollPane = new JScrollPane(table);
+                            scrollPane.setPreferredSize(new Dimension(100,100));
+                            table.setFillsViewportHeight(true);
+                            groupsPanel.add(scrollPane);
+                            panelOfAperiodic.add(groupsPanel, BorderLayout.CENTER);
                         }
-                        JTable table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
-                        JScrollPane scrollPane = new JScrollPane(table);
-                        scrollPane.setPreferredSize(new Dimension(100,100));
-                        table.setFillsViewportHeight(true);
-                        panelOfAperiodic.add(scrollPane, BorderLayout.CENTER);
                     }
                     break;
                 case MANUAL:
-                    int numberOfTasksCurrentGroup = 10;
+                    //Hay un solo grupo y está en la posición [0][0] del array de grupos
+                    int numberOfTasksCurrentGroup = aperiodicInfo.getAperiodicTaskGroups()[0][0].getNumTasks();
                         Object[][] data = new Object[numberOfTasksCurrentGroup][aperiodicColumnNames.length];
                         for (int j = 0; j < numberOfTasksCurrentGroup; j++){
-                            data[j][0] = new Object();
-                            data[j][0] = "Nom de la tasca";
-                            for (int k = 1; k < aperiodicColumnNames.length; k++){
+                            aperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(j);
+                            for (int k = 0; k < aperiodicColumnNames.length; k++){
                                 data[j][k] = new Object();
-                                data[j][k] = (float)6.0;
+                                switch(aperiodicColumnNames[k]){
+                                    case("Task"):
+                                        data[j][k] = aperiodicTask.getName();
+                                        break;
+                                    case("Arrival"):
+                                        data[j][k] = String.valueOf(aperiodicTask.getArrivalTime());
+                                        break;    
+                                    case("Computation time"):
+                                        data[j][k] = String.valueOf(aperiodicTask.getComputationTime());
+                                        break;
+                                    case("End"):
+                                        data[j][k] = String.valueOf(aperiodicTask.getDeadline());
+                                        break;
+                                }
                             }
                         }
-                        final JTable table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
+                        table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
                         JScrollPane scrollPane = new JScrollPane(table);
                         scrollPane.setPreferredSize(new Dimension(100,200));
                         table.setFillsViewportHeight(true);
@@ -424,51 +469,23 @@ public class mainWindow extends javax.swing.JFrame {
                         JPanel OptionsPanel = new JPanel();
 
                         JButton addTaskButton = new JButton("Add task");
-                        JButton deleteTaskButton = new JButton("Delete task");
-                        JButton saveChangesButton = new JButton("Save Changes");
+                        JButton deleteTaskButton = new JButton("Delete task");                        
 
                         addTaskButton.addActionListener(new java.awt.event.ActionListener() {
                             @Override
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                System.out.println("Afegir tasca aperiodica");
-                                // TODO crear una tasca aperiodica
-                                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                                Object[] rowToAdd = {"1", "2", "3", "4"};
-                                model.addRow(rowToAdd);
+                                addTask();
                             }
                         });
                         deleteTaskButton.addActionListener(new java.awt.event.ActionListener() {
                             @Override
                             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                System.out.println("Eliminar tasca aperiodica" + table.getSelectedRow());
-                                // TODO eliminar la tasca aperiodica table.getSelectedRow() de s'scheduler, jo ja ho faig de sa taula
-                                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                                int[] rows = table.getSelectedRows();
-                                for(int i=0;i<rows.length;i++){
-                                    model.removeRow(rows[i]-i);
-                                }
+                                deleteTask();
                             }
-                        });
-                        saveChangesButton.addActionListener(new java.awt.event.ActionListener() {
-                            @Override
-                            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                System.out.println("Afegir tasca aperiodica");
-                                // TODO crear una tasca aperiodica
-                                DefaultTableModel model = (DefaultTableModel) table.getModel();
-                                for (int i = 0; i < model.getRowCount(); i++){
-                                    String name = (String) model.getValueAt(i, 0);
-                                    float arrival = (float) model.getValueAt(i, 1);
-                                    float computationTime = (float) model.getValueAt(i, 2);
-                                    float end = (float) model.getValueAt(i, 3);
-
-                                    System.out.println(name + "/" + arrival + "/" + computationTime + "/" + end);
-                                }
-                            }
-                        });
+                        });                        
 
                         OptionsPanel.add(addTaskButton);
-                        OptionsPanel.add(deleteTaskButton);
-                        OptionsPanel.add(saveChangesButton);
+                        OptionsPanel.add(deleteTaskButton);                        
 
                         panelOfAperiodic.add(OptionsPanel, BorderLayout.PAGE_END);
                     break;
@@ -477,7 +494,70 @@ public class mainWindow extends javax.swing.JFrame {
                     panelOfAperiodic.add(label);
                     break;
             }
-            //}
+            
+    }
+    
+    private void addTask(){
+        System.out.println("Afegir tasca aperiodica");                                
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        Object[] rowToAdd = {defaultAperiodicTask.getName(), defaultAperiodicTask.getArrivalTime(), defaultAperiodicTask.getComputationTime(), defaultAperiodicTask.getDeadline()};
+        model.addRow(rowToAdd);
+    }
+    
+    private void deleteTask(){
+        System.out.println("Eliminar tasca aperiodica" + table.getSelectedRow());                                
+        DefaultTableModel model = (DefaultTableModel) table.getModel();
+        int[] rows = table.getSelectedRows();
+        for(int i=0;i<rows.length;i++){
+            model.removeRow(rows[i]-i);
+        }
+    }
+    
+    private void generateAperiodicTasks(int selectedSet){          
+        if (aperiodicButtonGroup.getSelection() != null){
+            System.out.println(aperiodicButtonGroup.getSelection().getActionCommand());
+            
+            int aperiodicTasksPerGroup;
+            int numAperiodicLoads;
+            double[] aperiodicLoads;                        
+            int numAperiodicMeanServiceTimes;
+            double[] aperiodicMeanServiceTimes;
+            
+            switch (aperiodicButtonGroup.getSelection().getActionCommand()) {
+                case "Automatic":                    
+                    aperiodicTasksPerGroup = 10;                                
+                    numAperiodicLoads = 5;
+                    aperiodicLoads = new double[numAperiodicLoads];
+                    double residualAperiodicLoad = Scheduler.getMAX_CPU_UTILIZATION() - Scheduler.getTaskSets().get(selectedSet).getTotalPeriodicLoad();
+                    double aperiodicLoadIntervalSize = residualAperiodicLoad / (double)numAperiodicLoads;
+                    numAperiodicMeanServiceTimes = 4;
+                    aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];
+                    aperiodicMeanServiceTimes[0] = 0.55;
+                    aperiodicMeanServiceTimes[1] = 1.10;
+                    aperiodicMeanServiceTimes[2] = 2.75;
+                    aperiodicMeanServiceTimes[3] = 5.5;
+                    AperiodicTaskGroup[][] aperiodicTaskGroups = new AperiodicTaskGroup[numAperiodicLoads][numAperiodicMeanServiceTimes];
+                    for(int i = 0; i < numAperiodicLoads; i++){
+                        aperiodicLoads[i] = aperiodicLoadIntervalSize * (i + 1);
+                        for(int j = 0; j < numAperiodicMeanServiceTimes; j++){                        
+                            aperiodicTaskGroups[i][j] = new AperiodicTaskGroup(aperiodicTasksPerGroup, aperiodicMeanServiceTimes[j], aperiodicLoads[i]);                
+                        }                    
+                    }
+                    aperiodicInfo = new AperiodicInfo(aperiodicTaskGroups, Scheduler.aperiodicGenerationMode.AUTO, aperiodicMeanServiceTimes, aperiodicLoads);                    
+                    break;
+                case "Manual":
+                    numAperiodicLoads = 1;
+                    aperiodicLoads = new double[numAperiodicLoads];
+                    numAperiodicMeanServiceTimes = 1;
+                    aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];                                        
+                    aperiodicTaskGroups = new AperiodicTaskGroup[1][1];
+                    aperiodicTaskGroups[0][0] = new AperiodicTaskGroup();
+                    aperiodicTaskGroups[0][0].addTask(defaultAperiodicTask);
+                    aperiodicInfo = new AperiodicInfo(aperiodicTaskGroups, Scheduler.aperiodicGenerationMode.MANUAL, aperiodicMeanServiceTimes, aperiodicLoads);
+                    break;
+            }
+            buildAperiodicTab(true);
+        }
     }
     
     private void fileSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileSaveResultsActionPerformed
@@ -533,6 +613,40 @@ public class mainWindow extends javax.swing.JFrame {
 
     }//GEN-LAST:event_saveButtonActionPerformed
 
+    private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
+        System.out.println("Guardar cambios");
+        // TODO guardar cambios
+        switch(aperiodicInfo.getMode()){
+            case AUTO:
+                Scheduler.setAperiodicInfo(aperiodicInfo);
+                break;
+            case MANUAL:                
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                for (int i = 0; i < model.getRowCount(); i++){
+                    String name = (String) model.getValueAt(i, 0);
+                    float dada = (float)model.getValueAt(i, 1);
+                    float arrival = Float.valueOf(dada);
+                    float computationTime = Float.valueOf((String)model.getValueAt(i, 2));                    
+                    aperiodicInfo.getAperiodicTaskGroups()[0][0].addTask(new AperiodicTask(name, arrival, computationTime));
+                }
+                
+                AperiodicTask currentAperiodicTask;
+                AperiodicTask previousAperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(0);
+                aperiodicInfo.getAperiodicMeanServiceTimes()[0] = 0;
+                double aperiodicMeanTimeBetweenArrivals = 0;
+                int manualNumAperiodicTasks = aperiodicInfo.getAperiodicTaskGroups()[0][0].taskGroup.size();
+                for(int i = 1; i < manualNumAperiodicTasks; i++){
+                    currentAperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(i);
+                    aperiodicInfo.getAperiodicMeanServiceTimes()[0] += currentAperiodicTask.getComputationTime() / manualNumAperiodicTasks;
+                    aperiodicMeanTimeBetweenArrivals += (currentAperiodicTask.getArrivalTime() - previousAperiodicTask.getArrivalTime()) / (manualNumAperiodicTasks - 1);
+                    previousAperiodicTask = currentAperiodicTask;
+                }
+                aperiodicInfo.getAperiodicLoads()[0] = aperiodicInfo.getAperiodicMeanServiceTimes()[0] / aperiodicMeanTimeBetweenArrivals;                        
+                Scheduler.setAperiodicInfo(aperiodicInfo);                    
+                break;
+        }
+    }//GEN-LAST:event_btSaveMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -576,6 +690,7 @@ public class mainWindow extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btSave;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JMenuItem fileImportData;
     private javax.swing.JMenuItem fileSaveResults;
