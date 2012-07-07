@@ -293,6 +293,7 @@ public class mainWindow extends javax.swing.JFrame {
         
             //Scheduler.getTaskSets().size();
             if (Scheduler.getTaskSets() != null){
+                jPanel1.removeAll();
                 int numOfSets = Scheduler.getTaskSets().size();
 
                 jPanel1.setLayout( new GridLayout(6,0));
@@ -332,21 +333,21 @@ public class mainWindow extends javax.swing.JFrame {
         int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
 
         panelOfPeriodic.removeAll();
+                
+        int numberOfGroups = Scheduler.getTaskSets().get(selectedSet).numOfGroups();
         
-        int numberOfGroups = 2;
-
         panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
 
         String[] periodicColumnNames = {"Task", "Phase", "Computation time", "Period"};
 
         for (int i = 0; i < numberOfGroups; i++){
-            int numberOfTasksCurrentGroup = 10;
+            int numberOfTasksCurrentGroup = Scheduler.getTaskSets().get(selectedSet).getGroup(i).getNumTasks();
             Object[][] data = new Object[numberOfTasksCurrentGroup][periodicColumnNames.length];
             for (int j = 0; j < numberOfTasksCurrentGroup; j++){
-                for (int k = 0; k < periodicColumnNames.length; k++){
-                    data[j][k] = new Object();
-                    data[j][k] = "texte de proba";
-                }
+                data[j][0] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getName();
+                data[j][1] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getPeriod();
+                data[j][2] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getComputationTime();
+                data[j][3] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getPhase();
             }
             table = new JTable(new DefaultTableModel(data, periodicColumnNames));
             JScrollPane scrollPane = new JScrollPane(table);

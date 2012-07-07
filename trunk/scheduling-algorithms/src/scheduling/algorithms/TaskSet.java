@@ -50,4 +50,8 @@ public class TaskSet {
     public float getTotalPeriodicLoad(){
         return totalPeriodicLoad;
     }
+    
+    public int numOfGroups(){
+        return this.group.length;
+    }
 }
