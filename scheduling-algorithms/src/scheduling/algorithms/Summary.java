@@ -73,11 +73,16 @@ public class Summary {
      * @param serverCapacity Capacidad actual del servidor. No debemos olvidarnos de el momento en que la capacidad del servidor se regenera.
      *        Por tanto será mas útil si en éste parámetro metemos el valor de Min (currentServerCapacity, nextRegenerationTime - currentNode.startTime()).
      *        (El nombre de las variables es un ejemplo, usad las variables que hayáis creado para este propósito)
-     * @return Tiempo de computación de la tarea que se ejecutará dentro de el nodo especificado. 
-     *         Si devuelve -1 significa que el nodo ya estaba ocupado por una tarea.
-     *         Imprescindible utilizarlo para calcular las modificaciones de el remainingComputation y el Server Capacity después de ejecutar éste método.
-     *              remainingComputation = remainingComputation - resultado_addTaskToFreeNode;
-     *              ServerCapcity        = serverCapacity - resultado_addTaskToFreeNode
+     * @return Este método puede devolver dos cosas distintas:
+     *         1) si la tarea se completa en el nodo asignado, se resta el tiempo de finalización de la tarea menos el tiempo de llegada (y así se calcula
+     *            el tiempo de respuesta).
+     *         2) en el caso de que la tarea no se complete en el nodo asignado (es decir, la tarea continuará en un nuevo nodo libre), se devuelve el tiempo
+     *            de computación de la tarea en este nodo (este tiempo servirá más adelante, cuando se asigne un nuevo nodo a esta tarea, para conocer el
+     *            tiempo que falta a la tarea para finalizar)
+     * 
+     * IMPORTANTE:  como en ambos casos el return devolverá un float, para poder discriminar en cúal de los dos casos nos encontramos, el segundo caso se
+     * multiplicará por -1 y así se podrá deducir: si el valor devuelto por el método es positivo estamos en el primer caso y si es negativo en el segundo.
+     *            
      */
     public static float addTaskToFreeNode(ListIterator<Node> iterator, Task task, float arrivalTime, float remainingComputation, float serverCapacity){
         Node node = iterator.previous();
@@ -99,7 +104,11 @@ public class Summary {
             iterator.previous(); //lo dejamos apuntando a node
         }
         node.setTask(task);
-        return node.getStopTime() - node.getStartTime();
+        if (remainingComputation - (node.getStopTime() - node.getStartTime()) == 0){
+            return (node.getStopTime() - arrivalTime);
+        }else{
+            return (node.getStopTime() - node.getStartTime())*-1;
+        }
     }
     
     /**
