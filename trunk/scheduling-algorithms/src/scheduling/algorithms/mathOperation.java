@@ -66,4 +66,10 @@ public class mathOperation {
     public static int mcm(int a, int b){
         return (a / mcd(a, b)) * b;
     }
+    
+    public static float round(float floatToRound,int digits){
+        floatToRound *= Math.pow(10, 2);
+        int rounded = Math.round(floatToRound);
+        return (float) (rounded / Math.pow(10, 2));    
+    }
 }

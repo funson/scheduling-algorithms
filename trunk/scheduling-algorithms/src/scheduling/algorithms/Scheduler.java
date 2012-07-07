@@ -5,6 +5,8 @@
 package scheduling.algorithms;
 
 import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
 
 /**
  * Clase que representa el planificador de los conjuntos de tareas. Planifica el conjunto que seleccionemos 
@@ -37,7 +39,10 @@ public class Scheduler {
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
     private static int numTaskSetToSchedule;
-    private static final double MAX_CPU_UTILIZATION = 0.9; 
+    private static final double MAX_CPU_UTILIZATION = 0.9;
+    //Chapuza al canto:
+    private static JFrame resultWindow;
+    private static JTextArea resultsTextArea;
     
     private static Result result;
     
@@ -72,7 +77,28 @@ public class Scheduler {
                     responseTimeByGroup /= TaskSet.GROUPS_PER_SET;
                     getResult().addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
                 }                
-            }                        
+            }
+            
+            Result result = getResult();
+
+            String output = "";
+            ArrayList<String> serverNamesInResult = result.getServerNamesInResult();
+            ArrayList<Double> loadsInResult       = result.getLoadsInResult();
+
+            for (int i=0;i<serverNamesInResult.size();i++){
+                    output+= " \t" + serverNamesInResult.get(i);
+            }
+            output+="\n";
+
+        for (int i=0;i<loadsInResult.size();i++){
+                    output+= Double.toString(loadsInResult.get(i));
+                    for (int j=0;j<serverNamesInResult.size();j++){
+                        output+="\t" + result.getData(loadsInResult.get(i), serverNamesInResult.get(j));
+                    }
+                    output+="\n";
+        }       
+        resultWindow.setVisible(true);
+        resultsTextArea.setText(output);
         }
     };
     
@@ -121,10 +147,11 @@ public class Scheduler {
      * @mode Modo de creación de las tareas aperiódicas: manual o automática
      */
     public static void scheduleTaskSet(int taskSetToSchedule){
-        if(aperiodicInfo.getMode().equals(aperiodicGenerationMode.NONE))
-            throw new IllegalStateException("No hay tareas aperiódicas creadas.");
+        /*if(aperiodicInfo.getMode().equals(aperiodicGenerationMode.NONE))
+            throw new IllegalStateException("No hay tareas aperiódicas creadas.");*/
         summaries = new Summary[NUM_SERVERS][TaskSet.GROUPS_PER_SET][numAperiodicMeanServiceTimes][numAperiodicLoads];
         Scheduler.numTaskSetToSchedule = taskSetToSchedule;
+        
         new Thread(runnable).start();
     }
         
@@ -169,6 +196,12 @@ public class Scheduler {
      */
     public static double getMAX_CPU_UTILIZATION() {
         return MAX_CPU_UTILIZATION;
+    }
+    
+    //Chapuza al canto:
+    public static void setResultWindow(JFrame window, JTextArea txtArea){
+        resultWindow = window;
+        resultsTextArea = txtArea;
     }
 
 }

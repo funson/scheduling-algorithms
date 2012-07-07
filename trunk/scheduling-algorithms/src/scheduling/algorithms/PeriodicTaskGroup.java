@@ -74,4 +74,11 @@ public class PeriodicTaskGroup extends TaskGroup {
         return taskGroup.iterator();
     }
     
+    @Override
+    public PeriodicTaskGroup clone(){        
+        PeriodicTaskGroup clone = new PeriodicTaskGroup();
+        clone.taskGroup = (ArrayList<Task>)taskGroup.clone();
+        return clone;
+    }
+    
 }
