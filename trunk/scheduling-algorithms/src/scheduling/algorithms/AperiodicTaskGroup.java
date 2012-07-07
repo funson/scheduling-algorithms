@@ -4,6 +4,7 @@
  */
 package scheduling.algorithms;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 /**
@@ -42,8 +43,11 @@ public class AperiodicTaskGroup extends TaskGroup {
             currentTask = new AperiodicTask("AP"+i, previousTask.getArrivalTime() + timeBetweenArrivals, computationTime);
             this.taskGroup.add(currentTask);
             previousTask = currentTask;
-        }
-        
+        }        
+    }
+    
+    public AperiodicTaskGroup(){
+        super();
     }
     
     /**
@@ -59,5 +63,20 @@ public class AperiodicTaskGroup extends TaskGroup {
      */
     public void removeAperiodicTask(int index){
         taskGroup.remove(index);
+    }
+    
+    /**
+     * Método que devuelve una copia del grupo.
+     * Se puede usar con las clases {@link PeriodicTaskGroup} y {@link AperiodicTaskGroup}, 
+     * haciendo el correspondiente casting.
+     * @return La copia del grupo.
+     */
+
+    @Override
+    public AperiodicTaskGroup clone(){        
+        AperiodicTaskGroup clone = new AperiodicTaskGroup();
+        clone.taskGroup = (ArrayList<Task>)taskGroup.clone();
+        //AperiodicTaskGroup clone = (AperiodicTaskGroup) super.clone();
+        return clone;
     }
 }
