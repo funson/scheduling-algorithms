@@ -155,8 +155,14 @@ public class Scheduler {
      */
     public static void setAperiodicInfo(AperiodicInfo aperiodicInfo) {
         Scheduler.aperiodicInfo = aperiodicInfo;
-        Scheduler.numAperiodicMeanServiceTimes = aperiodicInfo.getAperiodicMeanServiceTimes().length;
-        Scheduler.numAperiodicLoads = aperiodicInfo.getAperiodicLoads().length;
+        if(aperiodicInfo.getAperiodicLoads() != null && aperiodicInfo.getAperiodicMeanServiceTimes() != null && aperiodicInfo.getAperiodicTaskGroups() != null){          
+            Scheduler.numAperiodicMeanServiceTimes = aperiodicInfo.getAperiodicMeanServiceTimes().length;
+            Scheduler.numAperiodicLoads = aperiodicInfo.getAperiodicLoads().length;
+        }
+        else{
+            Scheduler.numAperiodicMeanServiceTimes = 0;
+            Scheduler.numAperiodicLoads = 0;
+        }
     }
     /**
      * @return La utilización máxima de la CPU.
