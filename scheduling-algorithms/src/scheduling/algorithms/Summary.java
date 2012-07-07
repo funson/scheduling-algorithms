@@ -97,14 +97,16 @@ public class Summary {
             iterator.add(new Node(arrivalTime, node.getStopTime()));
             node.setStopTime(arrivalTime);
             node = (Node) iterator.previous();
+            iterator.next();
         }
         if(node.getStopTime() > node.getStartTime() + stoptime){
             iterator.add(new Node(node.getStartTime() + stoptime, node.getStopTime()));
             node.setStopTime(node.getStartTime() + stoptime);
             iterator.previous(); //lo dejamos apuntando a node
+            
         }
         node.setTask(task);
-        if (remainingComputation - (node.getStopTime() - node.getStartTime()) == 0){
+        if ( (node.getStopTime() - node.getStartTime()) == remainingComputation){
             return (node.getStopTime() - arrivalTime);
         }else{
             return (node.getStopTime() - node.getStartTime())*-1;
@@ -129,7 +131,7 @@ public class Summary {
             float remainingComputation;
             boolean deadlineMet = true;
             float responseTime;
-            int numPeriod = 1;
+            int numPeriod = 0;
             float nextAbsolutePeriod, currentAbsolutePeriod;
             while(iterator.hasNext()){
                 nextAbsolutePeriod = period*numPeriod + phase;
@@ -138,8 +140,8 @@ public class Summary {
                 while(iterator.hasNext() && node.getStopTime() <= nextAbsolutePeriod){
                     node = (Node) iterator.next();
                 }
-                if(!iterator.hasNext())
-                    return deadlineMet;
+                /*if(!iterator.hasNext())
+                    return deadlineMet;*/
                 currentAbsolutePeriod = nextAbsolutePeriod;
                 nextAbsolutePeriod = period * (numPeriod + 1) + phase;
                 while(remainingComputation > 0){

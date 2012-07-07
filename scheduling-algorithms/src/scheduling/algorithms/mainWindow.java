@@ -22,6 +22,7 @@ public class mainWindow extends javax.swing.JFrame {
     private ButtonGroup rButtonGroup;
     ButtonGroup aperiodicButtonGroup;
     private AperiodicInfo aperiodicInfo;
+    private int selectedSet;
     private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 0, 0);
     JTable table;
 
@@ -296,6 +297,8 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fileImportDataActionPerformed
 
     void buildMainWindow(){
+        
+        Scheduler.setResultWindow(tasksWindow, resultsTextArea);
                     
             if (Scheduler.getTaskSets() != null){
                 jPanel1.removeAll();
@@ -306,7 +309,7 @@ public class mainWindow extends javax.swing.JFrame {
                 rButtonGroup = new ButtonGroup();
                 JRadioButton radioButton[] = new JRadioButton[numOfSets];
                 for (int i = 0; i < numOfSets; i++){
-                    radioButton[i] = new JRadioButton("Set " + i, false);
+                    radioButton[i] = new JRadioButton("Set " + i + ": " + Scheduler.getTaskSets().get(i).getTotalPeriodicLoad() * 100 + "%", false);
                     radioButton[i].setActionCommand(Integer.toString(i));
                     jPanel1.add(radioButton[i]);
                     rButtonGroup.add(radioButton[i]);
@@ -338,7 +341,7 @@ public class mainWindow extends javax.swing.JFrame {
     
     void buildPeriodicTab(){                
         System.out.println(rButtonGroup.getSelection().getActionCommand());
-        int selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
+        selectedSet = Integer.parseInt(rButtonGroup.getSelection().getActionCommand());
 
         panelOfPeriodic.removeAll();
                 
@@ -594,27 +597,10 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Result result = Scheduler.getResult();
-        
-        String output = "";
-        ArrayList<String> serverNamesInResult = result.getServerNamesInResult();
-        ArrayList<Double> loadsInResult       = result.getLoadsInResult();
-        
-        for (int i=0;i<serverNamesInResult.size();i++){
-                output+= " \t" + serverNamesInResult.get(i);
-        }
-        output+="\n";
-        
-       for (int i=0;i<loadsInResult.size();i++){
-                output+= Double.toString(loadsInResult.get(i));
-                for (int j=0;j<serverNamesInResult.size();j++){
-                    output+="\t" + result.getData(loadsInResult.get(i), serverNamesInResult.get(j));
-                }
-                output+="\n";
-       }
-       
-       resultsTextArea.setText(output);
-        resultWindow.setVisible(true);
+        if(aperiodicInfo.getMode() == Scheduler.aperiodicGenerationMode.NONE)
+            JOptionPane.showMessageDialog(null, "No hay tareas aperiódicas creadas.");
+        else 
+            Scheduler.scheduleTaskSet(selectedSet);        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

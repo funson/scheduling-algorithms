@@ -19,7 +19,7 @@ public class AperiodicTask extends Task {
      * @param computationTime   El tiempo de computación de la tarea     
      */
     public AperiodicTask(String name, float arrivalTime, float computationTime){
-        super(name,computationTime, Float.MAX_VALUE);        
+        super(name,computationTime, Float.POSITIVE_INFINITY);        
         this.arrivalTime = arrivalTime;                
     }
     
