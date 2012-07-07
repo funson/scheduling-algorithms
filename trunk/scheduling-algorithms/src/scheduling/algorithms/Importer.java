@@ -93,44 +93,46 @@ public class Importer {
                             // Inserim la tasca al grup
                             taskSets.get(currentSet).getGroup(taskGroup).addTask(new PeriodicTask(nom, t, ph, c));
                         }
-                        else if (aux[i].contains("U*s_DS")){
-                            System.out.println("###############################");// a les dues linies segs tenim la informació dels servidors
-                            // Lleguim la seg linia
+                        else if (aux[i].contains("Servers")){
+                            System.out.println("###############################");
+                            
+                            int periodDS, periodSS, periodPE, periodPS;
+                            float capacityDS, capacitySS, capacityPE, capacityPS;
+                            
+                            // DS Server
                             sLine = bf.readLine();
                             aux = sLine.split("\t");
-                            // Els tres primers son les dades dels servidor
-                            int index = 0;
-                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            float dada1 = Float.parseFloat(aux[index].replace(",", "."));
-                            index++;
-                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            float dada2 = Float.parseFloat(aux[index].replace(",", "."));
-                            index++;
-                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            float dada3 = Float.parseFloat(aux[index].replace(",", "."));
-
-                            // El 4t element es el primer de la seg linia
+                            periodDS = Integer.parseInt(aux[1]);
+                            capacityDS = Float.parseFloat(aux[2].replace(",", "."));
+                            
+                            // SS Server
                             sLine = bf.readLine();
                             aux = sLine.split("\t");
-                            // Els tres primers son les dades dels servidor
-                            index = 0;
-                            while (aux[index].equals("\t") || aux[index].equals("") || aux[index].equals(" ")) index++;
-                            float dada4 = Float.parseFloat(aux[index].replace(",", "."));
+                            periodSS = Integer.parseInt(aux[1]);
+                            capacitySS = Float.parseFloat(aux[2].replace(",", "."));
                             
+                            // PE Server
+                            sLine = bf.readLine();
+                            aux = sLine.split("\t");
+                            periodPE = Integer.parseInt(aux[1]);
+                            capacityPE = Float.parseFloat(aux[2].replace(",", "."));
                             
+                            // PS Server
+                            sLine = bf.readLine();
+                            aux = sLine.split("\t");
+                            periodPS = Integer.parseInt(aux[1]);
+                            capacityPS = Float.parseFloat(aux[2].replace(",", "."));
                             
-                            System.out.println(dada1);
-                            System.out.println(dada2);
-                            System.out.println(dada3);
-                            System.out.println(dada4);
+                            System.out.println(periodDS + " " + capacityDS);
+                            System.out.println(periodSS + " " + capacitySS);
+                            System.out.println(periodPE + " " + capacityPE);
+                            System.out.println(periodPS + " " + capacityPS);
                             
+                            taskSetServers[1] = new DeferrableServer(periodDS, capacityDS);
+                            taskSetServers[2] = new SporadicServer(periodSS, capacitySS);
+                            taskSetServers[3] = new PriorityExchangeServer(periodPE, capacityPE);
+                            taskSetServers[4] = new PollingServer(periodPS, capacityPS);
                             
-                            
-                            
-//                            taskSetServers[1] = new DeferrableServer();
-//                            taskSetServers[2] = new PollingServer();
-//                            taskSetServers[3] = new PriorityExchangeServer();
-//                            taskSetServers[4] = new SporadicServer();
                             servers.add(taskSetServers);
                         }
                         /*A mesura que es recorre un conjunt, anar guardant els servidors a l'array:
