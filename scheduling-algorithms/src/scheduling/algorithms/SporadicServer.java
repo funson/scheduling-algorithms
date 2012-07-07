@@ -14,8 +14,11 @@ import java.util.ListIterator;
  */
 public class SporadicServer extends Server {
     
+    ArrayList<Float> regenerationpoints;
+            
     public SporadicServer(float period, float capacity){
         super("Sporadic Server", period, capacity);
+        ArrayList<Float> regenerationpoints=new ArrayList<>();
     }
 
     @Override
@@ -60,8 +63,6 @@ public class SporadicServer extends Server {
         return (float) trTotal/ (float) SporadicServer.getAperiodicTaskGroup().getNumTasks();
     }
     
-    
-    ArrayList<Float> regenerationpoints=new ArrayList<>();
     public void SetRegenerationPoint(float activationtime, float nodefreestarttime){
         float regenerationpoint;
         if (activationtime>nodefreestarttime){
