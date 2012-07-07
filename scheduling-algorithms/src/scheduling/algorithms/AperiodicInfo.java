@@ -27,6 +27,18 @@ public class AperiodicInfo {
         this.aperiodicMeanServiceTimes = aperiodicMeanServiceTimes;
         this.aperiodicLoads = aperiodicLoads;
     }
+    
+    public AperiodicInfo(AperiodicInfo aperiodicInfo){
+        this.mode = aperiodicInfo.mode;
+        if(aperiodicInfo.aperiodicLoads != null && aperiodicInfo.aperiodicMeanServiceTimes != null && aperiodicInfo.aperiodicTaskGroups != null){
+            this.aperiodicLoads = aperiodicInfo.aperiodicLoads.clone();
+            this.aperiodicMeanServiceTimes = aperiodicInfo.aperiodicMeanServiceTimes.clone();        
+            this.aperiodicTaskGroups = new AperiodicTaskGroup[this.aperiodicLoads.length][this.aperiodicMeanServiceTimes.length];
+            for(int i = 0; i < aperiodicLoads.length; i++)
+                for(int j = 0; j < aperiodicMeanServiceTimes.length; j++)
+                    this.aperiodicTaskGroups[i][j] = (AperiodicTaskGroup) aperiodicInfo.aperiodicTaskGroups[i][j].clone();
+        }
+    }
 
     /**
      * @return the aperiodicTaskGroups
