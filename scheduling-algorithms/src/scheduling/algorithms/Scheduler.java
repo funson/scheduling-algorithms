@@ -114,26 +114,6 @@ public class Scheduler {
         aperiodicInfo = new AperiodicInfo(aperiodicTaskGroups, aperiodicGenerationMode.AUTO, aperiodicMeanServiceTimes, aperiodicLoads);
     }
     
-    /*public static void setAperiodicTaskGroup(AperiodicTaskGroup aperiodicTaskGroup){
-        aperiodicTaskGroups[0][0] = aperiodicTaskGroup;
-        numAperiodicLoads = 1;
-        aperiodicLoads = new double[numAperiodicLoads];
-        numAperiodicMeanServiceTimes = 1;
-        aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];            
-        AperiodicTask currentAperiodicTask;
-        AperiodicTask previousAperiodicTask = (AperiodicTask) aperiodicTaskGroups[0][0].getTask(0);
-        aperiodicMeanServiceTimes[0] = 0;
-        double aperiodicMeanTimeBetweenArrivals = 0;
-        int manualNumAperiodicTasks = aperiodicTaskGroups[0][0].taskGroup.size();
-        for(int i = 1; i < manualNumAperiodicTasks; i++){
-            currentAperiodicTask = (AperiodicTask) aperiodicTaskGroups[0][0].getTask(i);
-            aperiodicMeanServiceTimes[0] += currentAperiodicTask.getComputationTime() / manualNumAperiodicTasks;
-            aperiodicMeanTimeBetweenArrivals += (currentAperiodicTask.getArrivalTime() - previousAperiodicTask.getArrivalTime()) / (manualNumAperiodicTasks - 1);
-            previousAperiodicTask = currentAperiodicTask;
-        }
-        aperiodicLoads[0] = aperiodicMeanServiceTimes[0] / aperiodicMeanTimeBetweenArrivals;
-    }*/
-    
     /**
      * Método con el cual se realiza la planificación de todos los grupos de tareas del conjunto especificado.
      * @param taskSetToSchedule Índice del conjunto de tareas a planificar.
@@ -162,18 +142,6 @@ public class Scheduler {
     public static void setTaskSets(ArrayList<TaskSet> aTaskSets) {
         taskSets = aTaskSets;
     }
-
-    /**
-     * @param aAperiodicTaskGroups the aperiodicTaskGroups to set
-     */
-    /*public static void setUp(AperiodicTaskGroup[][] aperiodicTaskGroups, aperiodicGenerationMode mode, double[] aperiodicMeanServiceTimes, double[] aperiodicLoads) {
-        Scheduler.aperiodicTaskGroups = aperiodicTaskGroups;
-        //Scheduler.mode = mode;
-        Scheduler.aperiodicMeanServiceTimes = aperiodicMeanServiceTimes;
-        Scheduler.numAperiodicMeanServiceTimes = aperiodicMeanServiceTimes.length;
-        Scheduler.aperiodicLoads = aperiodicLoads;
-        Scheduler.numAperiodicLoads = aperiodicLoads.length;
-    }*/
 
     /**
      * @return La info aperiódica de la simulación.

@@ -128,6 +128,7 @@ public class Summary {
             float computation = periodicTask.getComputationTime();
             float remainingComputation;
             boolean deadlineMet = true;
+            float responseTime;
             int numPeriod = 1;
             float nextAbsolutePeriod, currentAbsolutePeriod;
             while(iterator.hasNext()){
@@ -141,9 +142,15 @@ public class Summary {
                     return deadlineMet;
                 currentAbsolutePeriod = nextAbsolutePeriod;
                 nextAbsolutePeriod = period * (numPeriod + 1) + phase;
-                while(remainingComputation > 0 && deadlineMet){
+                while(remainingComputation > 0){
                     if(node.isFree()){
-                        remainingComputation -= addTaskToFreeNode(iterator, periodicTask, currentAbsolutePeriod, remainingComputation, Float.MAX_VALUE);
+                        responseTime = addTaskToFreeNode(iterator, periodicTask, currentAbsolutePeriod, remainingComputation, Float.MAX_VALUE);
+                        
+                        if (responseTime>=0)
+                            remainingComputation = 0;
+                        else
+                            remainingComputation = remainingComputation + responseTime;
+                        
                         if(remainingComputation > 0 && node.getStopTime() > currentAbsolutePeriod)
                             deadlineMet = false;
                     }                    
