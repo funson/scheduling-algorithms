@@ -29,14 +29,12 @@ public class DeferrableServer extends Server {
         float tiempoActual=0;                           //tiempo Actual
         float tiempoPendiente=0;                        //Tiempo Pendiente
         float tiempoTotalTareas=0;                      //Tiempo total para calcular el tiempo de respuesta
-        int ntareas = 0;
         ListIterator<Node> listaNodos = summary.getSummaryListIterator();
         while (aIterator.hasNext()){
             AperiodicTask aTask = (AperiodicTask)aIterator.next();
             tiempoPendiente = aTask.getComputationTime();
             tiempoActual = aTask.getArrivalTime();
             //Calcular tiempo de respuesta
-            ntareas++;
             while(tiempoPendiente != 0){
                 if (listaNodos.hasNext()){
                     Node node = listaNodos.next();
@@ -95,7 +93,7 @@ public class DeferrableServer extends Server {
         }
         //ListIterator<Node> aux2 = summary.getSummaryListIterator();
        // this.visualizarListaNodosFinal(aux2);
-        return (tiempoTotalTareas/(float)ntareas);
+        return (tiempoTotalTareas/(float)cloneAperiodicTaskGroup.getNumTasks());
     }
     
     private void visualizarListaNodosFinal(ListIterator<Node> aux2){
