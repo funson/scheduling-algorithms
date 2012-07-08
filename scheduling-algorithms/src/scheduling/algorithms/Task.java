@@ -45,6 +45,14 @@ public abstract class Task  implements Comparable<Task> {
     @Override
     public int compareTo(Task o) {
         Integer f = new Integer (this.period);
+        
+        if (this instanceof Server && ! (this instanceof BackgroundServer)){
+            if (f.compareTo(o.period)==0){
+                return -1;
+            }
+        }
+        else if  (this instanceof BackgroundServer)
+            return 1;
         return f.compareTo(o.period);
     }
 
