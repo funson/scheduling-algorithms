@@ -75,11 +75,9 @@ public class Summary {
      * @param serverCapacity Capacidad actual del servidor. No debemos olvidarnos de el momento en que la capacidad del servidor se regenera.
      *        Por tanto será mas útil si en éste parámetro metemos el valor de Min (currentServerCapacity, nextRegenerationTime - currentNode.startTime()).
      *        (El nombre de las variables es un ejemplo, usad las variables que hayáis creado para este propósito)
-     * @return El nodo al cual se le ha asignado la tarea. Este nodo puede ser el mismo nodo libre (ahora ocupado) o un nuevo nodo contenido en el nodo libre inicial 
+     * @return Si algún dato de entrada es inválido: devuelve null. Si no, devuelve el nodo al cual se ha asignado la tarea
      * 
      * PRECONDICIÓN: una llamada a esta función siempre debe ir precedida de una llamada a iterateUntilFreeNode
-     * IMPORTANTE:  como en ambos casos el return devolverá un int, para poder discriminar en cúal de los dos casos nos encontramos, el segundo caso se
-     * multiplicará por -1 y así se podrá deducir: si el valor devuelto por el método es positivo estamos en el primer caso y si es negativo en el segundo.
      *            
      */
     public static Node addTaskToFreeNode(ListIterator<Node> iterator, Task task, int arrivalTime, int remainingComputation, int serverCapacity){
@@ -106,6 +104,11 @@ public class Summary {
         return node;
     }
     
+    /**
+     * Método que recorre la lista de nodos hasta encontrar el primer nodo libre.
+     * Este método deja el puntero "next" del iterador apuntando al nodo encontrado.
+     * @param inode El iterador de la lista
+     */
     public static void iterateUntilFreeNode(ListIterator<Node> inode) {
         if(!inode.hasNext())
             return;
@@ -117,6 +120,14 @@ public class Summary {
             inode.previous();    
     }
     
+    /**
+     * Método que recorre la lista de nodos hasta que encuentra el primer nodo tal que:
+     *      a) Empieza en el "time" especificado
+     *      b) Contiene el "time" especificado
+     * Este método deja el puntero "next" del iterador apuntando al nodo encontrado.
+     * @param inode El iterador de la lista
+     * @param time El instante de tiempo absoluto
+     */
     public static void iterateUntilTime(ListIterator<Node> inode, int time) {
         if(!inode.hasNext())
             return;
