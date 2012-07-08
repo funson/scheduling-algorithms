@@ -13,28 +13,30 @@ import java.util.ListIterator;
  */
 public class DeferrableServer extends Server {
     
-    public DeferrableServer(float period, float capacity){
-        super("Deferrable Server", period, capacity);
+    public DeferrableServer(double period, double capacity){
+        super("DS", period, capacity);
     }
 
     @Override
-    public float scheduleAperiodicTaskGroup(Summary summary) {
+    public int scheduleAperiodicTaskGroup(Summary summary) {
         //throw new UnsupportedOperationException("Not supported yet.");
         AperiodicTaskGroup cloneAperiodicTaskGroup = (AperiodicTaskGroup)DeferrableServer.getAperiodicTaskGroup();
         Iterator<Task> aIterator = cloneAperiodicTaskGroup.taskGroup.iterator();
         cloneAperiodicTaskGroup.sortByArrivalTime();
-        float auxCapacity = this.getComputationTime();  //Tiempo restante de computación
-        float auxPeriod = this.getPeriod();             //Tiempo restante de periodo
+        int auxCapacity = this.getComputationTime();  //Tiempo restante de computación
+        int auxPeriod = this.getPeriod();             //Tiempo restante de periodo
         int ciclo = 0;                                  //Ciclo Actual
-        float tiempoActual=0;                           //tiempo Actual
-        float tiempoPendiente=0;                        //Tiempo Pendiente
-        float tiempoTotalTareas=0;                      //Tiempo total para calcular el tiempo de respuesta
+        int tiempoActual=0;                           //tiempo Actual
+        int tiempoPendiente=0;                        //Tiempo Pendiente
+        int tiempoTotalTareas=0;                      //Tiempo total para calcular el tiempo de respuesta
+        int ntareas = 0;
         ListIterator<Node> listaNodos = summary.getSummaryListIterator();
         while (aIterator.hasNext()){
             AperiodicTask aTask = (AperiodicTask)aIterator.next();
             tiempoPendiente = aTask.getComputationTime();
             tiempoActual = aTask.getArrivalTime();
             //Calcular tiempo de respuesta
+            ntareas++;
             while(tiempoPendiente != 0){
                 if (listaNodos.hasNext()){
                     Node node = listaNodos.next();
@@ -93,7 +95,7 @@ public class DeferrableServer extends Server {
         }
         //ListIterator<Node> aux2 = summary.getSummaryListIterator();
        // this.visualizarListaNodosFinal(aux2);
-        return (tiempoTotalTareas/(float)cloneAperiodicTaskGroup.getNumTasks());
+        return (tiempoTotalTareas/(int)ntareas);
     }
     
     private void visualizarListaNodosFinal(ListIterator<Node> aux2){
@@ -111,20 +113,20 @@ public class DeferrableServer extends Server {
         }
     }
     
-    private int calcularCiclo(float tiempoActual) {
+    private int calcularCiclo(int tiempoActual) {
         return (int)(tiempoActual / this.getPeriod());
     }
     
-    private float calcularPeriodoRestante(float tiempoActual){
+    private int calcularPeriodoRestante(int tiempoActual){
         int ciclo = calcularCiclo(tiempoActual);
-        float aux = ((ciclo+1)*this.getPeriod())-tiempoActual;
+        int aux = ((ciclo+1)*this.getPeriod())-tiempoActual;
         return ((ciclo+1)*this.getPeriod())-tiempoActual;
     }
     
-    private void insertarNodo(float tActual, float duracion, Node nodo, Task t , ListIterator<Node> lNodos){
+    private void insertarNodo(int tActual, int duracion, Node nodo, Task t , ListIterator<Node> lNodos){
         //La tarea empieza igual que el nodo
         if (tActual == nodo.getStartTime()){
-            float tfinal = nodo.getStopTime();
+            int tfinal = nodo.getStopTime();
             nodo.setStopTime(tActual + duracion);
             nodo.setTask(t);
             Node nNode = new Node(tActual +duracion, tfinal);
@@ -132,7 +134,7 @@ public class DeferrableServer extends Server {
             lNodos.previous();
         } else {
             //La tarea no empieza cuando empieza el nodo
-            float tfinal = nodo.getStopTime();
+            int tfinal = nodo.getStopTime();
             nodo.setStopTime(tActual);
             Node nTarea = new Node(tActual, duracion+tActual, t);
             lNodos.add(nTarea);

@@ -32,8 +32,8 @@ public class mathOperation {
      * @param lambda
      * @return an Exponential-distributed random variable's value
      */
-    public static float getExponential(double lambda){
-        return (float)(-Math.log(Math.random())/lambda);        
+    public static int getExponential(double lambda){
+        return (int)Math.ceil((-Math.log(Math.random())/lambda));        
     }
     
     /**
@@ -67,9 +67,9 @@ public class mathOperation {
         return (a / mcd(a, b)) * b;
     }
     
-    public static float round(float floatToRound,int digits){
-        floatToRound *= Math.pow(10, 2);
-        int rounded = Math.round(floatToRound);
-        return (float) (rounded / Math.pow(10, 2));    
-    }
+    /*public static int round(int intToRound,int digits){
+        intToRound *= Math.pow(10, digits);
+        int rounded = (int) Math.round(intToRound);
+        return (int) (rounded / Math.pow(10, digits));    
+    }*/
 }

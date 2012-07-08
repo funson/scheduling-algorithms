@@ -12,15 +12,15 @@ package scheduling.algorithms;
  */
 public class Node {
     private Task    task;
-    private float   startTime;
-    private float   stopTime;
+    private int   startTime;
+    private int   stopTime;
     
     /**
      * Constructor para crear un nodo libre. Representa un período de tiempo en el que no hay ninguna tarea planificada.
      * @param startTime El instante de tiempo inicial en que no hay ninguna tarea planificada.
      * @param stopTime  El instante de tiempo final en que no hay ninguna tarea planificada.
      */
-    public Node(float startTime, float stopTime){
+    public Node(int startTime, int stopTime){
         this.startTime = startTime;
         this.stopTime = stopTime;
         this.task = null;
@@ -32,7 +32,7 @@ public class Node {
      * @param stopTime  El instante de tiempo final en el que se ha planificado la tarea.
      * @param task      La tarea que se ha planificado.
      */
-    public Node(float startTime, float stopTime, Task task){
+    public Node(int startTime, int stopTime, Task task){
         this.startTime = startTime;
         this.stopTime = stopTime;
         this.task = task;
@@ -63,28 +63,28 @@ public class Node {
     /**
      * @return El tiempo de inicio del intervalo.
      */
-    public float getStartTime() {
+    public int getStartTime() {
         return startTime;
     }
 
     /**
      * @param startTime El tiempo de inicio del intervalo a asignar.
      */
-    public void setStartTime(float startTime) {
+    public void setStartTime(int startTime) {
         this.startTime = startTime;
     }
 
     /**
      * @return El tiempo de finalización del intervalo.
      */
-    public float getStopTime() {
+    public int getStopTime() {
         return stopTime;
     }
 
     /**
      * @param stopTime El tiempo de finalización del intervalo a asignar.
      */
-    public void setStopTime(float stopTime) {
+    public void setStopTime(int stopTime) {
         this.stopTime = stopTime;
     }
 }

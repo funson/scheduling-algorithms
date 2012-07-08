@@ -39,9 +39,9 @@ public class PeriodicTaskGroup extends TaskGroup {
      * Para su cálculo excluye a los servidores que haya en el grupo.
      * @return El hiperperiodo del conjunto de tareas periódicas. 
      */
-    public float calculateHiperperiod(){
+    public int calculateHiperperiod(){
         final int MAX_DECIMAL_DIGITS = 5;        
-        float T_i;
+        int T_i;
         int T_iFtoI;
         int hiperPeriod = 1;
         PeriodicTask periodicTask;
@@ -51,11 +51,11 @@ public class PeriodicTaskGroup extends TaskGroup {
             
             if (!(periodicTask instanceof Server)){
                 T_i = periodicTask.getPeriod();
-                T_iFtoI = (int) (T_i * Math.pow(10, MAX_DECIMAL_DIGITS));
+                T_iFtoI = (int) T_i;
                 hiperPeriod = mathOperation.mcm(hiperPeriod, T_iFtoI);
             }
         }
-        return (float)(hiperPeriod) / (float)(Math.pow(10, MAX_DECIMAL_DIGITS));
+        return (int)(hiperPeriod);
     }
     
     /**

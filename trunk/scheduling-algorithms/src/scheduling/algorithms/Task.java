@@ -11,10 +11,10 @@ package scheduling.algorithms;
 public abstract class Task  implements Comparable<Task> {
     
     private String name;
-    protected float computationTime;
+    protected int computationTime;
     
 
-    protected float period;
+    protected int period;
     
     /**
      * El constructor de la tarea. Crea una nueva tarea a partir de los parámetros especificados.     
@@ -22,29 +22,29 @@ public abstract class Task  implements Comparable<Task> {
      * @param computationTime   El tiempo de computación de la tarea     
      * @param period   El periodo de la tarea  
      */
-    public Task(String name, float computationTime, float period){   
+    public Task(String name, double computationTime, double period){ 
         this.name = name;
-        this.computationTime = computationTime;    
-        this.period = period;
+        this.computationTime = (int) Math.ceil(computationTime);    
+        this.period =  (int) Math.ceil(period);
     }
 
     /**
      * @return El tiempo de computación
      */
-    public float getComputationTime() {
+    public int getComputationTime() {
         return computationTime;
     }
 
     /**
      * @param computationTime El tiempo de computación a asignar
      */
-    public void setComputationTime(float computationTime) {
-        this.computationTime = computationTime;
+    public void setComputationTime(double computationTime) {
+        this.computationTime = (int) Math.ceil(computationTime);
     }  
     
     @Override
     public int compareTo(Task o) {
-        Float f = new Float (this.period);
+        Integer f = new Integer (this.period);
         return f.compareTo(o.period);
     }
 

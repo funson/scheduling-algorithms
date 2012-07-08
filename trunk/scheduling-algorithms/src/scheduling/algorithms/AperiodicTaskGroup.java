@@ -34,8 +34,8 @@ public class AperiodicTaskGroup extends TaskGroup {
      * @param aperiodicMeanServiceTime El tiempo medio de servicio, que repercute en el tiempo de comutación de la tarea
      */
     public AperiodicTaskGroup(int numTasks, double aperiodicMeanServiceTime, double aperiodicLoad){
-        float timeBetweenArrivals, computationTime;
-        AperiodicTask previousTask = new AperiodicTask("", 0, 0);
+        int timeBetweenArrivals, computationTime;
+        AperiodicTask previousTask = new AperiodicTask("", 0.0, 0.0);
         AperiodicTask currentTask;
         for(int i = 0; i < numTasks; i++){
             timeBetweenArrivals = mathOperation.getPoisson(aperiodicMeanServiceTime * (1 / aperiodicLoad));

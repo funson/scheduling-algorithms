@@ -29,12 +29,18 @@ public class Exporter {
             }
             out.write("\n");
             for (int i=0;i<loadsInResult.size();i++){
-                out.write(Double.toString(loadsInResult.get(i)));
+                out.write(DoubleToString(loadsInResult.get(i)));
                 for (int j=0;j<serverNamesInResult.size();j++){
-                    out.write("\t" + result.getData(loadsInResult.get(i), serverNamesInResult.get(j)));
+                    out.write("\t" + DoubleToString(result.getData(loadsInResult.get(i), serverNamesInResult.get(j))));
                 }
                 out.write("\n");
             }
         }
+    }
+    
+    private static String DoubleToString(double d){
+        String decimals = Integer.toString(Math.abs((int)(d*100)%100));
+        String intpart = Integer.toString((int) d);
+        return intpart + "," + decimals;       
     }
 }

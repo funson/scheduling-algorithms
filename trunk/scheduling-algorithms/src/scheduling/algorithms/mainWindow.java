@@ -23,8 +23,11 @@ public class mainWindow extends javax.swing.JFrame {
     ButtonGroup aperiodicButtonGroup;
     private AperiodicInfo aperiodicInfo;
     private int selectedSet;
-    private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 0, 0);
+    private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 1.0, 2.0);
     JTable table;
+    
+    
+    
 
 
     public static String newline = System.getProperty("line.separator");    
@@ -32,7 +35,7 @@ public class mainWindow extends javax.swing.JFrame {
      * Creates new form mainWindow
      */
     public mainWindow() {
-        initComponents();
+        initComponents();                
     }
 
     /**
@@ -58,6 +61,8 @@ public class mainWindow extends javax.swing.JFrame {
         resultsTextArea = new javax.swing.JTextArea();
         buttonPanel = new javax.swing.JPanel();
         saveButton = new javax.swing.JButton();
+        progressBar = new javax.swing.JFrame();
+        barra = new javax.swing.JProgressBar();
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel1 = new javax.swing.JPanel();
@@ -146,6 +151,9 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        resultWindow.setMinimumSize(new java.awt.Dimension(400, 400));
+        resultWindow.setPreferredSize(new java.awt.Dimension(400, 400));
+
         resultsTextArea.setColumns(20);
         resultsTextArea.setRows(5);
         scrollTextArea.setViewportView(resultsTextArea);
@@ -205,6 +213,26 @@ public class mainWindow extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        progressBar.setMinimumSize(new java.awt.Dimension(225, 100));
+        progressBar.setResizable(false);
+
+        javax.swing.GroupLayout progressBarLayout = new javax.swing.GroupLayout(progressBar.getContentPane());
+        progressBar.getContentPane().setLayout(progressBarLayout);
+        progressBarLayout.setHorizontalGroup(
+            progressBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(progressBarLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(barra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(80, Short.MAX_VALUE))
+        );
+        progressBarLayout.setVerticalGroup(
+            progressBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(progressBarLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(barra, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -298,7 +326,7 @@ public class mainWindow extends javax.swing.JFrame {
 
     void buildMainWindow(){
         
-        Scheduler.setResultWindow(tasksWindow, resultsTextArea);
+        Scheduler.setResultWindow(resultWindow, resultsTextArea, progressBar,barra);
                     
             if (Scheduler.getTaskSets() != null){
                 jPanel1.removeAll();
@@ -345,7 +373,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         panelOfPeriodic.removeAll();
                 
-        int numberOfGroups = TaskSet.GROUPS_PER_SET;
+        int numberOfGroups = TaskSet.GROUPS_PER_SET;        
         
         panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
 
@@ -407,7 +435,7 @@ public class mainWindow extends javax.swing.JFrame {
 
         panelOfAperiodic.add(genPanel, BorderLayout.PAGE_START);
 
-        String[] aperiodicColumnNames = {"Task", "Arrival", "Computation time", "End"};
+        String[] aperiodicColumnNames = {"Task", "Arrival", "Computation time"};
 
         if(!generated)
             aperiodicInfo = new AperiodicInfo(Scheduler.getAperiodicInfo());
@@ -450,9 +478,9 @@ public class mainWindow extends javax.swing.JFrame {
                                     case("Computation time"):
                                         data[k][l] = String.valueOf(aperiodicTask.getComputationTime());
                                         break;
-                                    case("End"):
+                                    /*case("End"):
                                         data[k][l] = String.valueOf(aperiodicTask.getDeadline());
-                                        break;
+                                        break;*/
                                 }
                             }
                         }
@@ -483,9 +511,9 @@ public class mainWindow extends javax.swing.JFrame {
                                 case("Computation time"):
                                     data[j][k] = String.valueOf(aperiodicTask.getComputationTime());
                                     break;
-                                case("End"):
+                                /*case("End"):
                                     data[j][k] = String.valueOf(aperiodicTask.getDeadline());
-                                    break;
+                                    break;*/
                             }
                         }
                     }
@@ -561,7 +589,7 @@ public class mainWindow extends javax.swing.JFrame {
                     numAperiodicLoads = 5;
                     aperiodicLoads = new double[numAperiodicLoads];
                     double residualAperiodicLoad = Scheduler.getMAX_CPU_UTILIZATION() - Scheduler.getTaskSets().get(selectedSet).getTotalPeriodicLoad();
-                    double aperiodicLoadIntervalSize = residualAperiodicLoad / (double)numAperiodicLoads;
+                    double aperiodicLoadIntervalSize = residualAperiodicLoad / (int)numAperiodicLoads;
                     numAperiodicMeanServiceTimes = 4;
                     aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];
                     aperiodicMeanServiceTimes[0] = 0.55;
@@ -642,10 +670,10 @@ public class mainWindow extends javax.swing.JFrame {
                     String name = (String) model.getValueAt(i, 0);
                     Object o = model.getValueAt(i, 1);
                     String s = o.toString();
-                    Float arrival = Float.valueOf(s);                    
+                    Integer arrival = Integer.valueOf(s);                    
                     o = model.getValueAt(i, 2);
                     s = o.toString();
-                    float computationTime = Float.valueOf(s);                                        
+                    int computationTime = Integer.valueOf(s);                                        
                     aperiodicInfo.getAperiodicTaskGroups()[0][0].addTask(new AperiodicTask(name, arrival, computationTime));
                     System.out.println("Tarea: "+arrival + " " + computationTime);
                 }
@@ -660,7 +688,7 @@ public class mainWindow extends javax.swing.JFrame {
                 else{    
                     AperiodicTask previousAperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(0);
                     aperiodicInfo.getAperiodicMeanServiceTimes()[0] = 0;
-                    double aperiodicMeanTimeBetweenArrivals = 0;
+                    int aperiodicMeanTimeBetweenArrivals = 0;
                     int manualNumAperiodicTasks = aperiodicInfo.getAperiodicTaskGroups()[0][0].taskGroup.size();
                     for(int i = 1; i < manualNumAperiodicTasks; i++){
                         currentAperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(i);
@@ -727,6 +755,7 @@ public class mainWindow extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JProgressBar barra;
     private javax.swing.JButton btSave;
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JMenuItem fileImportData;
@@ -742,6 +771,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JPanel panelOfAperiodic;
     private javax.swing.JPanel panelOfPeriodic;
+    private javax.swing.JFrame progressBar;
     private javax.swing.JFrame resultWindow;
     private javax.swing.JTextArea resultsTextArea;
     private javax.swing.JButton saveButton;
