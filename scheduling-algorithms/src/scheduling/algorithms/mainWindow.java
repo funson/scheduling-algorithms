@@ -23,7 +23,7 @@ public class mainWindow extends javax.swing.JFrame {
     ButtonGroup aperiodicButtonGroup;
     private AperiodicInfo aperiodicInfo;
     private int selectedSet;
-    private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 1.0, 2.0);
+    private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 0.0, 0.0);
     JTable table;
     
     
@@ -377,7 +377,7 @@ public class mainWindow extends javax.swing.JFrame {
         
         panelOfPeriodic.setLayout(new GridLayout(numberOfGroups,0));
 
-        String[] periodicColumnNames = {"Task", "Phase", "Computation time", "Period"};
+        String[] periodicColumnNames = {"Task", "Period", "Computation time", "Phase"};
 
         for (int i = 0; i < numberOfGroups; i++){
             int numberOfTasksCurrentGroup = Scheduler.getTaskSets().get(selectedSet).getGroup(i).getNumTasks();
@@ -625,7 +625,7 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(aperiodicInfo.getMode() == Scheduler.aperiodicGenerationMode.NONE)
+        if(Scheduler.getAperiodicInfo().getMode() == Scheduler.aperiodicGenerationMode.NONE)
             JOptionPane.showMessageDialog(null, "No hay tareas aperiódicas creadas.");
         else 
             Scheduler.scheduleTaskSet(selectedSet);        
