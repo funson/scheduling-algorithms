@@ -66,7 +66,7 @@ public class Result {
             found = r.servername.equals(serverName)&& r.totalLoad == total_load;
         }
         
-        return found ? r.meanResponseTime : -1.0f;
+        return found ? r.meanResponseTime : -1;
         
     }
     

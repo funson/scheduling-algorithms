@@ -9,12 +9,12 @@ package scheduling.algorithms;
  * @author Juanito
  */
 public class PriorityExchangeServer extends Server {
-    public PriorityExchangeServer(float period, float capacity){
-        super("Priority Exchange Server",period, capacity);
+    public PriorityExchangeServer(double period, double capacity){
+        super("PE", period, capacity);
     }
 
     @Override
-    public float scheduleAperiodicTaskGroup(Summary summary) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public int scheduleAperiodicTaskGroup(Summary summary) {
+        return -1;
     }
 }

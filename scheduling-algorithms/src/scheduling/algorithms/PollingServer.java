@@ -14,8 +14,8 @@ import java.util.ListIterator;
  */
 public class PollingServer extends Server {
 
-    public PollingServer(float period, float capacity) {
-        super("Polling Server", period, capacity);
+    public PollingServer(double period, double capacity) {
+        super("PS", period, capacity);
     }
 
     /**
@@ -24,7 +24,7 @@ public class PollingServer extends Server {
      * @return Tiempo medio de respuesa 
      */
     @Override
-    public float scheduleAperiodicTaskGroup(Summary summary) {
+    public int scheduleAperiodicTaskGroup(Summary summary) {
 
 
         //Obtenemos el iterador de nodos sobre el cual insertaremos las tareas periodicas anteriores
@@ -36,11 +36,11 @@ public class PollingServer extends Server {
         clonedAperiodicTaskGroup.sortByArrivalTime();
 
         // Variable auxiliar para almacenar el tiempo restante que quede por ejecutar de un
-        float remainingTimeTask;
+        int remainingTimeTask;
         //Variable para almacenar el tiempo de  
-        float acumulatedResponseTime = (float) 0.0;
+        int acumulatedResponseTime = (int) 0.0;
         //Variable que marca el instante de finalización de una tarea
-        float finishedTimeTask = (float) 0.0;
+        int finishedTimeTask = (int) 0.0;
 
 
         Iterator<Task> taskIterator = clonedAperiodicTaskGroup.taskGroup.iterator();
@@ -56,10 +56,10 @@ public class PollingServer extends Server {
                 Node node = nodeIterator.next();
                 if (node.isFree()) {
 
-                    float stopNodePeriod = beforePeriod(node, task);
+                    int stopNodePeriod = beforePeriod(node, task);
                     if (stopNodePeriod != -1) {
 
-                        float capacityNodeTime = stopNodePeriod - node.getStartTime();
+                        int capacityNodeTime = stopNodePeriod - node.getStartTime();
 
                         //Ocupa el tiempo de capacidad Completo
                         if (capacityNodeTime == remainingTimeTask) {
@@ -77,7 +77,7 @@ public class PollingServer extends Server {
                             node.setTask(task);
                             remainingTimeTask = remainingTimeTask - capacityNodeTime;
 
-                            if (remainingTimeTask == (float) 0.0) {
+                            if (remainingTimeTask == (int) 0.0) {
                                 finishedTimeTask = stopNodePeriod;
                             }
 
@@ -96,7 +96,7 @@ public class PollingServer extends Server {
                             node.setTask(task);
                             remainingTimeTask = remainingTimeTask - remainingTimeTask;
 
-                            if (remainingTimeTask == (float) 0.0) {
+                            if (remainingTimeTask == (int) 0.0) {
                                 finishedTimeTask = node.getStartTime() + remainingTimeTask;
                             }
 
@@ -116,7 +116,7 @@ public class PollingServer extends Server {
                         }
 
                     } else {
-                        float startNodePeriod = nextPeriod(node, task);
+                        int startNodePeriod = nextPeriod(node, task);
                         if (startNodePeriod != -1) {
 
                             //Se puede añadir una tarea al inicio del nodo
@@ -142,16 +142,15 @@ public class PollingServer extends Server {
 
                                     }
 
-                                    if (remainingTimeTask == (float) 0.0) {
+                                    if (remainingTimeTask == (int) 0.0) {
                                         finishedTimeTask = node.getStopTime();
                                     }
-
 
 
                                     //La capacidad no ocupa toda la parte del nodo    
                                 } else {
 
-                                    float stopComputationPeriod = startNodePeriod + computationTime;
+                                    int stopComputationPeriod = startNodePeriod + computationTime;
 
                                     if (startNodePeriod + remainingTimeTask >= stopComputationPeriod) {
                                         Node newNode = new Node(startNodePeriod + computationTime, node.getStopTime());
@@ -176,16 +175,13 @@ public class PollingServer extends Server {
                                         node.setTask(task);
                                         remainingTimeTask = remainingTimeTask - remainingTimeTask;
 
-                                        if (remainingTimeTask == (float) 0.0) {
+                                        if (remainingTimeTask == (int) 0.0) {
                                             finishedTimeTask = node.getStartTime() + remainingTimeTask;
                                         }
-
 
                                     }
 
                                 }
-
-
 
                                 //Se puede añadir una tarea al final del nodo    
                             } else if (startNodePeriod + this.computationTime == node.getStopTime()) {
@@ -217,7 +213,7 @@ public class PollingServer extends Server {
 
                                     remainingTimeTask = remainingTimeTask - remainingTimeTask;
 
-                                    if (remainingTimeTask == (float) 0.0) {
+                                    if (remainingTimeTask == (int) 0.0) {
                                         finishedTimeTask = startNodePeriod + remainingTimeTask;
                                     }
 
@@ -232,8 +228,8 @@ public class PollingServer extends Server {
                             } else {
 
 
-                                float startComputationTime;
-                                float durationComputationTime;
+                                int startComputationTime;
+                                int durationComputationTime;
 
                                 if (task.getArrivalTime() > startNodePeriod) {
                                     startComputationTime = task.getArrivalTime();
@@ -292,7 +288,7 @@ public class PollingServer extends Server {
                 }
 
                 //Se ha computado toda la tarea y se ejecuta la siguiente
-                if (remainingTimeTask == (float) 0.0) {
+                if (remainingTimeTask == (int) 0.0) {
 
                     acumulatedResponseTime += ((finishedTimeTask) - task.getArrivalTime());
                     if (taskIterator.hasNext()) {
@@ -303,17 +299,13 @@ public class PollingServer extends Server {
 
                     }
                 }
-
-
-
-
             }
 
         }
 
 
 
-        return (float) acumulatedResponseTime / (float) PollingServer.getAperiodicTaskGroup().getNumTasks();
+        return (int) acumulatedResponseTime / (int) PollingServer.getAperiodicTaskGroup().getNumTasks();
     }
 
     /**
@@ -322,9 +314,9 @@ public class PollingServer extends Server {
      * @param task  Tarea a ejecutar
      * @return  Periodo libre
      */
-    private float nextPeriod(Node node, AperiodicTask task) {
+    private int nextPeriod(Node node, AperiodicTask task) {
 
-        float time = node.getStartTime();
+        int time = node.getStartTime();
 
         while (((time % period != 0) && (time < node.getStopTime())) || time <= (task.getArrivalTime() - this.computationTime)) {
             time++;
@@ -345,9 +337,9 @@ public class PollingServer extends Server {
      * @param task Tarea ejecutar
      * @return 
      */
-    private float beforePeriod(Node node, AperiodicTask task) {
+    private int beforePeriod(Node node, AperiodicTask task) {
 
-        float time = node.getStartTime() - 1;
+        int time = node.getStartTime() - 1;
         while ((time % period != 0) && (time >= (node.getStartTime() - computationTime))) {
             time--;
         }

@@ -14,7 +14,7 @@ public abstract class Server extends PeriodicTask {
     private static AperiodicTaskGroup aperiodicTaskGroup;
 
     
-    public Server(String name, float period, float capacity){
+    public Server(String name, double period, double capacity){
         super(name, period, 0, capacity);        
     }
     
@@ -26,7 +26,7 @@ public abstract class Server extends PeriodicTask {
      * @param summary El resumen de la planificación. Este método lo actualizará con las tareas aperiódicas planificadas.
      * @return Tiempo de respuesta medio de las tareas aperiódicas
      */
-    public abstract float scheduleAperiodicTaskGroup(Summary summary);
+    public abstract int scheduleAperiodicTaskGroup(Summary summary);
 
     /**
      * @return El grupo de tareas aperiódicas que debe planificar el Servidor.

@@ -6,6 +6,7 @@ package scheduling.algorithms;
 
 import java.util.ArrayList;
 import javax.swing.JFrame;
+import javax.swing.JProgressBar;
 import javax.swing.JTextArea;
 
 /**
@@ -27,15 +28,17 @@ public class Scheduler {
         NONE, AUTO, MANUAL;
     }
     
-    private static final int NUM_SERVERS = 5;
+    private static JProgressBar barra;
+    public static final int NUM_SERVERS = 5;
     private static AperiodicInfo aperiodicInfo = new AperiodicInfo();
     private static int numAperiodicMeanServiceTimes;
-    //private static double[] aperiodicMeanServiceTimes;
+    private static JFrame progressBar;
+    //private static int[] aperiodicMeanServiceTimes;
     private static int numAperiodicLoads;
-    //private static double[] aperiodicLoads;
+    //private static int[] aperiodicLoads;
     private static ArrayList<Server[]> servers;    
     //private static AperiodicTaskGroup[][] aperiodicTaskGroups;
-    private static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 20;    
+    private static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 1;    
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
     private static int numTaskSetToSchedule;
@@ -49,14 +52,20 @@ public class Scheduler {
     private static Runnable runnable = new Runnable() {
 
         @Override
-        public void run() {        
-            float timeToSchedule;
+        public void run() {
+            barra.getModel().setMaximum(NUM_SERVERS*TaskSet.GROUPS_PER_SET*numAperiodicMeanServiceTimes*numAperiodicLoads);
+            barra.getModel().setMinimum(0);
+            progressBar.setVisible(true);
+            int timeToSchedule;
             TaskSet taskSetToSchedule = taskSets.get(numTaskSetToSchedule);
             PeriodicTaskGroup periodicTaskGroupToSchedule;
             AperiodicTaskGroup aperiodicTaskGroup;
             result = new Result();
-            float responseTimeByMeanServiceTime = 0;
-            float responseTimeByGroup = 0;            
+            double responseTimeByMeanServiceTime = 0;
+            double responseTimeByGroup = 0;
+            
+            int iterations = 0;
+            barra.setValue(iterations);
             for(int i = 0; i < NUM_SERVERS; i++){                                                                                        
                 responseTimeByGroup = 0;
                 for(int j = 0; j < numAperiodicLoads; j++){
@@ -70,13 +79,15 @@ public class Scheduler {
                                 summaries[i][k][l][j] = new Summary(timeToSchedule);                
                                 summaries[i][k][l][j].schedulePeriodicTaskGroup(periodicTaskGroupToSchedule, servers.get(numTaskSetToSchedule)[i]);  
                                 responseTimeByMeanServiceTime += summaries[i][k][l][j].getAverageAperiodicResponseTime();
+                                iterations++;
+                                barra.setValue(iterations);
                             }                                                
                             responseTimeByMeanServiceTime /= numAperiodicMeanServiceTimes;
                             responseTimeByGroup += responseTimeByMeanServiceTime;
                     }
                     responseTimeByGroup /= TaskSet.GROUPS_PER_SET;
                     getResult().addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
-                }                
+                }                                
             }
             
             Result result = getResult();
@@ -91,16 +102,23 @@ public class Scheduler {
             output+="\n";
 
         for (int i=0;i<loadsInResult.size();i++){
-                    output+= Double.toString(loadsInResult.get(i));
+                    output+= DoubleToString(loadsInResult.get(i));
                     for (int j=0;j<serverNamesInResult.size();j++){
-                        output+="\t" + result.getData(loadsInResult.get(i), serverNamesInResult.get(j));
+                        output+="\t" + DoubleToString(result.getData(loadsInResult.get(i), serverNamesInResult.get(j)));
                     }
                     output+="\n";
         }       
         resultWindow.setVisible(true);
         resultsTextArea.setText(output);
+        progressBar.setVisible(false);
         }
     };
+    
+    private static String DoubleToString(double d){
+        String decimals = Integer.toString(Math.abs((int)(d*100)%100));
+        String intpart = Integer.toString((int) d);
+        return intpart + "," + decimals;       
+    }
     
     /**
      * Método que carga los datos del fichero de entrada. 
@@ -113,31 +131,6 @@ public class Scheduler {
         servers  = new ArrayList<>();
         Importer.importTaskSets(urlFile, taskSets, servers);
         
-    }
-    /**
-     * Método PROVISIONAL para generar tareas aperiódicas automáticamente, para poder hacer pruebas mientras la GUI Tareas no esté terminada.
-     * @param aperiodicTasksPerGroup
-     * @param taskSet
-     */
-    public static void generateAperiodicTaskGroups(int aperiodicTasksPerGroup, int taskSet){
-        numAperiodicLoads = 5;
-        double[] aperiodicLoads = new double[numAperiodicLoads];
-        double residualAperiodicLoad = MAX_CPU_UTILIZATION - taskSets.get(taskSet).getTotalPeriodicLoad();
-        double aperiodicLoadIntervalSize = residualAperiodicLoad / (double)numAperiodicLoads;
-        numAperiodicMeanServiceTimes = 4;
-        double[] aperiodicMeanServiceTimes = new double[numAperiodicMeanServiceTimes];
-        aperiodicMeanServiceTimes[0] = 0.55;
-        aperiodicMeanServiceTimes[1] = 1.10;
-        aperiodicMeanServiceTimes[2] = 2.75;
-        aperiodicMeanServiceTimes[3] = 5.5;
-        AperiodicTaskGroup[][] aperiodicTaskGroups = new AperiodicTaskGroup[numAperiodicLoads][numAperiodicMeanServiceTimes];
-        for(int i = 0; i < numAperiodicLoads; i++){
-            aperiodicLoads[i] = aperiodicLoadIntervalSize * i;
-            for(int j = 0; j < numAperiodicMeanServiceTimes; j++){                        
-                aperiodicTaskGroups[i][j] = new AperiodicTaskGroup(aperiodicTasksPerGroup, aperiodicMeanServiceTimes[j], aperiodicLoads[i]);                
-            }                    
-        }
-        aperiodicInfo = new AperiodicInfo(aperiodicTaskGroups, aperiodicGenerationMode.AUTO, aperiodicMeanServiceTimes, aperiodicLoads);
     }
     
     /**
@@ -199,9 +192,11 @@ public class Scheduler {
     }
     
     //Chapuza al canto:
-    public static void setResultWindow(JFrame window, JTextArea txtArea){
+    public static void setResultWindow(JFrame window, JTextArea txtArea, JFrame progressBar, JProgressBar barra){
         resultWindow = window;
         resultsTextArea = txtArea;
+        Scheduler.progressBar = progressBar;
+        Scheduler.barra       = barra;        
     }
 
 }
