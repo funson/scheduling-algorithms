@@ -151,10 +151,11 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        resultWindow.setMinimumSize(new java.awt.Dimension(400, 400));
-        resultWindow.setPreferredSize(new java.awt.Dimension(400, 400));
+        resultWindow.setMinimumSize(new java.awt.Dimension(600, 600));
+        resultWindow.setPreferredSize(new java.awt.Dimension(600, 600));
 
         resultsTextArea.setColumns(20);
+        resultsTextArea.setEditable(false);
         resultsTextArea.setRows(5);
         scrollTextArea.setViewportView(resultsTextArea);
 
@@ -621,7 +622,7 @@ public class mainWindow extends javax.swing.JFrame {
     }
     
     private void fileSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileSaveResultsActionPerformed
-        // TODO guardar fitxer?? això no se fa a es resultats lluis?
+
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -657,7 +658,6 @@ public class mainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void btSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btSaveMouseClicked
-        //TODO guardar
         System.out.println("Guardar cambios");        
         switch(aperiodicInfo.getMode()){
             case AUTO:
@@ -678,29 +678,19 @@ public class mainWindow extends javax.swing.JFrame {
                     System.out.println("Tarea: "+arrival + " " + computationTime);
                 }
                 
-                AperiodicTask currentAperiodicTask;
-                
                 if (model.getRowCount()==0){
                     aperiodicInfo = new AperiodicInfo();
                     Scheduler.setAperiodicInfo(aperiodicInfo);
                     
                 }
                 else{    
-                    AperiodicTask previousAperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(0);
                     aperiodicInfo.getAperiodicMeanServiceTimes()[0] = 0;
-                    int aperiodicMeanTimeBetweenArrivals = 0;
-                    int manualNumAperiodicTasks = aperiodicInfo.getAperiodicTaskGroups()[0][0].taskGroup.size();
-                    for(int i = 1; i < manualNumAperiodicTasks; i++){
-                        currentAperiodicTask = (AperiodicTask) aperiodicInfo.getAperiodicTaskGroups()[0][0].getTask(i);
-                        aperiodicInfo.getAperiodicMeanServiceTimes()[0] += currentAperiodicTask.getComputationTime() / manualNumAperiodicTasks;
-                        aperiodicMeanTimeBetweenArrivals += (currentAperiodicTask.getArrivalTime() - previousAperiodicTask.getArrivalTime()) / (manualNumAperiodicTasks - 1);
-                        previousAperiodicTask = currentAperiodicTask;
-                    }
-                    aperiodicInfo.getAperiodicLoads()[0] = aperiodicInfo.getAperiodicMeanServiceTimes()[0] / aperiodicMeanTimeBetweenArrivals;                        
+                    aperiodicInfo.getAperiodicLoads()[0] = 0;                        
                     Scheduler.setAperiodicInfo(aperiodicInfo);                    
                 }
                 break;
         }
+        btSave.setEnabled(false);
     }//GEN-LAST:event_btSaveMouseClicked
 
     private void jTabbedPane2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane2StateChanged
