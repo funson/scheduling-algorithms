@@ -32,6 +32,7 @@ public class DeferrableServer extends Server {
         int tiempoPendiente = 0;                        //Tiempo Pendiente
         int tiempoTotalTareas = 0;                      //Tiempo total para calcular el tiempo de respuesta
         int ntareas = 0;       
+        boolean handled = false;
         
         while (aIterator.hasNext() && inode.hasNext()) {
             AperiodicTask aTask = (AperiodicTask) aIterator.next();
@@ -48,7 +49,9 @@ public class DeferrableServer extends Server {
                 return tiempoTotalTareas / ntareas;
             }
             ntareas++;
-            while (tiempoPendiente != 0) {
+            handled = false;
+            while (tiempoPendiente != 0 || !handled) {
+                handled = true;
                 Summary.iterateUntilFreeNode(inode);
                 if (!inode.hasNext()) {
                     return tiempoTotalTareas / ntareas;
