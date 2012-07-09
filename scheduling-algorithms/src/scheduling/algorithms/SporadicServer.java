@@ -24,7 +24,7 @@ public class SporadicServer extends Server {
 
     @Override
     public int scheduleAperiodicTaskGroup(Summary summary) {
-        int trTotal = 0;
+        /*int trTotal = 0;
         Iterator<Task> aperiodicTaskIterator;
         ListIterator<Node> AperiodicNodeIterator;
         AperiodicTaskGroup clonedAperiodicTaskGroup = SporadicServer.getAperiodicTaskGroup();    
@@ -58,7 +58,8 @@ public class SporadicServer extends Server {
             }
              trTotal += nodo.getStopTime() - tarea.getArrivalTime();
         }
-        return (int) trTotal/ (int) SporadicServer.getAperiodicTaskGroup().getNumTasks();
+        return (int) trTotal/ (int) SporadicServer.getAperiodicTaskGroup().getNumTasks();*/
+        return -1;
     }
     
     public void SetRegenerationPoint(int activationtime, int nodefreestarttime){
