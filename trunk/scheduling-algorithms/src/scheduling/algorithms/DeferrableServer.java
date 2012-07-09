@@ -73,9 +73,11 @@ public class DeferrableServer extends Server {
                 tiempoTotalTareas = tiempoTotalTareas + (node.getStopTime() - aTask.getArrivalTime());
             }
         }
-        //ListIterator<Node> aux2 = summary.getSummaryListIterator();
-        //this.visualizarinodeFinal(aux2);
-        return (tiempoTotalTareas / (int) ntareas);
+        
+        if(ntareas == 0)
+                    return 0;
+            else
+                return tiempoTotalTareas/ntareas;
     }
 
     private void visualizarinodeFinal(ListIterator<Node> aux2) {
