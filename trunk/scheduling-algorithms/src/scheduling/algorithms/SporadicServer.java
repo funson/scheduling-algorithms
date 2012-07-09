@@ -19,46 +19,46 @@ public class SporadicServer extends Server {
     public SporadicServer(double period, double capacity){
         super("SS", period, capacity);
         regenerationpoints=new ArrayList<>();
+        this.lastcapacity=0;
     }
 
     @Override
     public int scheduleAperiodicTaskGroup(Summary summary) {
-//        int trTotal = 0;
-//        Iterator<Task> aperiodicTaskIterator;
-//        ListIterator<Node> AperiodicNodeIterator;
-//        AperiodicTaskGroup clonedAperiodicTaskGroup = SporadicServer.getAperiodicTaskGroup();    
-//        clonedAperiodicTaskGroup.sortByArrivalTime();
-//        Node nodolibre = null;
-//        Node nodo = new Node(0,0);
-//        boolean salir;
-//        AperiodicTask tarea;
-//        int tiempopendiente;
-//        
-//        aperiodicTaskIterator = clonedAperiodicTaskGroup.taskGroup.iterator();
-//        //
-//        this.SetServerCapacity(this.getComputationTime());
-//        //
-//        while (aperiodicTaskIterator.hasNext()){ //vamos recorriendo todas las tareas aperiódicas
-//            tarea = (AperiodicTask) aperiodicTaskIterator.next();
-//            tiempopendiente = tarea.getComputationTime();
-//            while (tiempopendiente > 0){//metemos cada tarea aperiódica en el/los nodo/s libre/s necesarios.
-//                AperiodicNodeIterator = summary.getSummaryListIterator();
-//                salir = false;
-//                while (AperiodicNodeIterator.hasNext() && salir==false){//buscamos los nodos libres necesarios
-//                    nodolibre = AperiodicNodeIterator.next();
-//                    if (nodolibre.isFree() && nodolibre.getStopTime() > ((AperiodicTask) tarea).getArrivalTime()){
-//                        salir = true;
-//                    }
-//                }
-//                //
-//                this.SetRegenerationPoint(((AperiodicTask) tarea).getArrivalTime(), nodolibre.getStartTime());
-//                nodo = Summary.addTaskToFreeNode(AperiodicNodeIterator, tarea, ((AperiodicTask) tarea).getArrivalTime(), tiempopendiente, this.GetServerCapacity(nodolibre.getStartTime(),nodolibre.getStopTime(),((AperiodicTask) tarea).getComputationTime()));
-//                tiempopendiente -= nodo.getStopTime() - nodo.getStartTime();
-//            }
-//             trTotal += nodo.getStopTime() - tarea.getArrivalTime();
-//        }
-//        return (int) trTotal/ (int) SporadicServer.getAperiodicTaskGroup().getNumTasks();
-        return -1;
+        int trTotal = 0;
+        Iterator<Task> aperiodicTaskIterator;
+        ListIterator<Node> AperiodicNodeIterator;
+        AperiodicTaskGroup clonedAperiodicTaskGroup = SporadicServer.getAperiodicTaskGroup();    
+        clonedAperiodicTaskGroup.sortByArrivalTime();
+        Node nodolibre = null;
+        Node nodo = new Node(0,0);
+        boolean salir;
+        AperiodicTask tarea;
+        int tiempopendiente;
+        
+        aperiodicTaskIterator = clonedAperiodicTaskGroup.taskGroup.iterator();
+        //
+        this.SetServerCapacity(this.getComputationTime());
+        //
+        while (aperiodicTaskIterator.hasNext()){ //vamos recorriendo todas las tareas aperiódicas
+            tarea = (AperiodicTask) aperiodicTaskIterator.next();
+            tiempopendiente = tarea.getComputationTime();
+            while (tiempopendiente > 0){//metemos cada tarea aperiódica en el/los nodo/s libre/s necesarios.
+                AperiodicNodeIterator = summary.getSummaryListIterator();
+                salir = false;
+                while (AperiodicNodeIterator.hasNext() && salir==false){//buscamos los nodos libres necesarios
+                    nodolibre = AperiodicNodeIterator.next();
+                    if (nodolibre.isFree() && nodolibre.getStopTime() > ((AperiodicTask) tarea).getArrivalTime()){
+                        salir = true;
+                    }
+                }
+                //
+                this.SetRegenerationPoint(((AperiodicTask) tarea).getArrivalTime(), nodolibre.getStartTime());
+                nodo = Summary.addTaskToFreeNode(AperiodicNodeIterator, tarea, ((AperiodicTask) tarea).getArrivalTime(), tiempopendiente, this.GetServerCapacity(nodolibre.getStartTime(),nodolibre.getStopTime(),((AperiodicTask) tarea).getComputationTime()));
+                tiempopendiente -= nodo.getStopTime() - nodo.getStartTime();
+            }
+             trTotal += nodo.getStopTime() - tarea.getArrivalTime();
+        }
+        return (int) trTotal/ (int) SporadicServer.getAperiodicTaskGroup().getNumTasks();
     }
     
     public void SetRegenerationPoint(int activationtime, int nodefreestarttime){
@@ -74,23 +74,58 @@ public class SporadicServer extends Server {
     }
     
     int actualcapacity;
+    int lastcapacity;
     public void SetServerCapacity(int capacity){
         this.actualcapacity=capacity;
     }
 
     public int GetServerCapacity(int starttime, int stoptime,int totaltasktime){
         int actual;
-        for(int i=0;i<regenerationpoints.size();i++){   
+        int regenerationpointstoremove=0;
+        for(int i=0;i<regenerationpoints.size();i++){
             actual=regenerationpoints.get(i);
+            //
+            // Punts de regeneració abans de l'interval:
+            //
+            if (actual<starttime){
+                //Regeneració:
+                if (this.lastcapacity>this.actualcapacity){
+                    this.actualcapacity+=(lastcapacity-this.actualcapacity);
+                }
+                this.lastcapacity=this.actualcapacity;
+                //Fi regeneració
+                regenerationpointstoremove++;
+                
+            }
+            //
+            // Punts de regeneració dins l'interval:
+            //
             if((actual>=starttime)&&(actual<stoptime)){
+                /*
                 if (this.actualcapacity<actual){
                     this.actualcapacity=this.getComputationTime();
                 }else{
                     this.actualcapacity=actual+this.getComputationTime();
                 }
+                */
+                //Regeneració:
+                if (this.lastcapacity>this.actualcapacity){
+                    this.actualcapacity+=(lastcapacity-this.actualcapacity);
+                }
+                this.lastcapacity=this.actualcapacity;
+                //Fi regeneració
+                regenerationpointstoremove++;
             }
+            //
+            //
+            //
+        }
+        //Eliminam els punts de regeneració que ja em passat:
+        for(int j=0;j<regenerationpointstoremove;j++){
+            this.regenerationpoints.remove(j);
         }
         if (this.actualcapacity>=totaltasktime){
+            this.actualcapacity-=totaltasktime;
             return totaltasktime;
         }else{
             int aux = this.actualcapacity;
