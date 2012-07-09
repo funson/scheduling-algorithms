@@ -9,7 +9,7 @@ package scheduling.algorithms;
  * @author Juanito
  */
 public class TaskSet {
-    public final static int GROUPS_PER_SET =1;
+    public final static int GROUPS_PER_SET =10;
     
     private PeriodicTaskGroup[] group;    
     private int firstFreePosition;
