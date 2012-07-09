@@ -41,6 +41,7 @@ public class PollingServer extends Server {
         int acumulatedResponseTime = (int) 0.0;
         //Variable que marca el instante de finalización de una tarea
         int finishedTimeTask = (int) 0.0;
+        int numTasks = 0;
 
 
         Iterator<Task> taskIterator = clonedAperiodicTaskGroup.taskGroup.iterator();
@@ -289,11 +290,11 @@ public class PollingServer extends Server {
 
                 //Se ha computado toda la tarea y se ejecuta la siguiente
                 if (remainingTimeTask == (int) 0.0) {
-
+                    numTasks++;
                     acumulatedResponseTime += ((finishedTimeTask) - task.getArrivalTime());
                     if (taskIterator.hasNext()) {
 
-                        //Obtenemos el primer elemento para iterar
+                        //Obtenemos el primer elemento para iterar                        
                         task = (AperiodicTask) taskIterator.next();
                         remainingTimeTask = task.getComputationTime();
 
@@ -303,9 +304,9 @@ public class PollingServer extends Server {
 
         }
 
-
-
-        return (int) acumulatedResponseTime / (int) PollingServer.getAperiodicTaskGroup().getNumTasks();
+        if(numTasks == 0)
+            return 0;
+        return (int) acumulatedResponseTime / (int) numTasks;
     }
 
     /**
