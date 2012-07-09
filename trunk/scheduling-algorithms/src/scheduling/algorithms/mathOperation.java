@@ -32,8 +32,8 @@ public class mathOperation {
      * @param lambda
      * @return an Exponential-distributed random variable's value
      */
-    public static int getExponential(double lambda){
-        return (int)Math.ceil((-Math.log(Math.random())/lambda));        
+    public static double getExponential(double lambda){
+        return -Math.log(Math.random())/lambda;        
     }
     
     /**

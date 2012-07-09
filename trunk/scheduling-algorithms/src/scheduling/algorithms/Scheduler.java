@@ -28,6 +28,8 @@ public class Scheduler {
         NONE, AUTO, MANUAL;
     }
     
+    public static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 1;    
+    
     private static JProgressBar barra;
     public static final int NUM_SERVERS = 5;
     private static AperiodicInfo aperiodicInfo = new AperiodicInfo();
@@ -46,9 +48,7 @@ public class Scheduler {
     
     //Chapuza al canto:
     private static JFrame resultWindow;
-    private static JTextArea resultsTextArea;        
-    
-    public static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 2;    
+    private static JTextArea resultsTextArea;                
     
     private static Runnable runnable = new Runnable() {
 
@@ -146,8 +146,9 @@ public class Scheduler {
             throw new IllegalStateException("No hay tareas aperiódicas creadas.");*/
         summaries = new Summary[NUM_SERVERS][TaskSet.GROUPS_PER_SET][numAperiodicMeanServiceTimes][numAperiodicLoads];
         Scheduler.numTaskSetToSchedule = taskSetToSchedule;
-        
-        new Thread(runnable).start();
+        Thread thread = new Thread(runnable);
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.start();
     }
         
     

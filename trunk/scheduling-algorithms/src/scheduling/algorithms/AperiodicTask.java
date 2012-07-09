@@ -19,7 +19,7 @@ public class AperiodicTask extends Task {
      * @param computationTime   El tiempo de computación de la tarea     
      */
     public AperiodicTask(String name, double arrivalTime, double computationTime){
-        super(name,computationTime, Integer.MAX_VALUE);        
+        super(name,Math.round(computationTime), Integer.MAX_VALUE);        
         this.arrivalTime = (int) Math.ceil(arrivalTime);                
     }
     
@@ -30,7 +30,7 @@ public class AperiodicTask extends Task {
      * @param deadline El terminio de la tarea
      */
     public AperiodicTask(String name, double arrivalTime, double computationTime, double deadline){
-        super(name, computationTime, deadline);
+        super(name, Math.round(computationTime), deadline);
         this.arrivalTime = (int) Math.ceil(arrivalTime);
     }
 

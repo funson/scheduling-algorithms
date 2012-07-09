@@ -68,6 +68,7 @@ public class BackgroundServer extends Server {
         int remainingComputation;
         int totalResponseTime   = 0;
         int numtasques          = 0;
+        boolean handled = false;
         
         while (inode.hasNext() && itask.hasNext()){
             aperiodicTask = (AperiodicTask) itask.next();
@@ -78,13 +79,15 @@ public class BackgroundServer extends Server {
             else
                 return totalResponseTime/numtasques;
             remainingComputation = aperiodicTask.getComputationTime();
-            while(remainingComputation > 0){
+            handled = false;
+            while(remainingComputation > 0 || !handled){
+                handled = true;
                 Summary.iterateUntilFreeNode(inode);
                 if (!inode.hasNext())
                     return totalResponseTime/numtasques;
                 node = Summary.addTaskToFreeNode(inode, aperiodicTask, aperiodicTask.getArrivalTime(), remainingComputation, Integer.MAX_VALUE);
                 remainingComputation -= (node.getStopTime() - node.getStartTime()); 
-            }
+            }            
             totalResponseTime += node.getStopTime() - aperiodicTask.getArrivalTime();
             numtasques++;  
         }
