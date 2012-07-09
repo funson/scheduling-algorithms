@@ -74,7 +74,7 @@ public class BackgroundServer extends Server {
             Summary.iterateUntilTime(inode,aperiodicTask.getArrivalTime());
             if (!inode.hasNext())
                 if(numtasques == 0)
-                    return Integer.MAX_VALUE;
+                    return 0;
             else
                 return totalResponseTime/numtasques;
             remainingComputation = aperiodicTask.getComputationTime();
@@ -89,7 +89,7 @@ public class BackgroundServer extends Server {
             numtasques++;  
         }
         if(numtasques == 0)
-                    return Integer.MAX_VALUE;
+                    return 0;
             else
                 return totalResponseTime/numtasques;
     }  
