@@ -549,7 +549,8 @@ public class mainWindow extends javax.swing.JFrame {
                 break;
             case NONE:
                 JLabel label = new JLabel("No tasks");
-                panelOfAperiodic.add(label);
+                label.setHorizontalAlignment(SwingConstants.CENTER);                
+                panelOfAperiodic.add(label, BorderLayout.CENTER);
                 break;
         }
         panelOfAperiodic.validate();
@@ -622,12 +623,15 @@ public class mainWindow extends javax.swing.JFrame {
     }
     
     private void fileSaveResultsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileSaveResultsActionPerformed
-
+        if(Scheduler.getResult() == null)
+            JOptionPane.showMessageDialog(null, "No hay resultados que mostrar.", "NO RESULTADOS", JOptionPane.INFORMATION_MESSAGE);
+        else            
+        resultWindow.setVisible(true);
     }//GEN-LAST:event_fileSaveResultsActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if(Scheduler.getAperiodicInfo().getMode() == Scheduler.aperiodicGenerationMode.NONE)
-            JOptionPane.showMessageDialog(null, "No hay tareas aperiódicas creadas.");
+            JOptionPane.showMessageDialog(null, "No hay tareas aperiódicas creadas.", "NO TAREAS APERIÓDICAS", JOptionPane.ERROR_MESSAGE);
         else 
             Scheduler.scheduleTaskSet(selectedSet);        
     }//GEN-LAST:event_jButton1ActionPerformed
