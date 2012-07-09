@@ -67,9 +67,9 @@ public class Scheduler {
             
             int iterations = 0;
             barra.setValue(iterations);
-            for(int i = 0; i < NUM_SERVERS; i++){                                                                                        
-                responseTimeByGroup = 0;
+            for(int i = 0; i < NUM_SERVERS; i++){                                                                                                        
                 for(int j = 0; j < numAperiodicLoads; j++){
+                    responseTimeByGroup = 0;
                     for(int k = 0; k < TaskSet.GROUPS_PER_SET; k++){                        
                         periodicTaskGroupToSchedule = taskSetToSchedule.getGroup(k);
                         timeToSchedule = HIPERPERIOD_TIMES_TO_SCHEDULE*periodicTaskGroupToSchedule.calculateHiperperiod();
