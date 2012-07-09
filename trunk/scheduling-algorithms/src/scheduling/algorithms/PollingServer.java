@@ -34,19 +34,22 @@ public class PollingServer extends Server {
         int totalResponseTime   = 0;
         int numtasques          = 0;
         int serverCapacity      = this.getComputationTime();
-        Node potentialNode     = new Node (0,0);
+        Node potentialNode     = inode.next();
+        inode.previous();
         int numperiod =0;
         int currentStartPeriodTime   = 0;
-        int nextStartPeriodTime      = 0; 
+        int nextStartPeriodTime      = 0;
+        boolean handled = false;
         
         while (inode.hasNext() && itask.hasNext()){
             aperiodicTask = (AperiodicTask) itask.next();
             remainingComputation = aperiodicTask.getComputationTime();
-            while(remainingComputation > 0){
-                
+            handled = false;
+            while(remainingComputation > 0 || !handled){
+                handled = true;
                 //Ir al siguiente periodo que empiece por libre y que sea superior al arrival de la tarea a planificar
                 // y también si el servidor se encuentra sin capacidad
-                while ((currentStartPeriodTime<aperiodicTask.getArrivalTime() && !potentialNode.isFree())||serverCapacity == 0){
+                while (currentStartPeriodTime<aperiodicTask.getArrivalTime() || !potentialNode.isFree() ||serverCapacity == 0){
                     potentialNode = Summary.iterateUntilTime(inode,nextStartPeriodTime);
                     if (!inode.hasNext())
                         return totalResponseTime/numtasques;
@@ -343,7 +346,6 @@ public class PollingServer extends Server {
             }
 
         }
-
         if(numTasks == 0)
             return 0;
         return (int) acumulatedResponseTime / (int) numTasks;
