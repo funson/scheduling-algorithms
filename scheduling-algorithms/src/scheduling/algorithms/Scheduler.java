@@ -4,10 +4,12 @@
  */
 package scheduling.algorithms;
 
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.ArrayList;
-import javax.swing.JFrame;
-import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  * Clase que representa el planificador de los conjuntos de tareas. Planifica el conjunto que seleccionemos 
@@ -48,7 +50,7 @@ public class Scheduler {
     
     //Chapuza al canto:
     private static JFrame resultWindow;
-    private static JTextArea resultsTextArea;                
+    private static JPanel resultsPanel;                
     
     private static Runnable runnable = new Runnable() {
 
@@ -91,26 +93,43 @@ public class Scheduler {
                 }                                
             }
                         
-
-            String output = "";
+            JTable table;            
             ArrayList<String> serverNamesInResult = result.getServerNamesInResult();
             ArrayList<Double> loadsInResult       = result.getLoadsInResult();
 
+            String[] columnNames = new String[serverNamesInResult.size() + 1];
+            columnNames[0] = "Aperiodic Load";
+            Object[][] data = new Object[loadsInResult.size()][serverNamesInResult.size() + 1];
+            
             for (int i=0;i<serverNamesInResult.size();i++){
-                    output+= " \t" + serverNamesInResult.get(i);
+                columnNames[i+1] = serverNamesInResult.get(i);
             }
-            output+="\n";
+            
+            for(int i = 0; i <loadsInResult.size(); i++)
+                for(int j = 0; j < serverNamesInResult.size() + 1; j++) {
+                    data[i][j] = new Object();
+                    if(j == 0)
+                        data[i][j] = DoubleToString(loadsInResult.get(i));
+                    else
+                        data[i][j] = DoubleToString(result.getData(loadsInResult.get(i), serverNamesInResult.get(j-1)));
+                }
 
-        for (int i=0;i<loadsInResult.size();i++){
-                    output+= DoubleToString(loadsInResult.get(i));
-                    for (int j=0;j<serverNamesInResult.size();j++){
-                        output+="\t" + DoubleToString(result.getData(loadsInResult.get(i), serverNamesInResult.get(j)));
-                    }
-                    output+="\n";
-        }       
-        resultWindow.setVisible(true);
-        resultsTextArea.setText(output);        
+            DefaultTableModel model = new DefaultTableModel(data, columnNames);
+            table = new JTable(model) {
+                @Override
+                public boolean isCellEditable(int rowIndex, int colIndex) {
+                    return false;
+                }
+            };
+            JScrollPane scrollPane = new JScrollPane(table);            
+            table.setFillsViewportHeight(true);                
+            
+            resultsPanel.setLayout(new BorderLayout());
+            resultsPanel.add(scrollPane, BorderLayout.CENTER);            
+            resultsPanel.validate();
+                
         progressBar.setVisible(false);
+        resultWindow.setVisible(true);
         }
     };
     
@@ -193,9 +212,9 @@ public class Scheduler {
     }
     
     //Chapuza al canto:
-    public static void setResultWindow(JFrame window, JTextArea txtArea, JFrame progressBar, JProgressBar barra){
+    public static void setResultWindow(JFrame window, JPanel panel, JFrame progressBar, JProgressBar barra){
         resultWindow = window;
-        resultsTextArea = txtArea;
+        resultsPanel = panel;
         Scheduler.progressBar = progressBar;
         Scheduler.barra       = barra;        
     }
