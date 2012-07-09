@@ -87,11 +87,10 @@ public class Scheduler {
                             responseTimeByGroup += responseTimeByMeanServiceTime;
                     }
                     responseTimeByGroup /= TaskSet.GROUPS_PER_SET;
-                    getResult().addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
+                    result.addData(taskSetToSchedule.getTotalPeriodicLoad() + aperiodicInfo.getAperiodicLoads()[j], servers.get(numTaskSetToSchedule)[i].getName(), responseTimeByGroup);
                 }                                
             }
-            
-            Result result = getResult();
+                        
 
             String output = "";
             ArrayList<String> serverNamesInResult = result.getServerNamesInResult();
@@ -110,8 +109,7 @@ public class Scheduler {
                     output+="\n";
         }       
         resultWindow.setVisible(true);
-        resultsTextArea.setText(output);
-        resultWindow.setAlwaysOnTop(true);
+        resultsTextArea.setText(output);        
         progressBar.setVisible(false);
         }
     };

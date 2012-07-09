@@ -152,14 +152,12 @@ public class mainWindow extends javax.swing.JFrame {
         );
 
         resultWindow.setTitle("Results");
-        resultWindow.setAlwaysOnTop(true);
         resultWindow.setMinimumSize(new java.awt.Dimension(600, 600));
         resultWindow.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         resultWindow.setPreferredSize(new java.awt.Dimension(600, 600));
         resultWindow.setType(java.awt.Window.Type.POPUP);
 
         resultsTextArea.setColumns(20);
-        resultsTextArea.setEditable(false);
         resultsTextArea.setRows(5);
         scrollTextArea.setViewportView(resultsTextArea);
 
@@ -220,6 +218,7 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap(72, Short.MAX_VALUE))
         );
 
+        progressBar.setTitle("Planificando...");
         progressBar.setMinimumSize(new java.awt.Dimension(225, 100));
         progressBar.setResizable(false);
 
