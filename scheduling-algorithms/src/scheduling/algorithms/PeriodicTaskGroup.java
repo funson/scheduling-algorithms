@@ -14,9 +14,8 @@ import java.util.Iterator;
  * para ordenar las tareas según su periodo y para obtener una copia.
  * @author Juanito
  */
-public class PeriodicTaskGroup extends TaskGroup {
-
-
+public class PeriodicTaskGroup extends TaskGroup {    
+    
     public PeriodicTaskGroup(){
         super();
     }

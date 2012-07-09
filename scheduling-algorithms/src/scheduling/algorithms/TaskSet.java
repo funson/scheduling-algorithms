@@ -9,11 +9,12 @@ package scheduling.algorithms;
  * @author Juanito
  */
 public class TaskSet {
-    public final static int GROUPS_PER_SET =10;
+    public final static int GROUPS_PER_SET =1;
     
     private PeriodicTaskGroup[] group;    
     private int firstFreePosition;
     private double totalPeriodicLoad;
+    private int maxHiperperiod = 0;
     
     /**
      * Constructor de Conjunto de Tareas
@@ -23,6 +24,7 @@ public class TaskSet {
         group = new PeriodicTaskGroup[GROUPS_PER_SET];
         this.totalPeriodicLoad = totalPeriodicLoad;
         firstFreePosition = 0;
+        maxHiperperiod = 0;
     }
     
     /**
@@ -43,6 +45,7 @@ public class TaskSet {
         if(firstFreePosition == GROUPS_PER_SET){
             throw new UnsupportedOperationException("No caben más grupos de tareas en el conjunto.");
         }
+        maxHiperperiod = Math.max(getMaxHiperperiod(), groupToInsert.calculateHiperperiod());
         this.group[firstFreePosition] = groupToInsert;
         firstFreePosition++;
     }
@@ -53,5 +56,20 @@ public class TaskSet {
     
     public int numOfGroups(){
         return this.group.length;
+    }
+
+    /**
+     * @return the maxHiperperiod
+     */
+    public int getMaxHiperperiod() {
+        return maxHiperperiod;
+    }
+    
+    public int calculateMaxHiperperiod(){
+        int hiperperiod = 0;
+        for(int i = 0; i < GROUPS_PER_SET; i++){
+            hiperperiod = Math.max(hiperperiod, group[i].calculateHiperperiod());
+        }
+        return hiperperiod;
     }
 }

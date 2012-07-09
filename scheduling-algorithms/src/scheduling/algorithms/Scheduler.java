@@ -37,22 +37,23 @@ public class Scheduler {
     private static int numAperiodicLoads;
     //private static int[] aperiodicLoads;
     private static ArrayList<Server[]> servers;    
-    //private static AperiodicTaskGroup[][] aperiodicTaskGroups;
-    private static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 1;    
+    //private static AperiodicTaskGroup[][] aperiodicTaskGroups;    
     private static Summary[][][][] summaries;  
     private static ArrayList<TaskSet> taskSets;        
     private static int numTaskSetToSchedule;
-    private static final double MAX_CPU_UTILIZATION = 0.9;
+    private static final double MAX_CPU_UTILIZATION = 0.9;    
+    private static Result result;
+    
     //Chapuza al canto:
     private static JFrame resultWindow;
-    private static JTextArea resultsTextArea;
+    private static JTextArea resultsTextArea;        
     
-    private static Result result;
+    public static final int HIPERPERIOD_TIMES_TO_SCHEDULE = 2;    
     
     private static Runnable runnable = new Runnable() {
 
         @Override
-        public void run() {
+        public void run() {            
             barra.getModel().setMaximum(NUM_SERVERS*TaskSet.GROUPS_PER_SET*numAperiodicMeanServiceTimes*numAperiodicLoads);
             barra.getModel().setMinimum(0);
             progressBar.setVisible(true);

@@ -33,12 +33,14 @@ public class AperiodicTaskGroup extends TaskGroup {
      * @param numTasks El tamaño del grupo de tareas aperiódicas
      * @param aperiodicMeanServiceTime El tiempo medio de servicio, que repercute en el tiempo de comutación de la tarea
      */
-    public AperiodicTaskGroup(int numTasks, double aperiodicMeanServiceTime, double aperiodicLoad){
+    public AperiodicTaskGroup(double aperiodicMeanServiceTime, double aperiodicLoad, int maxHiperperiod){
         int timeBetweenArrivals, computationTime;
         AperiodicTask previousTask = new AperiodicTask("", 0.0, 0.0);
         AperiodicTask currentTask;
+        double meanTimeBetweenArrivals = aperiodicMeanServiceTime * (1 / aperiodicLoad);
+        int numTasks = (int) Math.ceil(maxHiperperiod / meanTimeBetweenArrivals);
         for(int i = 0; i < numTasks; i++){
-            timeBetweenArrivals = mathOperation.getPoisson(aperiodicMeanServiceTime * (1 / aperiodicLoad));
+            timeBetweenArrivals = mathOperation.getPoisson(meanTimeBetweenArrivals);
             computationTime = mathOperation.getExponential(aperiodicMeanServiceTime);            
             currentTask = new AperiodicTask("AP"+i, previousTask.getArrivalTime() + timeBetweenArrivals, computationTime);
             this.taskGroup.add(currentTask);
