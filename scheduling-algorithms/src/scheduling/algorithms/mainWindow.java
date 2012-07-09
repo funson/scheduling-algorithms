@@ -151,8 +151,12 @@ public class mainWindow extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        resultWindow.setTitle("Results");
+        resultWindow.setAlwaysOnTop(true);
         resultWindow.setMinimumSize(new java.awt.Dimension(600, 600));
+        resultWindow.setModalExclusionType(java.awt.Dialog.ModalExclusionType.APPLICATION_EXCLUDE);
         resultWindow.setPreferredSize(new java.awt.Dimension(600, 600));
+        resultWindow.setType(java.awt.Window.Type.POPUP);
 
         resultsTextArea.setColumns(20);
         resultsTextArea.setEditable(false);
@@ -185,7 +189,7 @@ public class mainWindow extends javax.swing.JFrame {
             .addGroup(buttonPanelLayout.createSequentialGroup()
                 .addGap(249, 249, 249)
                 .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
         buttonPanelLayout.setVerticalGroup(
             buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -213,7 +217,7 @@ public class mainWindow extends javax.swing.JFrame {
                 .addComponent(textPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(buttonPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(72, Short.MAX_VALUE))
         );
 
         progressBar.setMinimumSize(new java.awt.Dimension(225, 100));

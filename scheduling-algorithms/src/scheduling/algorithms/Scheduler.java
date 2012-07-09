@@ -110,6 +110,7 @@ public class Scheduler {
         }       
         resultWindow.setVisible(true);
         resultsTextArea.setText(output);
+        resultWindow.setAlwaysOnTop(true);
         progressBar.setVisible(false);
         }
     };
