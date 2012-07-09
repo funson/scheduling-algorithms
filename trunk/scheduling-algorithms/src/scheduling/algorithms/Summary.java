@@ -16,7 +16,7 @@ import java.util.ListIterator;
  * 
  * @author Juanito
  */
-public class Summary {        
+public class Summary {
     
     private int averageAperiodicResponseTime;
     private ArrayList<Node> nodes;
@@ -128,19 +128,23 @@ public class Summary {
      * @param inode El iterador de la lista
      * @param time El instante de tiempo absoluto
      */
-    public static void iterateUntilTime(ListIterator<Node> inode, int time) {
+    public static Node iterateUntilTime(ListIterator<Node> inode, int time) {
         if(!inode.hasNext())
-            return;
+            return null;
         Node node = inode.next();
         
         while(inode.hasNext() && node.getStopTime() <= time)
             node = inode.next();
-        if(node.getStopTime() > time)
+        if(node.getStopTime() > time){
             inode.previous();
             if(node.isFree() && time != node.getStartTime()){
                 inode.add(new Node(node.getStartTime(), time));
                 node.setStartTime(time);
             }
+        }
+        else if (!inode.hasNext())
+            return null;
+        return node;
     }
     
     /**

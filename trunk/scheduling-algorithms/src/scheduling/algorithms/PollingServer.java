@@ -25,8 +25,48 @@ public class PollingServer extends Server {
      */
     @Override
     public int scheduleAperiodicTaskGroup(Summary summary) {
-
-
+        ListIterator<Node> inode = summary.getSummaryListIterator();
+        Server.getAperiodicTaskGroup().sortByArrivalTime();
+        Iterator<Task> itask = Server.getAperiodicTaskGroup().taskGroup.iterator();
+        Node node =new Node (0,0);
+        AperiodicTask aperiodicTask;
+        int remainingComputation;
+        int totalResponseTime   = 0;
+        int numtasques          = 0;
+        int serverCapacity      = this.getComputationTime();
+        Node potentialNode     = new Node (0,0);
+        int numperiod =0;
+        int currentStartPeriodTime   = 0;
+        int nextStartPeriodTime      = 0; 
+        
+        while (inode.hasNext() && itask.hasNext()){
+            aperiodicTask = (AperiodicTask) itask.next();
+            remainingComputation = aperiodicTask.getComputationTime();
+            while(remainingComputation > 0){
+                
+                //Ir al siguiente periodo que empiece por libre y que sea superior al arrival de la tarea a planificar
+                // y también si el servidor se encuentra sin capacidad
+                while ((currentStartPeriodTime<aperiodicTask.getArrivalTime() && !potentialNode.isFree())||serverCapacity == 0){
+                    potentialNode = Summary.iterateUntilTime(inode,nextStartPeriodTime);
+                    if (!inode.hasNext())
+                        return totalResponseTime/numtasques;
+                    serverCapacity = this.getComputationTime();
+                    numperiod++;
+                    currentStartPeriodTime = nextStartPeriodTime;
+                    nextStartPeriodTime = this.getPeriod()*numperiod;
+                }
+                
+                node = Summary.addTaskToFreeNode(inode, aperiodicTask, aperiodicTask.getArrivalTime(), remainingComputation, serverCapacity);
+                remainingComputation -= (node.getStopTime() - node.getStartTime()); 
+                serverCapacity       -= (node.getStopTime() - node.getStartTime());
+                potentialNode = inode.next();
+                inode.previous();
+            }
+            totalResponseTime += node.getStopTime() - aperiodicTask.getArrivalTime();
+            numtasques++;  
+        }
+        return totalResponseTime/numtasques;
+/*
         //Obtenemos el iterador de nodos sobre el cual insertaremos las tareas periodicas anteriores
         ListIterator<Node> nodeIterator = summary.getSummaryListIterator();
 
@@ -307,6 +347,8 @@ public class PollingServer extends Server {
         if(numTasks == 0)
             return 0;
         return (int) acumulatedResponseTime / (int) numTasks;
+        * 
+        */
     }
 
     /**
