@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,7 +26,7 @@ public class mainWindow extends javax.swing.JFrame {
     private AperiodicInfo aperiodicInfo;
     private int selectedSet;
     private AperiodicTask defaultAperiodicTask = new AperiodicTask("AT", 0.0, 0.0);
-    JTable table;
+    JTable table;    
     
     
     
@@ -57,8 +59,6 @@ public class mainWindow extends javax.swing.JFrame {
         btSave = new javax.swing.JButton();
         resultWindow = new javax.swing.JFrame();
         textPanel = new javax.swing.JPanel();
-        scrollTextArea = new javax.swing.JScrollPane();
-        resultsTextArea = new javax.swing.JTextArea();
         buttonPanel = new javax.swing.JPanel();
         saveButton = new javax.swing.JButton();
         progressBar = new javax.swing.JFrame();
@@ -157,19 +157,15 @@ public class mainWindow extends javax.swing.JFrame {
         resultWindow.setPreferredSize(new java.awt.Dimension(600, 600));
         resultWindow.setType(java.awt.Window.Type.POPUP);
 
-        resultsTextArea.setColumns(20);
-        resultsTextArea.setRows(5);
-        scrollTextArea.setViewportView(resultsTextArea);
-
         javax.swing.GroupLayout textPanelLayout = new javax.swing.GroupLayout(textPanel);
         textPanel.setLayout(textPanelLayout);
         textPanelLayout.setHorizontalGroup(
             textPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollTextArea)
+            .addGap(0, 580, Short.MAX_VALUE)
         );
         textPanelLayout.setVerticalGroup(
             textPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scrollTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 447, Short.MAX_VALUE)
+            .addGap(0, 447, Short.MAX_VALUE)
         );
 
         saveButton.setLabel("Guardar");
@@ -330,7 +326,7 @@ public class mainWindow extends javax.swing.JFrame {
 
     void buildMainWindow(){
         
-        Scheduler.setResultWindow(resultWindow, resultsTextArea, progressBar,barra);
+        Scheduler.setResultWindow(resultWindow, textPanel, progressBar,barra);
                     
             if (Scheduler.getTaskSets() != null){
                 jPanel1.removeAll();
@@ -392,7 +388,9 @@ public class mainWindow extends javax.swing.JFrame {
                 data[j][2] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getComputationTime();
                 data[j][3] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getPhase();
             }
-            table = new JTable(new DefaultTableModel(data, periodicColumnNames));
+            DefaultTableModel model = new DefaultTableModel(data, periodicColumnNames);
+            table = new JTable(model);
+            
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.setPreferredSize(new Dimension(100,100));
             table.setFillsViewportHeight(true);
@@ -488,10 +486,16 @@ public class mainWindow extends javax.swing.JFrame {
                                 }
                             }
                         }
-                        table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
+                        DefaultTableModel model = new DefaultTableModel(data, aperiodicColumnNames);
+                        table = new JTable(model) {
+                            @Override
+                            public boolean isCellEditable(int rowIndex, int colIndex) {
+                                return false;
+                            }
+                        };
                         JScrollPane scrollPane = new JScrollPane(table);
                         scrollPane.setPreferredSize(new Dimension(100,100));
-                        table.setFillsViewportHeight(true);
+                        table.setFillsViewportHeight(true);                        
                         groupsPanel.add(scrollPane);
                         panelOfAperiodic.add(groupsPanel, BorderLayout.CENTER);
                     }
@@ -521,7 +525,15 @@ public class mainWindow extends javax.swing.JFrame {
                             }
                         }
                     }
-                    table = new JTable(new DefaultTableModel(data, aperiodicColumnNames));
+                    DefaultTableModel model = new DefaultTableModel(data, aperiodicColumnNames);
+                    model.addTableModelListener(new TableModelListener() {
+
+                        @Override
+                        public void tableChanged(TableModelEvent e) {
+                            btSave.setEnabled(true);
+                        }
+                    });
+                    table = new JTable(model);
                     JScrollPane scrollPane = new JScrollPane(table);
                     scrollPane.setPreferredSize(new Dimension(100,200));
                     table.setFillsViewportHeight(true);
@@ -770,9 +782,7 @@ public class mainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel panelOfPeriodic;
     private javax.swing.JFrame progressBar;
     private javax.swing.JFrame resultWindow;
-    private javax.swing.JTextArea resultsTextArea;
     private javax.swing.JButton saveButton;
-    private javax.swing.JScrollPane scrollTextArea;
     private javax.swing.JFrame tasksWindow;
     private javax.swing.JPanel textPanel;
     // End of variables declaration//GEN-END:variables
