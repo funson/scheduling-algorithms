@@ -34,11 +34,12 @@ public class AperiodicTaskGroup extends TaskGroup {
      * @param aperiodicMeanServiceTime El tiempo medio de servicio, que repercute en el tiempo de comutación de la tarea
      */
     public AperiodicTaskGroup(double aperiodicMeanServiceTime, double aperiodicLoad, int maxHiperperiod){
-        int timeBetweenArrivals, computationTime;
+        int timeBetweenArrivals;
+        double computationTime;
         AperiodicTask previousTask = new AperiodicTask("", 0.0, 0.0);
         AperiodicTask currentTask;
         double meanTimeBetweenArrivals = aperiodicMeanServiceTime * (1 / aperiodicLoad);
-        int numTasks = (int) Math.ceil(maxHiperperiod / meanTimeBetweenArrivals);
+        int numTasks = ((int) Math.ceil(maxHiperperiod / meanTimeBetweenArrivals)) / 2;
         for(int i = 0; i < numTasks; i++){
             timeBetweenArrivals = mathOperation.getPoisson(meanTimeBetweenArrivals);
             computationTime = mathOperation.getExponential(aperiodicMeanServiceTime);            

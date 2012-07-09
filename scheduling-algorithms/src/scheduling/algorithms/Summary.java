@@ -83,7 +83,7 @@ public class Summary {
     public static Node addTaskToFreeNode(ListIterator<Node> iterator, Task task, int arrivalTime, int remainingComputation, int serverCapacity){
         Node node = iterator.next();
         
-        if (!node.isFree() || serverCapacity <= 0 || remainingComputation<= 0)
+        if (!node.isFree() || serverCapacity <= 0 || remainingComputation< 0)
             return null;
         
         int stoptime = Math.min(remainingComputation,serverCapacity);

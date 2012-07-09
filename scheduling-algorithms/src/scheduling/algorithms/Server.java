@@ -15,7 +15,7 @@ public abstract class Server extends PeriodicTask {
 
     
     public Server(String name, double period, double capacity){
-        super(name, period, 0, capacity);        
+        super(name, period, 0, Math.ceil(capacity));        
     }
     
     /**
