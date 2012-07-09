@@ -606,7 +606,7 @@ public class mainWindow extends javax.swing.JFrame {
                     for(int i = 0; i < numAperiodicLoads; i++){
                         aperiodicLoads[i] = aperiodicLoadIntervalSize * (i + 1);
                         for(int j = 0; j < numAperiodicMeanServiceTimes; j++){                        
-                            aperiodicTaskGroups[i][j] = new AperiodicTaskGroup(aperiodicTasksPerGroup, aperiodicMeanServiceTimes[j], aperiodicLoads[i]);                
+                            aperiodicTaskGroups[i][j] = new AperiodicTaskGroup(aperiodicMeanServiceTimes[j], aperiodicLoads[i], Scheduler.getTaskSets().get(selectedSet).calculateMaxHiperperiod() * Scheduler.HIPERPERIOD_TIMES_TO_SCHEDULE);                
                         }                    
                     }
                     aperiodicInfo = new AperiodicInfo(aperiodicTaskGroups, Scheduler.aperiodicGenerationMode.AUTO, aperiodicMeanServiceTimes, aperiodicLoads);                    
