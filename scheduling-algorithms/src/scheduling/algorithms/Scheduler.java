@@ -98,7 +98,7 @@ public class Scheduler {
             ArrayList<Double> loadsInResult       = result.getLoadsInResult();
 
             String[] columnNames = new String[serverNamesInResult.size() + 1];
-            columnNames[0] = "Aperiodic Load";
+            columnNames[0] = "Total Load";
             Object[][] data = new Object[loadsInResult.size()][serverNamesInResult.size() + 1];
             
             for (int i=0;i<serverNamesInResult.size();i++){
