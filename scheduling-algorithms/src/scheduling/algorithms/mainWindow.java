@@ -389,7 +389,12 @@ public class mainWindow extends javax.swing.JFrame {
                 data[j][3] = ((PeriodicTask)Scheduler.getTaskSets().get(selectedSet).getGroup(i).getTask(j)).getPhase();
             }
             DefaultTableModel model = new DefaultTableModel(data, periodicColumnNames);
-            table = new JTable(model);
+            table = new JTable(model) {
+                @Override
+                public boolean isCellEditable(int rowIndex, int colIndex) {
+                    return false;
+                }
+            };
             
             JScrollPane scrollPane = new JScrollPane(table);
             scrollPane.setPreferredSize(new Dimension(100,100));
