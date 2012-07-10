@@ -24,6 +24,27 @@ public class SporadicServer extends Server {
 
     @Override
     public int scheduleAperiodicTaskGroup(Summary summary) {
+        
+        
+        
+        ListIterator<Node> inode = summary.getSummaryListIterator();
+        Server.getAperiodicTaskGroup().sortByArrivalTime();
+        Iterator<Task> itask = Server.getAperiodicTaskGroup().taskGroup.iterator();
+        Node node =new Node (0,0);
+        AperiodicTask aperiodicTask;
+        int remainingComputation;
+        int totalResponseTime   = 0;
+        int numtasques          = 0;
+        int serverCapacity      = this.getComputationTime();
+        Node potentialNode     = inode.next();
+        inode.previous();
+        int numperiod =0;
+        int currentStartPeriodTime   = 0;
+        int nextStartPeriodTime      = 0;
+        boolean handled = false;
+        
+        
+        
         /*int trTotal = 0;
         Iterator<Task> aperiodicTaskIterator;
         ListIterator<Node> AperiodicNodeIterator;
