@@ -665,7 +665,7 @@ public class mainWindow extends javax.swing.JFrame {
         //Create a file chooser
         final JFileChooser fc = new JFileChooser();
         //In response to a button click:
-        int returnVal = fc.showOpenDialog(this);
+        int returnVal = fc.showSaveDialog(this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             try {
