@@ -7,6 +7,7 @@ package scheduling.algorithms;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ListIterator;
+import java.util.Queue;
 
 /**
  *
@@ -15,37 +16,17 @@ import java.util.ListIterator;
 public class SporadicServer extends Server {
     
     ArrayList<Integer> regenerationpoints;
+    ArrayList<Integer> capacitytoregenerate;
             
     public SporadicServer(double period, double capacity){
         super("SS", period, capacity);
         regenerationpoints=new ArrayList<>();
-        this.lastcapacity=0;
+        capacitytoregenerate=new ArrayList<>();
     }
 
     @Override
     public int scheduleAperiodicTaskGroup(Summary summary) {
-        
-        
-        
-        ListIterator<Node> inode = summary.getSummaryListIterator();
-        Server.getAperiodicTaskGroup().sortByArrivalTime();
-        Iterator<Task> itask = Server.getAperiodicTaskGroup().taskGroup.iterator();
-        Node node =new Node (0,0);
-        AperiodicTask aperiodicTask;
-        int remainingComputation;
-        int totalResponseTime   = 0;
-        int numtasques          = 0;
-        int serverCapacity      = this.getComputationTime();
-        Node potentialNode     = inode.next();
-        inode.previous();
-        int numperiod =0;
-        int currentStartPeriodTime   = 0;
-        int nextStartPeriodTime      = 0;
-        boolean handled = false;
-        
-        
-        
-        /*int trTotal = 0;
+        int trTotal = 0;
         Iterator<Task> aperiodicTaskIterator;
         ListIterator<Node> AperiodicNodeIterator;
         AperiodicTaskGroup clonedAperiodicTaskGroup = SporadicServer.getAperiodicTaskGroup();    
@@ -79,8 +60,7 @@ public class SporadicServer extends Server {
             }
              trTotal += nodo.getStopTime() - tarea.getArrivalTime();
         }
-        return (int) trTotal/ (int) SporadicServer.getAperiodicTaskGroup().getNumTasks();*/
-        return -1;
+        return (int) trTotal/ (int) SporadicServer.getAperiodicTaskGroup().getNumTasks();
     }
     
     public void SetRegenerationPoint(int activationtime, int nodefreestarttime){
@@ -96,7 +76,6 @@ public class SporadicServer extends Server {
     }
     
     int actualcapacity;
-    int lastcapacity;
     public void SetServerCapacity(int capacity){
         this.actualcapacity=capacity;
     }
@@ -106,40 +85,16 @@ public class SporadicServer extends Server {
         int regenerationpointstoremove=0;
         for(int i=0;i<regenerationpoints.size();i++){
             actual=regenerationpoints.get(i);
-            //
             // Punts de regeneració abans de l'interval:
-            //
             if (actual<starttime){
-                //Regeneració:
-                if (this.lastcapacity>this.actualcapacity){
-                    this.actualcapacity+=(lastcapacity-this.actualcapacity);
-                }
-                this.lastcapacity=this.actualcapacity;
-                //Fi regeneració
+                this.actualcapacity=this.capacitytoregenerate.get(0);
+                this.capacitytoregenerate.remove(0);
                 regenerationpointstoremove++;
-                
             }
-            //
             // Punts de regeneració dins l'interval:
-            //
             if((actual>=starttime)&&(actual<stoptime)){
-                /*
-                if (this.actualcapacity<actual){
-                    this.actualcapacity=this.getComputationTime();
-                }else{
-                    this.actualcapacity=actual+this.getComputationTime();
-                }
-                */
-                //Regeneració:
-                if (this.lastcapacity>this.actualcapacity){
-                    this.actualcapacity+=(lastcapacity-this.actualcapacity);
-                }
-                this.lastcapacity=this.actualcapacity;
-                //Fi regeneració
                 regenerationpointstoremove++;
             }
-            //
-            //
             //
         }
         //Eliminam els punts de regeneració que ja em passat:
@@ -148,10 +103,12 @@ public class SporadicServer extends Server {
         }
         if (this.actualcapacity>=totaltasktime){
             this.actualcapacity-=totaltasktime;
+            this.capacitytoregenerate.add(totaltasktime);
             return totaltasktime;
         }else{
             int aux = this.actualcapacity;
             this.actualcapacity = 0;
+            this.capacitytoregenerate.add(aux);
             return aux;
         }
     }
