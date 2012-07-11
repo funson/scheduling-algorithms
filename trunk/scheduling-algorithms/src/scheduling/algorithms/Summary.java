@@ -132,10 +132,14 @@ public class Summary {
         if(!inode.hasNext())
             return null;
         Node node = inode.next();
+        if (time <= node.getStartTime()){
+            inode.previous();
+            return node;
+        }
         
         while(inode.hasNext() && node.getStopTime() <= time)
             node = inode.next();
-        if(node.getStopTime() > time){
+        if(time < node.getStopTime()){
             inode.previous();
             if(node.isFree() && time != node.getStartTime()){
                 inode.add(new Node(node.getStartTime(), time));
