@@ -19,8 +19,83 @@ public class DeferrableServer extends Server {
 
     @Override
     public double scheduleAperiodicTaskGroup(Summary summary) {
-        //throw new UnsupportedOperationException("Not supported yet.");
         ListIterator<Node> inode = summary.getSummaryListIterator();
+        Server.getAperiodicTaskGroup().sortByArrivalTime();
+        Iterator<Task> aIterator = Server.getAperiodicTaskGroup().taskGroup.iterator();
+        Node node = new Node(0, 0);
+        
+        int auxCapacity = this.getComputationTime();  //Tiempo restante de computación
+        int auxPeriod = this.getPeriod();             //Tiempo restante de periodo
+        int cicloactual = 0;                                  //Ciclo Actual
+        int ultimociclo = 0;
+        int tiempoActual = 0;                           //tiempo Actual
+        int tiempoPendiente = 0;                        //Tiempo Pendiente
+        double tiempoTotalTareas = 0;                      //Tiempo total para calcular el tiempo de respuesta
+        int ntareas = 0;       
+        boolean handled = false;
+        
+        while (aIterator.hasNext() && inode.hasNext()) {
+            AperiodicTask aTask = (AperiodicTask) aIterator.next();
+            node = Summary.iterateUntilTime(inode, aTask.getArrivalTime());
+            if (!inode.hasNext()) {
+                return tiempoTotalTareas / ntareas;
+            }
+            
+            handled = false;
+            tiempoPendiente = aTask.getComputationTime();
+            while (tiempoPendiente != 0 || !handled) {
+                handled = true;
+                
+                //Si el servidor no tiene capacidad va al siguiente periodo
+                if (auxCapacity == 0){
+                    cicloactual ++;
+                    Summary.iterateUntilTime(inode, cicloactual*period); 
+                    if (!inode.hasNext()) {
+                        return tiempoTotalTareas / ntareas;
+                    }
+                }
+                
+                
+                //Busca el siguiente nodo libre
+                Summary.iterateUntilFreeNode(inode);
+                if (!inode.hasNext()) {
+                    return tiempoTotalTareas / ntareas;
+                }
+                
+                node = inode.next();
+                inode.previous();
+                cicloactual = calcularCiclo(node.getStartTime());
+                
+                if (ultimociclo < cicloactual)
+                    auxCapacity = this.getComputationTime();
+                
+                ultimociclo = cicloactual;
+                
+                node = Summary.addTaskToFreeNode(inode, aTask, aTask.getArrivalTime(), tiempoPendiente, auxCapacity);
+                tiempoPendiente -= (node.getStopTime() - node.getStartTime());
+                auxCapacity     -= (node.getStopTime() - node.getStartTime());
+                
+                cicloactual = calcularCiclo(node.getStopTime());               
+                
+                //Si hemos cambiado de ciclo durante la ejecuciónd e una tarea. No hay que restaurar completamente 
+                // la capacidad. Ya que sería equivalente a que el periodo empieza en el momento de haber acabado la ejecución
+                // cuando en realidad el periodo ha empezado antes.
+                if (ultimociclo < cicloactual){
+                    auxCapacity = this.getComputationTime()-(node.getStopTime() - cicloactual*period);
+                }
+            }
+            
+            tiempoTotalTareas = tiempoTotalTareas + (node.getStopTime() - aTask.getArrivalTime());
+            ntareas++;
+        }
+        
+        if(ntareas == 0)
+            return 0;
+        else
+            return tiempoTotalTareas/ntareas;
+        
+        //throw new UnsupportedOperationException("Not supported yet.");
+        /*ListIterator<Node> inode = summary.getSummaryListIterator();
         Server.getAperiodicTaskGroup().sortByArrivalTime();
         Iterator<Task> aIterator = Server.getAperiodicTaskGroup().taskGroup.iterator();
         Node node = new Node(0, 0);
@@ -80,7 +155,7 @@ public class DeferrableServer extends Server {
         if(ntareas == 0)
                     return 0;
             else
-                return tiempoTotalTareas/ntareas;
+                return tiempoTotalTareas/ntareas;*/
     }
 
     private void visualizarinodeFinal(ListIterator<Node> aux2) {
