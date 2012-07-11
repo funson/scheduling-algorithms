@@ -26,7 +26,7 @@ public abstract class Server extends PeriodicTask {
      * @param summary El resumen de la planificación. Este método lo actualizará con las tareas aperiódicas planificadas.
      * @return Tiempo de respuesta medio de las tareas aperiódicas
      */
-    public abstract int scheduleAperiodicTaskGroup(Summary summary);
+    public abstract double scheduleAperiodicTaskGroup(Summary summary);
 
     /**
      * @return El grupo de tareas aperiódicas que debe planificar el Servidor.

@@ -18,7 +18,7 @@ public class DeferrableServer extends Server {
     }
 
     @Override
-    public int scheduleAperiodicTaskGroup(Summary summary) {
+    public double scheduleAperiodicTaskGroup(Summary summary) {
         //throw new UnsupportedOperationException("Not supported yet.");
         ListIterator<Node> inode = summary.getSummaryListIterator();
         Server.getAperiodicTaskGroup().sortByArrivalTime();
@@ -30,7 +30,7 @@ public class DeferrableServer extends Server {
         int ciclo = 0;                                  //Ciclo Actual
         int tiempoActual = 0;                           //tiempo Actual
         int tiempoPendiente = 0;                        //Tiempo Pendiente
-        int tiempoTotalTareas = 0;                      //Tiempo total para calcular el tiempo de respuesta
+        double tiempoTotalTareas = 0;                      //Tiempo total para calcular el tiempo de respuesta
         int ntareas = 0;       
         boolean handled = false;
         

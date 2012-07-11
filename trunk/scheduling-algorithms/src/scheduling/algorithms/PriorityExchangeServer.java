@@ -14,7 +14,7 @@ public class PriorityExchangeServer extends Server {
     }
 
     @Override
-    public int scheduleAperiodicTaskGroup(Summary summary) {
+    public double scheduleAperiodicTaskGroup(Summary summary) {
         return -1;
     }
 }

@@ -24,14 +24,14 @@ public class PollingServer extends Server {
      * @return Tiempo medio de respuesa 
      */
     @Override
-    public int scheduleAperiodicTaskGroup(Summary summary) {
+    public double scheduleAperiodicTaskGroup(Summary summary) {
         ListIterator<Node> inode = summary.getSummaryListIterator();
         Server.getAperiodicTaskGroup().sortByArrivalTime();
         Iterator<Task> itask = Server.getAperiodicTaskGroup().taskGroup.iterator();
         Node node =new Node (0,0);
         AperiodicTask aperiodicTask;
         int remainingComputation;
-        int totalResponseTime   = 0;
+        double totalResponseTime   = 0;
         int numtasques          = 0;
         int serverCapacity      = this.getComputationTime();
         Node potentialNode     = inode.next();

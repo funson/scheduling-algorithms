@@ -18,7 +18,7 @@ import java.util.ListIterator;
  */
 public class Summary {
     
-    private int averageAperiodicResponseTime;
+    private double averageAperiodicResponseTime;
     private ArrayList<Node> nodes;
     private int deadlinesNotMet;
     private int hiperperiod;
@@ -36,7 +36,7 @@ public class Summary {
     /**
     * @return El tiempo medio de respuesta de las tareas aperiódicas
     */
-    public int getAverageAperiodicResponseTime() {
+    public double getAverageAperiodicResponseTime() {
         return averageAperiodicResponseTime;
     }
     
