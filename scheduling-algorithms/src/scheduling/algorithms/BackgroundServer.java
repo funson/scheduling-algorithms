@@ -23,7 +23,7 @@ public class BackgroundServer extends Server {
     /**
      * Clase que se encarga de planificar un grupo de tareas aperiódicas
      */
-    public int scheduleAperiodicTaskGroup(Summary summary) {
+    public double scheduleAperiodicTaskGroup(Summary summary) {
         //Versión Juanca:
 //        int trTotal = 0;
 //        Iterator<Task> aperiodicTaskIterator;
@@ -66,7 +66,7 @@ public class BackgroundServer extends Server {
         Node node =new Node (0,0);
         AperiodicTask aperiodicTask;
         int remainingComputation;
-        int totalResponseTime   = 0;
+        double totalResponseTime   = 0;
         int numtasques          = 0;
         boolean handled = false;
         
